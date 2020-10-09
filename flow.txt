@@ -1,0 +1,24 @@
+
+
+
+p0 demarrer
+p1 refaire p1
+   creer montage p5
+   une autre p2
+p2 refaire p2
+   creer montage p5
+   une autre p3
+p3 refaire p3
+   creer montage p5
+   une autre p4
+p4 refaire p4
+   creer montage p5
+p5 photomontage
+	styliser p7
+	imprimer p6
+	accueil p0
+p6 imprimer p0
+p7 styliser
+	next p7
+	valider p5
+	annuler p5

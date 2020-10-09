@@ -1,0 +1,960 @@
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'
+Traceback (most recent call last):
+  File "photobooth.py", line 17, in <module>
+    import pyautogui
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/__init__.py", line 115, in <module>
+  File "<frozen importlib._bootstrap>", line 969, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 958, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 664, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 634, in _load_backward_compatible
+  File "/usr/local/lib/python3.5/dist-packages/PyAutoGUI-0.9.36-py3.5.egg/pyautogui/_pyautogui_x11.py", line 160, in <module>
+  File "/usr/lib/python3.5/os.py", line 725, in __getitem__
+    raise KeyError(key) from None
+KeyError: 'DISPLAY'

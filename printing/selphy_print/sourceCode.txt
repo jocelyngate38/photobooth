@@ -1,0 +1,7 @@
+https://sourceforge.net/p/gimp-print/bugs/713/
+
+
+git clone http://git.shaftnet.org/cgit/selphy_print.git/
+cd selphy_print
+make
+sudo ./canonselphyneo -DD testjobs/canon_cp1200-p-cmy.raw

@@ -1,6 +1,9 @@
 #include <Adafruit_NeoPixel.h>
 #include <CmdMessenger.h>
 
+#define PHOTOBOOTH_2
+
+#ifdef PHOTOBOOTH_1
 int approchez[2] = {0, 19};
 int appareilphoto[2] = {19, 41};
 int boxaselfi[2] = {41, 59};
@@ -8,6 +11,18 @@ int sideRight[2] = {59, 79};
 int frontRight[2] = {79, 89};
 int frontLeft[2] = {89, 99};
 int sideLeft[2] = {99, 119};
+#endif
+
+#ifdef PHOTOBOOTH_2
+int approchez[2] = {0, 20};
+int appareilphoto[2] = {20, 40};
+int boxaselfi[2] = {40, 60};
+int sideRight[2] = {60, 80};
+int frontRight[2] = {80, 89};
+int frontLeft[2] = {89, 100};
+int sideLeft[2] = {100, 119};
+#endif
+
 
 const uint16_t PixelCount = sideLeft[1];
 uint8_t brightness = 200;
@@ -154,6 +169,7 @@ struct {
   bool updated = false;
 
 } LEDS_ERROR_STATE;
+
 
 enum {
 
@@ -362,7 +378,14 @@ void onSetBrightness() {
 
   brightness = cmdMessenger.readInt16Arg();
   cmdMessenger.sendCmd(kAcknowledge, "onSetBrightness triggered!");
-  LEDS_FRONT.updated = true;
+
+  LEDS_FRONT.updateRequest = true;
+  LEDS_SIDE_RIGHT.updateRequest = true;
+  LEDS_SIDE_LEFT.updateRequest = true;
+  LEDS_TEXT_BACK.updateRequest = true;
+  LEDS_CAMERA_BACK.updateRequest = true;
+
+  LEDS_FRONT.updated == false;
   
 }
 
@@ -526,6 +549,9 @@ void updateBackCameraLeds() {
 void loop() {
 
   cmdMessenger.feedinSerialData();
+
+  
+  
   if (LEDS_FRONT.updateRequest) {
     LEDS_FRONT.updateRequest = false;
     updateFrontLeds();

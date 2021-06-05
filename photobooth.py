@@ -5,7 +5,7 @@ try:
                               Qt, QTextStream, QThread, pyqtSignal, pyqtSlot, QTimer, QDateTime, QIODevice,
                               QElapsedTimer)
     from PyQt5.QtGui import QIcon, QKeySequence, QFont, QPixmap, QPainter, QPen, QColor, QMovie
-    from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow)
+    from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow,QToolTip)
     from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
     from PyQt5.QtMultimediaWidgets import QVideoWidget
 except:
@@ -23,10 +23,6 @@ try:
         except:
             print("GPIO import error")
         try:
-            import pyautogui
-        except:
-            print("pyautogui import error")
-        try:
             import cups
         except:
             print("cups import error")
@@ -36,6 +32,11 @@ try:
             print("import serial error")
 except:
     print("platform import error")
+
+try:
+    import pyautogui
+except:
+    print("pyautogui import error")
 
 try:
     from random import randint, randrange
@@ -625,7 +626,8 @@ class ledControler():
         self.sendCommand('12,' + str(brightness) + ';', MAX_SERIAL_RETRY)
 
 
-pyautogui.FAILSAFE = False
+if EMULATE is False:
+    pyautogui.FAILSAFE = False
 
 class MainWindow(QMainWindow):
 
@@ -1486,17 +1488,23 @@ class MainWindow(QMainWindow):
 
     def onRightButtonGPIO(self):
         try:
+            self.defineTimeout(-1)
+            self.defineTimeout(40)
             pyautogui.press('enter')
         except pyautogui.FailSafeException as e:
             print(e)
     def onLeftButtonGPIO(self):
         try:
+            self.defineTimeout(-1)
+            self.defineTimeout(40)
             pyautogui.press('left')
         except pyautogui.FailSafeException as e:
             print(e)
 
     def onDownButtonGPIO(self):
         try:
+            self.defineTimeout(-1)
+            self.defineTimeout(40)
             pyautogui.press('down')
         except pyautogui.FailSafeException as e:
             print(e)
@@ -1743,12 +1751,19 @@ class MainWindow(QMainWindow):
             act = QAction(f, self)
             act.setCheckable(True)
             act.triggered.connect(self.onSetCurrentBackGround)
+
             self.backgroundActionList.append(act)
-            act.setToolTip("<img src='"+self.resources.getPath(ressourcesManager.PATH.BACKGROUND_LIST_PATH) + "/" + f +"'" + " width='400' height='300' >")
+            act.setToolTip("<img src='"+self.resources.getPath(ressourcesManager.PATH.BACKGROUND_LIST_PATH) + "/" + f +"'" + " width='350' height='233' >")
+
+
+    def onMoveMouseAbove(self, act):
+        if self.lastAct != act:
+            self.lastAct = act
+            QToolTip.showText(QPoint(0,0), act.toolTip())
 
 
     def initMenu(self):
-
+        self.lastAct = None
         has_speed_light = True
         has_constant_light = True
         has_printer = True
@@ -1807,6 +1822,7 @@ class MainWindow(QMainWindow):
         self.dslrMenu.addAction(self.actionImagequality2)
 
         self.backgroundMenu  = QMenu("Arriere plan",self)
+        self.backgroundMenu.hovered.connect(self.onMoveMouseAbove)
         self.skinMenu  = QMenu("Thème",self)
         self.displayMenu.addMenu(self.backgroundMenu)
         self.displayMenu.addMenu(self.skinMenu)

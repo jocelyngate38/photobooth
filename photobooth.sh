@@ -13,4 +13,4 @@ cd /home/pi/photobooth
 #  sudo /etc/init.d/samba restart
 #fi
 
-while [ 1 ]; do sudo python3 ph2.py; test $? -gt 128 && break; done
+while [ 1 ]; do sudo python3 photobooth.py; test $? -gt 128 && break; done

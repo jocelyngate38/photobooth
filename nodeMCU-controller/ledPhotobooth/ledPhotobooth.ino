@@ -186,6 +186,7 @@ enum {
   kSetPrinterError,
   kSetErrorColor,
   kSetBrightness,
+  kPrintSettings,
 
 };
 
@@ -208,6 +209,7 @@ void attachCommandCallbacks()
   cmdMessenger.attach(kSetPrinterError, onSetPrinterError);
   cmdMessenger.attach(kSetErrorColor, onSetErrorColor);
   cmdMessenger.attach(kSetBrightness, onSetBrightness);
+  cmdMessenger.attach(kPrintSettings, onPrintSettings);
 
 
 }
@@ -250,6 +252,7 @@ void onCommandList() {
   Serial.print("kSetPrinterError: ");     Serial.print(kSetPrinterError);     Serial.println(",<bool>; [0=no error or 1=error state]");
   Serial.print("kSetErrorColor: ");       Serial.print(kSetErrorColor);       Serial.println(",<red_1>,<green_1>,<blue_1>,<red_2>,<green_2>,<blue_2>; uint8_t [0,255]");
   Serial.print("kSetBrightness: ");       Serial.print(kSetBrightness);       Serial.println(",<brightness>; uint8_t [0,255]");
+  Serial.print("kPrintSettings: ");       Serial.print(kPrintSettings);       Serial.println(";");
 
   cmdMessenger.sendCmd(kAcknowledge, "onCommandList triggered!");
 }
@@ -280,6 +283,55 @@ void onSetFrontColor() {
 
   cmdMessenger.sendCmd(kAcknowledge, "onSetFrontColor triggered!");
 }
+
+
+
+void onPrintSettings() {
+  
+      //Serial.print( "LEDS_ERROR_STATE_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+  
+    Serial.print("LEDS_CAMERA_BACK_COLOR [");
+    Serial.print(LEDS_CAMERA_BACK_COLOR.r,16);Serial.print(", ");
+    Serial.print(LEDS_CAMERA_BACK_COLOR.g,16);Serial.print(", ");
+    Serial.print(LEDS_CAMERA_BACK_COLOR.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_TEXT_BACK_COLOR [");
+    Serial.print(LEDS_TEXT_BACK_COLOR.r,16);Serial.print(", ");
+    Serial.print(LEDS_TEXT_BACK_COLOR.g,16);Serial.print(", ");
+    Serial.print(LEDS_TEXT_BACK_COLOR.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_SIDE_LEFT_COLOR [");
+    Serial.print(LEDS_SIDE_LEFT_COLOR.r,16);Serial.print(", ");
+    Serial.print(LEDS_SIDE_LEFT_COLOR.g,16);Serial.print(", ");
+    Serial.print(LEDS_SIDE_LEFT_COLOR.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_SIDE_RIGHT_COLOR [");
+    Serial.print(LEDS_SIDE_RIGHT_COLOR.r,16);Serial.print(", ");
+    Serial.print(LEDS_SIDE_RIGHT_COLOR.g,16);Serial.print(", ");
+    Serial.print(LEDS_SIDE_RIGHT_COLOR.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_FRONT_COLOR_1 [");
+    Serial.print(LEDS_FRONT_COLOR_1.r,16);Serial.print(", ");
+    Serial.print(LEDS_FRONT_COLOR_1.g,16);Serial.print(", ");
+    Serial.print(LEDS_FRONT_COLOR_1.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_FRONT_COLOR_2 [");
+    Serial.print(LEDS_FRONT_COLOR_2.r,16);Serial.print(", ");
+    Serial.print(LEDS_FRONT_COLOR_2.g,16);Serial.print(", ");
+    Serial.print(LEDS_FRONT_COLOR_2.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_ERROR_COLOR_1 [");
+    Serial.print(LEDS_ERROR_COLOR_1.r,16);Serial.print(", ");
+    Serial.print(LEDS_ERROR_COLOR_1.g,16);Serial.print(", ");
+    Serial.print(LEDS_ERROR_COLOR_1.b,16);
+    Serial.println("]");
+    Serial.print("LEDS_ERROR_COLOR_2 [");
+    Serial.print(LEDS_ERROR_COLOR_2.r,16);Serial.print(", ");
+    Serial.print(LEDS_ERROR_COLOR_2.g,16);Serial.print(", ");
+    Serial.print(LEDS_ERROR_COLOR_2.b,16);
+    Serial.println("]");
+  
+ }
 
 void onSetErrorColor() {
 
@@ -379,11 +431,11 @@ void onSetBrightness() {
   brightness = cmdMessenger.readInt16Arg();
   cmdMessenger.sendCmd(kAcknowledge, "onSetBrightness triggered!");
 
-  LEDS_FRONT.updateRequest = true;
-  LEDS_SIDE_RIGHT.updateRequest = true;
-  LEDS_SIDE_LEFT.updateRequest = true;
-  LEDS_TEXT_BACK.updateRequest = true;
-  LEDS_CAMERA_BACK.updateRequest = true;
+//  LEDS_FRONT.updateRequest = true;
+//  LEDS_SIDE_RIGHT.updateRequest = true;
+//  LEDS_SIDE_LEFT.updateRequest = true;
+//  LEDS_TEXT_BACK.updateRequest = true;
+//  LEDS_CAMERA_BACK.updateRequest = true;
 
   LEDS_FRONT.updated == false;
   
@@ -391,7 +443,7 @@ void onSetBrightness() {
 
 void setup() {
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   cmdMessenger.printLfCr();
   attachCommandCallbacks();
   onCommandList();
@@ -417,7 +469,7 @@ void updateErrorLeds() {
       b = LEDS_ERROR_COLOR_2.b;
     }
 
-    Serial.print( "LEDS_ERROR_STATE_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+    //Serial.print( "LEDS_ERROR_STATE_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
     for (int i = 0; i < frontRight[0]; i++)
       strip.setPixelColor(i, strip.Color(r, g, b));
     for (int i = frontLeft[1]; i < PixelCount; i++)
@@ -454,7 +506,7 @@ void updateFrontLeds() {
           b = LEDS_FRONT_COLOR_2.b;
         }
 
-        Serial.print( "LEDS_FRONT_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+        //Serial.print( "LEDS_FRONT_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
         for (int i = frontRight[0]; i < frontRight[1]; i++)
           strip.setPixelColor(i, strip.Color(r, g, b));
 
@@ -490,7 +542,7 @@ void updateFrontLeds() {
       strip.setPixelColor(i, strip.Color(r, g, b));
 
     LEDS_FRONT.updated = true;
-    Serial.print( "LEDS_FRONT_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+    Serial.print( "LEDS_FRONT_COLOR["); Serial.print(r, 16); Serial.print(", ");Serial.print(g, 16); Serial.print(", ");Serial.print(b, 16); Serial.println("]");
 
   }
 
@@ -504,7 +556,7 @@ void updateRightSideLeds() {
   for (int i = sideRight[0]; i < sideRight[1]; i++)
     strip.setPixelColor(i,  strip.Color(r, g, b));
   LEDS_SIDE_RIGHT.updated = true;
-  Serial.print( "LEDS_SIDE_RIGHT_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+  Serial.print( "LEDS_SIDE_RIGHT_COLOR["); Serial.print(r, 16); Serial.print(", ");Serial.print(g, 16); Serial.print(", ");Serial.print(b, 16); Serial.println("]");
 
 }
 
@@ -516,7 +568,7 @@ void updateLeftSideLeds() {
   for (int i = sideLeft[0]; i < sideLeft[1]; i++)
     strip.setPixelColor(i, strip.Color(r, g, b));
   LEDS_SIDE_LEFT.updated = true;
-  Serial.print( "LEDS_SIDE_LEFT_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+  Serial.print( "LEDS_SIDE_LEFT_COLOR["); Serial.print(r, 16); Serial.print(", ");Serial.print(g, 16); Serial.print(", ");Serial.print(b, 16); Serial.println("]");
 
 }
 
@@ -531,7 +583,7 @@ void updateBackTextLeds() {
   for (int i = boxaselfi[0]; i < boxaselfi[1]; i++)
     strip.setPixelColor(i, strip.Color(r, g, b));
   LEDS_TEXT_BACK.updated = true;
-  Serial.print( "LEDS_TEXT_BACK_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+  Serial.print( "LEDS_TEXT_BACK_COLOR["); Serial.print(r, 16); Serial.print(", ");Serial.print(g, 16); Serial.print(", ");Serial.print(b, 16); Serial.println("]");
 }
 
 void updateBackCameraLeds() {
@@ -542,15 +594,13 @@ void updateBackCameraLeds() {
   for (int i = appareilphoto[0]; i < appareilphoto[1]; i++)
     strip.setPixelColor(i, strip.Color(r, g, b));
   LEDS_CAMERA_BACK.updated = true;
-  Serial.print( "LEDS_CAMERA_BACK_COLOR["); Serial.print(r, 16); Serial.print(g, 16); Serial.print(b, 16); Serial.println("]");
+  Serial.print( "LEDS_CAMERA_BACK_COLOR["); Serial.print(r, 16); Serial.print(", ");Serial.print(g, 16); Serial.print(", ");Serial.print(b, 16); Serial.println("]");
 
 }
 
 void loop() {
 
   cmdMessenger.feedinSerialData();
-
-  
   
   if (LEDS_FRONT.updateRequest) {
     LEDS_FRONT.updateRequest = false;

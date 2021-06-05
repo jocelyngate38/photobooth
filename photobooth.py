@@ -1483,16 +1483,21 @@ class MainWindow(QMainWindow):
             self.onButton2Pressed()
 
     def onRightButtonGPIO(self):
-
-        pyautogui.press('enter')
-
+        try:
+            pyautogui.press('enter')
+        except FailsSafeException as e:
+            print(e)
     def onLeftButtonGPIO(self):
-
-        pyautogui.press('left')
+        try:
+            pyautogui.press('left')
+        except FailsSafeException as e:
+            print(e)
 
     def onDownButtonGPIO(self):
-
-        pyautogui.press('down')
+        try:
+            pyautogui.press('down')
+        except FailsSafeException as e:
+            print(e)
 
     def onShowMenu(self):
 
@@ -2282,10 +2287,15 @@ class MainWindow(QMainWindow):
             self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
                 return
-            pyautogui.press('esc')
-            pyautogui.press('esc')
-            pyautogui.press('esc')
-            pyautogui.press('esc')
+            try:
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+            except FailsSafeException as e:
+                print(e)
+
+
             self.gotoStart()
 
 
@@ -2293,10 +2303,13 @@ class MainWindow(QMainWindow):
             self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
                 return
-            pyautogui.press('esc')
-            pyautogui.press('esc')
-            pyautogui.press('esc')
-            pyautogui.press('esc')
+            try:
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+                pyautogui.press('esc')
+            except FailsSafeException as e:
+                print(e)
             self.gotoStart()
 
         elif self.currentGPIOMode == GPIOMode.COMPUTING:

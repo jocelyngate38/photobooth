@@ -625,7 +625,7 @@ class ledControler():
         self.sendCommand('12,' + str(brightness) + ';', MAX_SERIAL_RETRY)
 
 
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False
 
 class MainWindow(QMainWindow):
 

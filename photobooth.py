@@ -1485,18 +1485,18 @@ class MainWindow(QMainWindow):
     def onRightButtonGPIO(self):
         try:
             pyautogui.press('enter')
-        except FailsSafeException as e:
+        except FailSafeException as e:
             print(e)
     def onLeftButtonGPIO(self):
         try:
             pyautogui.press('left')
-        except FailsSafeException as e:
+        except FailSafeException as e:
             print(e)
 
     def onDownButtonGPIO(self):
         try:
             pyautogui.press('down')
-        except FailsSafeException as e:
+        except FailSafeException as e:
             print(e)
 
     def onShowMenu(self):
@@ -2292,7 +2292,7 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
                 pyautogui.press('esc')
                 pyautogui.press('esc')
-            except FailsSafeException as e:
+            except FailSafeException as e:
                 print(e)
 
 
@@ -2308,7 +2308,7 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
                 pyautogui.press('esc')
                 pyautogui.press('esc')
-            except FailsSafeException as e:
+            except FailSafeException as e:
                 print(e)
             self.gotoStart()
 

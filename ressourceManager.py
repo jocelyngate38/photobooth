@@ -26,16 +26,20 @@ class ressourcesManager:
 
     class PATH(Enum):
 
-        CAPTURE_LOCAL = 1
-        CAPTURE_USB = 2
-        ASSEMBLIES_USB = 3
+        CAPTURE = 1
+        CALIBRATION_IMAGE=2
+        ASSEMBLIES = 3
         SKIN = 4
         APPLICATION = 5
         PAGE = 6
         EVENT = 7
         LOG = 8
         LOG_FILE = 9
-        THUMB_LOCAL=10
+        THUMB=10
+        BACKGROUND_IMAGE=11
+        BACKGROUND_LIST_PATH=12
+        SKIN_LIST_PATH=13
+        EVENT_LIST_PATH=14
 
     def getDirectorySize(self, Path):
         start_path = self.getPath(Path)
@@ -46,17 +50,140 @@ class ressourcesManager:
                 total_size += os.path.getsize(fp)
         return float(total_size / 1024.0 / 1024.0)
 
-    def __init__(self, ):
+    def getDirectoryFileNumber(self, Path):
+        totalFiles=0
+        for base, dirs, files in os.walk(self.getPath(Path)):
+            for Files in files:
+                totalFiles += 1
+        return totalFiles
+
+    def __init__(self ):
+        pass
+
+        # self.loadCurrentXmlSkinDescriptor()
+
+    def logInfos(self):
+
+        self.logger.addInfo("RESSOURCE PATHS")
+        self.logger.addInfo("CAPTURE : " + self.getPath(self.PATH.CAPTURE))
+        self.logger.addInfo("ASSEMBLIES : " + self.getPath(self.PATH.ASSEMBLIES))
+        self.logger.addInfo("SKIN : " + self.getPath(self.PATH.SKIN))
+        self.logger.addInfo("BACKGROUND_IMAGE : " + self.getPath(self.PATH.BACKGROUND_IMAGE))
+        self.logger.addInfo("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
+        self.logger.addInfo("PAGE : " + self.getPath(self.PATH.PAGE))
+        self.logger.addInfo("EVENT : " + self.getPath(self.PATH.EVENT))
+        self.logger.addInfo("LOG : " + self.getPath(self.PATH.LOG))
+        self.logger.addInfo("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
+        self.logger.addInfo("THUMB : " + self.getPath(self.PATH.THUMB))
+        self.logger.addInfo("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
+        self.logger.addInfo("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
+        self.logger.addInfo("EVENT_LIST_PATH : " + self.getPath(self.PATH.EVENT_LIST_PATH))
+        self.logger.addInfo("CALIBRATION_IMAGE : " + self.getPath(self.PATH.CALIBRATION_IMAGE))
+
+    def printPaths(self):
+
+        print("============================================================")
+        print("                       RESSOURCE PATHS                      ")
+        print("============================================================")
+        print("CAPTURE : " + self.getPath(self.PATH.CAPTURE))
+        print("ASSEMBLIES : " + self.getPath(self.PATH.ASSEMBLIES))
+        print("SKIN : " + self.getPath(self.PATH.SKIN))
+        print("BACKGROUND_IMAGE : " + self.getPath(self.PATH.BACKGROUND_IMAGE))
+        print("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
+        print("PAGE : " + self.getPath(self.PATH.PAGE))
+        print("EVENT : " + self.getPath(self.PATH.EVENT))
+        print("LOG : " + self.getPath(self.PATH.LOG))
+        print("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
+        print("THUMB : " + self.getPath(self.PATH.THUMB))
+        print("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
+        print("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
+        print("EVENT_LIST_PATH : " + self.getPath(self.PATH.EVENT_LIST_PATH))
+        print("CALIBRATION_IMAGE : " + self.getPath(self.PATH.CALIBRATION_IMAGE))
+        print("============================================================")
+
+    def getSkinPageDatas(self):
+        return self.skinPageDatas
+
+    def getSkinLayoutDatas(self):
+        return self.skinLayoutDatas
+
+    def getLogger(self):
+        return self.logger
+
+    def setPath(self, Path, value):
+        if not os.path.exists(value):
+            os.makedirs(value)
+        if Path == ressourcesManager.PATH.CAPTURE:
+            self.capturePath = value
+        if Path == ressourcesManager.PATH.CALIBRATION_IMAGE:
+            self.calibrationImagePath = value
+        if Path == ressourcesManager.PATH.ASSEMBLIES:
+            self.assembliesPath = value
+        if Path == ressourcesManager.PATH.SKIN:
+            self.skinPath = value
+        if Path == ressourcesManager.PATH.APPLICATION:
+            self.applicationPath = value
+        if Path == ressourcesManager.PATH.PAGE:
+            self.pagesPath = value
+        if Path == ressourcesManager.PATH.EVENT:
+            self.layoutPath = value
+        if Path == ressourcesManager.PATH.LOG:
+            self.logPath = value
+        if Path == ressourcesManager.PATH.LOG_FILE:
+            self.logFile = value
+        if Path == ressourcesManager.PATH.THUMB:
+            self.thumbPath = value
+        if Path == ressourcesManager.PATH.BACKGROUND_IMAGE:
+            self.backgroundImagePath = value
+        if Path == ressourcesManager.PATH.BACKGROUND_LIST_PATH:
+            self.backgroundListPath = value
+        if Path == ressourcesManager.PATH.EVENT_LIST_PATH:
+            self.eventListPath = value
+        if Path == ressourcesManager.PATH.SKIN_LIST_PATH:
+            self.skinListPath = value
+
+    def getPath(self, Path):
+        if Path == ressourcesManager.PATH.CAPTURE:
+            return self.capturePath
+        if Path == ressourcesManager.PATH.CALIBRATION_IMAGE:
+            return self.calibrationImagePath
+        if Path == ressourcesManager.PATH.ASSEMBLIES:
+            return self.assembliesPath
+        if Path == ressourcesManager.PATH.SKIN:
+            return self.skinPath
+        if Path == ressourcesManager.PATH.APPLICATION:
+            return self.applicationPath
+        if Path == ressourcesManager.PATH.PAGE:
+            return self.pagesPath
+        if Path == ressourcesManager.PATH.EVENT:
+            return self.layoutPath
+        if Path == ressourcesManager.PATH.LOG:
+            return self.logPath
+        if Path == ressourcesManager.PATH.LOG_FILE:
+            return self.logFile
+        if Path == ressourcesManager.PATH.THUMB:
+            return self.thumbPath
+        if Path == ressourcesManager.PATH.BACKGROUND_IMAGE:
+            return self.backgroundImagePath
+        if Path == ressourcesManager.PATH.BACKGROUND_LIST_PATH:
+            return self.backgroundListPath
+        if Path == ressourcesManager.PATH.EVENT_LIST_PATH:
+            return self.eventListPath
+        if Path == ressourcesManager.PATH.SKIN_LIST_PATH:
+            return self.skinListPath
+
+    def loadResources(self):
 
         basePath = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), os.pardir))
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
 
-        self.skinName = settings.value("skin", "modern_chalk")
-        self.eventName = settings.value("event", "openningWallstreat")
+        self.skinName = settings.value("skin", "error")
+        self.eventName = settings.value("event", "error")
+        self.background = settings.value("background", "error")
 
-        self.logPath = basePath + "/photobooth-datas/local_datas/logs"
+        self.logPath = basePath + "/photobooth-datas/logs"
         if not os.path.exists(self.logPath):
             os.makedirs(self.logPath)
         self.logPath = os.path.normpath(self.logPath)
@@ -73,8 +200,24 @@ class ressourcesManager:
 
         self.applicationPath = basePath + "/photobooth"
         self.applicationPath = os.path.normpath(self.applicationPath)
-        
-        self.skinPath = self.applicationPath + "/resources/skins/" + self.skinName 
+
+        self.backgroundListPath = self.applicationPath + "/resources/backgrounds"
+        self.backgroundListPath = os.path.normpath(self.backgroundListPath)
+
+        self.calibrationImagePath = self.applicationPath + "/resources/calibration_image.jpg"
+        self.calibrationImagePath = os.path.normpath(self.calibrationImagePath)
+
+
+        self.skinListPath = self.applicationPath + "/resources/skins"
+        self.skinListPath = os.path.normpath(self.skinListPath)
+
+        self.eventListPath = self.applicationPath + "/resources/events"
+        self.eventListPath = os.path.normpath(self.eventListPath)
+
+        self.backgroundImagePath = self.applicationPath + "/resources/backgrounds/" + self.background
+        self.backgroundImagePath = os.path.normpath(self.backgroundImagePath)
+
+        self.skinPath = self.applicationPath + "/resources/skins/" + self.skinName
         self.skinPath = os.path.normpath(self.skinPath)
 
         self.pagesPath = self.skinPath
@@ -83,227 +226,35 @@ class ressourcesManager:
         self.layoutPath = self.applicationPath + "/resources/events/" + self.eventName
         self.layoutPath = os.path.normpath(self.layoutPath)
 
-        self.thumbLocalPath = basePath + "/photobooth-datas/local_datas/thumbs"
-        if not os.path.exists(self.thumbLocalPath):
-            os.makedirs(self.thumbLocalPath)
-        self.thumbLocalPath = os.path.normpath(self.thumbLocalPath)
+        self.thumbPath = basePath + "/photobooth-datas/thumbs"
+        if not os.path.exists(self.thumbPath):
+            os.makedirs(self.thumbPath)
+        self.thumbPath = os.path.normpath(self.thumbPath)
 
-        self.applicationLocalDataPath = basePath + "/photobooth-datas/local_datas"
-        if not os.path.exists(self.applicationLocalDataPath):
-            os.makedirs(self.applicationLocalDataPath)
-        self.applicationLocalDataPath = os.path.normpath(self.applicationLocalDataPath)
+        self.applicationDataPath = basePath + "/photobooth-datas"
+        if not os.path.exists(self.applicationDataPath):
+            os.makedirs(self.applicationDataPath)
+        self.applicationDataPath = os.path.normpath(self.applicationDataPath)
 
-        self.captureLocalPath = self.applicationLocalDataPath + "/" + self.eventName + "/captures"
-        if not os.path.exists(self.captureLocalPath):
-            os.makedirs(self.captureLocalPath)
-        self.captureLocalPath = os.path.normpath(self.captureLocalPath)
-
-        self.applicationUSBDataPath = basePath + "/photobooth-datas/usb_datas"
-        if not os.path.exists(self.applicationUSBDataPath):
-            os.makedirs(self.applicationUSBDataPath)
-        self.applicationUSBDataPath = os.path.normpath(self.applicationUSBDataPath)
-
-        self.assembliesPath = self.applicationUSBDataPath + "/" + self.eventName + "/assemblies"
+        self.assembliesPath = self.applicationDataPath + "/" + self.eventName + "/assemblies"
         if not os.path.exists(self.assembliesPath):
             os.makedirs(self.assembliesPath)
         self.assembliesPath = os.path.normpath(self.assembliesPath)
 
-        self.captureUSBPath = self.applicationUSBDataPath + "/" + self.eventName + "/captures"
-        if not os.path.exists(self.captureUSBPath):
-            os.makedirs(self.captureUSBPath)
-        self.captureUSBPath = os.path.normpath(self.captureUSBPath)
+        self.capturePath = self.applicationDataPath + "/" + self.eventName + "/captures"
+        if not os.path.exists(self.capturePath):
+            os.makedirs(self.capturePath)
+        self.capturePath = os.path.normpath(self.capturePath)
 
         self.skinLayoutDatas = [[], [], [], []]
-        #self.skinGeneratorThemes = []
-        # self.skinGeneratorLayoutDatas = [[], [], [], []]
 
         self.nbImageMax = 0
-        
-        self.homePageDisplayFilename=""
-        # self.loadCurrentXmlSkinDescriptor()
 
-    def logInfos(self):
-
-        self.logger.addInfo("RESSOURCE PATHS")
-        self.logger.addInfo("CAPTURE_LOCAL : " + self.getPath(self.PATH.CAPTURE_LOCAL))
-        self.logger.addInfo("CAPTURE_USB : " + self.getPath(self.PATH.CAPTURE_USB))
-        self.logger.addInfo("ASSEMBLIES_USB : " + self.getPath(self.PATH.ASSEMBLIES_USB))
-        self.logger.addInfo("SKIN : " + self.getPath(self.PATH.SKIN))
-        self.logger.addInfo("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
-        self.logger.addInfo("PAGE : " + self.getPath(self.PATH.PAGE))
-        self.logger.addInfo("EVENT : " + self.getPath(self.PATH.EVENT))
-        self.logger.addInfo("LOG : " + self.getPath(self.PATH.LOG))
-        self.logger.addInfo("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
-        self.logger.addInfo("THUMB_LOCAL : " + self.getPath(self.PATH.THUMB_LOCAL))
-
-    def printPaths(self):
-
-        print("============================================================")
-        print("                       RESSOURCE PATHS                      ")
-        print("============================================================")
-        print("CAPTURE_LOCAL : " + self.getPath(self.PATH.CAPTURE_LOCAL))
-        print("CAPTURE_USB : " + self.getPath(self.PATH.CAPTURE_USB))
-        print("ASSEMBLIES_USB : " + self.getPath(self.PATH.ASSEMBLIES_USB))
-        print("SKIN : " + self.getPath(self.PATH.SKIN))
-        print("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
-        print("PAGE : " + self.getPath(self.PATH.PAGE))
-        print("EVENT : " + self.getPath(self.PATH.EVENT))
-        print("LOG : " + self.getPath(self.PATH.LOG))
-        print("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
-        print("THUMB_LOCAL : " + self.getPath(self.PATH.THUMB_LOCAL))
-        print("============================================================")
-
-    def getSkinPageDatas(self):
-        return self.skinPageDatas
-
-    def getSkinLayoutDatas(self):
-        return self.skinLayoutDatas
-
-    def getLogger(self):
-        return self.logger
-
-    def setPath(self, Path, value):
-        if not os.path.exists(value):
-            os.makedirs(value)
-        if Path == ressourcesManager.PATH.CAPTURE_LOCAL:
-            self.captureLocalPath = value
-        if Path == ressourcesManager.PATH.CAPTURE_USB:
-            self.captureUSBPath = value
-        if Path == ressourcesManager.PATH.ASSEMBLIES_USB:
-            self.assembliesPath = value
-        if Path == ressourcesManager.PATH.SKIN:
-            self.skinPath = value
-        if Path == ressourcesManager.PATH.APPLICATION:
-            self.applicationPath = value
-        if Path == ressourcesManager.PATH.PAGE:
-            self.pagesPath = value
-        if Path == ressourcesManager.PATH.EVENT:
-            self.layoutPath = value
-        if Path == ressourcesManager.PATH.LOG:
-            self.logPath = value
-        if Path == ressourcesManager.PATH.LOG_FILE:
-            self.logFile = value
-        if Path == ressourcesManager.PATH.THUMB_LOCAL:
-            self.thumbLocalPath = value
-
-    def getPath(self, Path):
-        if Path == ressourcesManager.PATH.CAPTURE_LOCAL:
-            return self.captureLocalPath
-        if Path == ressourcesManager.PATH.CAPTURE_USB:
-            return self.captureUSBPath
-        if Path == ressourcesManager.PATH.ASSEMBLIES_USB:
-            return self.assembliesPath
-        if Path == ressourcesManager.PATH.SKIN:
-            return self.skinPath
-        if Path == ressourcesManager.PATH.APPLICATION:
-            return self.applicationPath
-        if Path == ressourcesManager.PATH.PAGE:
-            return self.pagesPath
-        if Path == ressourcesManager.PATH.EVENT:
-            return self.layoutPath
-        if Path == ressourcesManager.PATH.LOG:
-            return self.logPath
-        if Path == ressourcesManager.PATH.LOG_FILE:
-            return self.logFile
-        if Path == ressourcesManager.PATH.THUMB_LOCAL:
-            return self.thumbLocalPath
-
-    #def loadXmlSkinGeneratorDescriptor(self, path):
-
-        ## print(path)
-        #self.nbImageMax = 0
-        #self.rootTemplate = path
-        #tree = ET.parse(path + "/descriptor.xml")
-        #root = tree.getroot()
-        #layouts = root.findall("./layouts/layout")
-        #subThemes = root.findall("./subThemes/subTheme")
-        #pages = root.findall("./pages/page")
-
-        #self.skinGeneratorPagesDatas = []
-        #self.skinGeneratorThemes = []
-
-        #for theme in subThemes:
-            #self.skinGeneratorThemes.append([str(theme.find("./name").text), str(theme.find("./folder").text)])
-
-        ## print(self.skinGeneratorThemes)
-
-        #self.skinGeneratorLayoutDatas = [[], [], [], []]
-
-        #for lay in layouts:
-            #layoutDict = {}
-            #n = int(lay.find("./nbImages").text)
-            #if n > self.nbImageMax:
-                #self.nbImageMax = n
-            #path = str(lay.find("./template").text)
-            #isLandscape = int(lay.find("./landscape").text)
-            #layoutId = str(lay.find("./layoutId").text)
-
-            #layoutDict["landscape"] = isLandscape
-            #layoutDict["nbImages"] = n
-            #layoutDict["filename"] = path
-            #layoutDict["layoutId"] = layoutId
-
-            #curfile = self.rootTemplate + "/layouts/" + path
-            #if not os.path.isfile(curfile):
-                #print("XML error no such file " + curfile)
-                #self.getLogger().addError(
-                    #"XML error no such file " + curfile)
-                #continue
-
-            #messages = lay.findall("./messages/message")
-
-            #messagesDict = {}
-            #for mess in messages:
-                #messDict = {}
-                #messDict["x1"] = int(mess.find("./point1/x").text)
-                #messDict["y1"] = int(mess.find("./point1/y").text)
-                #messDict["x2"] = int(mess.find("./point2/x").text)
-                #messDict["y2"] = int(mess.find("./point2/y").text)
-                #messDict["x3"] = int(mess.find("./point3/x").text)
-                #messDict["y3"] = int(mess.find("./point3/y").text)
-                #messDict["x4"] = int(mess.find("./point4/x").text)
-                #messDict["y4"] = int(mess.find("./point4/y").text)
-                #messDict["defaultFontSize"] = int(mess.find("./defaultFontSize").text)
-                #messDict["location"] = mess.find("./location").text
-                #messDict["defaultMessage"] = mess.find("./defaultMessage").text
-                #messDict["type"] = mess.find("./type").text
-                #messagesDict[int(mess.find("./index").text)] = messDict
-
-            #layoutDict["messages"] = messagesDict
-
-            #self.skinGeneratorLayoutDatas[n - 1].append(layoutDict)
-
-        #for page in pages:
-            #pageDict = {}
-            #pageDict["filename"] = page.find("./filename").text
-
-            #messagesDict = {}
-            #messages = page.findall("./message")
-            #for mess in messages:
-                #messDict = {}
-                #messDict["x1"] = int(mess.find("./point1/x").text)
-                #messDict["y1"] = int(mess.find("./point1/y").text)
-                #messDict["x2"] = int(mess.find("./point2/x").text)
-                #messDict["y2"] = int(mess.find("./point2/y").text)
-                #messDict["x3"] = int(mess.find("./point3/x").text)
-                #messDict["y3"] = int(mess.find("./point3/y").text)
-                #messDict["x4"] = int(mess.find("./point4/x").text)
-                #messDict["y4"] = int(mess.find("./point4/y").text)
-                #messDict["defaultFontSize"] = int(mess.find("./defaultFontSize").text)
-                #messDict["location"] = mess.find("./location").text
-                #messDict["defaultMessage"] = mess.find("./defaultMessage").text
-                #messDict["type"] = mess.find("./type").text
-                #messagesDict[int(mess.find("./index").text)] = messDict
-
-            #pageDict["messages"] = messagesDict
-            #self.skinGeneratorPagesDatas.append(pageDict)
-
-    def loadCurrentXmlSkinDescriptor(self):
+        self.homePageDisplayFilename = ""
 
         self.nbImageMax = 0
 
         descriptor = self.getPath(ressourcesManager.PATH.EVENT) + "/descriptor.xml"
-        print(descriptor)
         tree = ET.parse(descriptor)
         root = tree.getroot()
         layouts = root.findall("./layouts/layout")
@@ -342,14 +293,14 @@ class ressourcesManager:
             layoutDict["layoutId"] = layoutId
 
             if not os.path.isfile(self.getPath(ressourcesManager.PATH.EVENT) + "/" + path):
-                print("XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
+                self.logger.addError("XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
                 self.getLogger().addError(
                     "XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
                 continue
 
             images = lay.findall("./images/image")
             if len(images) != int(lay.find("./nbImages").text):
-                print("XML error too much images for this layout")
+                self.logger.addError("XML error too much images for this layout")
                 self.getLogger().addError("XML error too much/less images for this layout")
                 continue
 
@@ -395,21 +346,20 @@ class ressourcesManager:
 
 
     def buildLayout2(self, idName, choosenLayout, thumb):
-        #print(choosenLayout)
 
         layoutId = choosenLayout["layoutId"]
         nbImages = choosenLayout["nbImages"]
 
-        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES_USB) + "/" + idName + "_" + layoutId + "_" + str(thumb) + ".jpg"
+        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES) + "/" + idName + "_" + layoutId + "_" + str(thumb) + ".jpg"
 
         if os.path.isfile(outFile):
-            print("This assembly already exists, we dont loose time to rebuild it")
+            self.logger.addInfo("This assembly already exists, we dont loose time to rebuild it")
             return QPixmap(outFile), os.path.normpath(outFile)
 
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            print("The current layout template does not exists")
+            self.logger.addWarning("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -432,7 +382,7 @@ class ressourcesManager:
             h = choosenLayout["images"][(i + 1)]["h"]
             angle = choosenLayout["images"][(i + 1)]["angle"]
 
-            pix = QPixmap(self.getPath(ressourcesManager.PATH.THUMB_LOCAL) + "/" + idName + "_" + ext + "_thumb_" + str(thumb) + ".jpg")
+            pix = QPixmap(self.getPath(ressourcesManager.PATH.THUMB) + "/" + idName + "_" + ext + "_thumb_" + str(thumb) + ".jpg")
             pix = pix.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
             painter.translate(x, y)
@@ -450,17 +400,15 @@ class ressourcesManager:
         
             
     def buildLayoutFromList(self, captureList, choosenLayout):
-        
-        #print(choosenLayout)
 
         layoutId = choosenLayout["layoutId"]
         nbImages = choosenLayout["nbImages"]
         
-        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES_USB) + "/" + str(uuid.uuid4()) + ".jpg"
+        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES) + "/" + str(uuid.uuid4()) + ".jpg"
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            print("The current layout template does not exists")
+            self.logger.addWarning("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -506,16 +454,14 @@ class ressourcesManager:
         layoutId = choosenLayout["layoutId"]
         nbImages = choosenLayout["nbImages"]
 
-        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES_USB) + "/" + idName + "_" + layoutId + ".jpg"
+        outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES) + "/" + idName + "_" + layoutId + ".jpg"
 
         if os.path.isfile(outFile):
-            #print("This assembly already exists, we dont loose time to rebuild it")
             return QPixmap(outFile), os.path.normpath(outFile)
 
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            #print("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -538,7 +484,7 @@ class ressourcesManager:
             h = choosenLayout["images"][(i + 1)]["h"]
             angle = choosenLayout["images"][(i + 1)]["angle"]
 
-            pix = QPixmap(self.getPath(ressourcesManager.PATH.CAPTURE_LOCAL) + "/" + idName + "_" + ext + ".jpg")
+            pix = QPixmap(self.getPath(ressourcesManager.PATH.CAPTURE) + "/" + idName + "_" + ext + ".jpg")
             pix = pix.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
             painter.translate(x, y)
@@ -556,13 +502,11 @@ class ressourcesManager:
     def buildSingleLayout(self, inFile, outFile, choosenLayout):
 
         if os.path.isfile(outFile):
-            #print("This assembly already exists, we dont loose time to rebuild it")
             return
 
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            #print("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -605,7 +549,4 @@ if __name__ == '__main__':
     conn = cups.Connection()
     printers = conn.getPrinters()
     resources.logger.addInfo(json.dumps(printers))
-
-    # resources.loadXmlSkinGeneratorDescriptor("../external/skin/chalk/templates/descriptor.xml")
-    # resources.loadCurrentXmlSkinDescriptor()
     sys.exit(1)

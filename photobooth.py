@@ -625,6 +625,8 @@ class ledControler():
         self.sendCommand('12,' + str(brightness) + ';', MAX_SERIAL_RETRY)
 
 
+pyautogui.FAILSAFE = True
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -1485,18 +1487,18 @@ class MainWindow(QMainWindow):
     def onRightButtonGPIO(self):
         try:
             pyautogui.press('enter')
-        except FailSafeException as e:
+        except pyautogui.FailSafeException as e:
             print(e)
     def onLeftButtonGPIO(self):
         try:
             pyautogui.press('left')
-        except FailSafeException as e:
+        except pyautogui.FailSafeException as e:
             print(e)
 
     def onDownButtonGPIO(self):
         try:
             pyautogui.press('down')
-        except FailSafeException as e:
+        except pyautogui.FailSafeException as e:
             print(e)
 
     def onShowMenu(self):
@@ -2292,7 +2294,7 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
                 pyautogui.press('esc')
                 pyautogui.press('esc')
-            except FailSafeException as e:
+            except pyautogui.FailSafeException as e:
                 print(e)
 
 
@@ -2308,7 +2310,7 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
                 pyautogui.press('esc')
                 pyautogui.press('esc')
-            except FailSafeException as e:
+            except pyautogui.FailSafeException as e:
                 print(e)
             self.gotoStart()
 

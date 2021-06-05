@@ -191,7 +191,7 @@ class ressourcesManager:
         self.logFile = self.logPath + '/photobooth.log'
         self.logFile = os.path.normpath(self.logFile)
 
-        self.logger = logger(self.logFile)
+        self.logger = logger(self.logFile, 2)
 
         self.logger.addInfo("STARTING RESSOURCE MANAGER")
         self.printDuration = 60

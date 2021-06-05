@@ -1645,7 +1645,7 @@ class MainWindow(QMainWindow):
         self.actionImagequality2.triggered.connect(self.setImagequality2)
         self.actionImagequality2.setCheckable(True)
 
-        self.actionEnableConstantLight = QAction("Activer/Désactiver éclairage constant", self)
+        self.actionEnableConstantLight = QAction("Activer/Désactiver", self)
         self.actionEnableConstantLight.setCheckable(True)
         self.actionEnableConstantLight.triggered.connect(self.toogleEnableConstantLight)
 
@@ -1655,7 +1655,7 @@ class MainWindow(QMainWindow):
         self.actionSwitchOffConstantLight = QAction("Eteindre éclairage constant", self)
         self.actionSwitchOffConstantLight.triggered.connect(self.switchOffConstantLight)
 
-        self.actionEnableSpeedLight = QAction("Activer/Désactiver éclairage flash", self)
+        self.actionEnableSpeedLight = QAction("Activer/Désactiver", self)
         self.actionEnableSpeedLight.setCheckable(True)
         self.actionEnableSpeedLight.triggered.connect(self.toogleEnableSpeedlight)
 
@@ -1675,7 +1675,7 @@ class MainWindow(QMainWindow):
             self.printerActionList.append(act)
 
 
-        self.actionEnablePrinting = QAction("Activer/Désactiver impressions", self)
+        self.actionEnablePrinting = QAction("Activer/Désactiver", self)
         self.actionEnablePrinting.setCheckable(True)
         self.actionEnablePrinting.triggered.connect(self.toogleEnablePrinting)
 
@@ -1688,9 +1688,9 @@ class MainWindow(QMainWindow):
         self.actionExit = QAction("<- Sortir du menu", self)
 
 
-        self.actionRestartCups = QAction("Redemarrer service impression", self)
-        self.actionStartCups = QAction("Demarrer service impression", self)
-        self.actionStopCups = QAction("Arreter service impression", self)
+        self.actionRestartCups = QAction("Redemarrer cups", self)
+        self.actionStartCups = QAction("Demarrer cups", self)
+        self.actionStopCups = QAction("Arreter cups", self)
 
         self.actionRestartCups.triggered.connect(self.restartCUPS)
         self.actionStartCups.triggered.connect(self.startCUPS)
@@ -1759,7 +1759,7 @@ class MainWindow(QMainWindow):
         self.dataMenu.addAction(self.actionCleanAssemblies)
         self.dataMenu.addAction(self.actionCleanEventDatas)
 
-        self.dslrMenu  = QMenu("Appareil photo " + CaptureImageThread(None,None).getCameraName(),self)
+        self.dslrMenu  = QMenu(CaptureImageThread(None,None).getCameraName(),self)
         self.settingMenu.addMenu(self.dslrMenu)
 
         self.speedLightMenu = QMenu("Eclairage flash", self)
@@ -1779,7 +1779,7 @@ class MainWindow(QMainWindow):
 
 
         self.printerMenu = QMenu("Impression", self)
-        self.cupsMenu = QMenu("Service d'impressions", self)
+        self.cupsMenu = QMenu("Cups", self)
         self.printerMenu.addAction(self.actionEnablePrinting)
         self.printerMenu.addMenu(self.cupsMenu)
         self.printerMenu.addActions(self.printerActionList)
@@ -1830,84 +1830,6 @@ class MainWindow(QMainWindow):
         self.contextMenu.addAction(self.actionShutdown)
         self.contextMenu.addAction(self.actionReboot)
         self.contextMenu.addAction(self.actionExit)
-
-
-        # self.menu = QMenu("Menu principal", self)
-        #
-        # self.menuCleaning = QMenu("Donnees", self)
-        # self.menuDSLR = QMenu("Appareil photo", self)
-        # self.menuSpeedLigth = QMenu("Eclairage flash", self)
-        # self.menuConstantLight = QMenu("Eclairage constant", self)
-        # self.menuPrinters = QMenu("Impressions", self)
-        # self.menuSkin = QMenu("Themes", self)
-        # self.menuBackground = QMenu("Arrière plan", self)
-        # self.menuBackground.setToolTipsVisible(True)
-        # self.menuEvents = QMenu("Evenement", self)
-        # self.menuSetup = QMenu("Installation", self)
-        # self.menuFeatures = QMenu("Features", self)
-        #
-        # self.menuCleaning.addAction(self.actionCleanUSBCaptures)
-        # self.menuCleaning.addAction(self.actionCleanLocalCaptures)
-        # self.menuCleaning.addAction(self.actionCleanUSBAssemblies)
-        # self.menuCleaning.addAction(self.actionCleanAll)
-        #
-        # self.menuConstantLight.addAction(self.actionEnableConstantLight)
-        # self.menuConstantLight.addAction(self.actionSwitchOnConstantLight)
-        # self.menuConstantLight.addAction(self.actionSwitchOffConstantLight)
-        #
-        # self.menuSpeedLigth.addAction(self.actionEnableSpeedLight)
-        # self.menuSpeedLigth.addAction(self.actionRestartSpeedLight)
-        #
-        # self.menuDSLR.addAction(self.actionRestartDSLR)
-        # self.menuDSLR.addAction(self.actionImagequality0)
-        # self.menuDSLR.addAction(self.actionImagequality1)
-        # self.menuDSLR.addAction(self.actionImagequality2)
-        #
-        # self.menuPrinters.addAction(self.actionEnablePrinting)
-        # self.menuPrinters.addAction(self.actionRestartCups)
-        # self.menuPrinters.addAction(self.actionStartCups)
-        # self.menuPrinters.addAction(self.actionStartCups)
-        # self.menuPrinters.addAction(self.actionStartCups)
-        # self.menuPrinters.addAction(self.actionStopCups)
-        # self.menuPrinters.addAction(self.actionChooseCP800_0Printer)
-        # self.menuPrinters.addAction(self.actionChooseCP800_1Printer)
-        # self.menuPrinters.addAction(self.actionChooseCP800_2Printer)
-        # self.menuPrinters.addAction(self.actionChooseCP800_3Printer)
-        #
-        # self.menuSetup.addAction(self.actionShutdown)
-        # self.menuSetup.addAction(self.actionReboot)
-        #
-        # self.menuFeatures.addAction(self.actionGenerateSingleAssemblies)
-        #
-        # self.menuFeatures.addAction(self.actionGenerateTestAssemblies)
-        # self.menuFeatures.addAction(self.actionPrintTestAssembly1)
-        # self.menuFeatures.addAction(self.actionPrintTestAssembly2)
-        # self.menuFeatures.addAction(self.actionPrintTestAssembly3)
-        # self.menuFeatures.addAction(self.actionPrintTestAssembly4)
-        #
-        # self.menu.addMenu(self.menuCleaning)
-        #
-        # self.menu.addMenu(self.menuDSLR)
-        # self.menu.addMenu(self.menuSpeedLigth)
-        # self.menu.addMenu(self.menuConstantLight)
-        #
-        # self.menu.addMenu(self.menuPrinters)
-        # self.menu.addMenu(self.menuSkin)
-        # self.menu.addMenu(self.menuBackground)
-        # self.menu.addMenu(self.menuEvents)
-        # self.menu.addMenu(self.menuSetup)
-        # self.menu.addMenu(self.menuFeatures)
-        #
-        # self.menu.addAction(self.actionExit)
-        #
-        # for ac in self.eventActionList:
-        #     self.menuEvents.addAction(ac)
-        #
-        # for ac in self.skinActionList:
-        #     self.menuSkin.addAction(ac)
-        #
-        # for ac in self.backgroundActionList:
-        #     self.menuBackground.addAction(ac)
 
     def updateMenu(self, type):
 
@@ -1986,12 +1908,12 @@ class MainWindow(QMainWindow):
             self.printerMenu.setTitle("Impression (activé)")
 
         if self.is_service_running("cups") is False:
-            self.cupsMenu.setTitle("Service d'impressions (arreté)")
+            self.cupsMenu.setTitle("Cups (arreté)")
             self.actionRestartCups.setText("Redemarrer (arreté)")
             self.actionStartCups.setText("Demarrer (arreté)")
             self.actionStopCups.setText("Arreter (arreté)")
         else:
-            self.cupsMenu.setTitle("Service d'impressions (démarré)")
+            self.cupsMenu.setTitle("Cups (démarré)")
             self.actionRestartCups.setText("Redemarrer (démarré)")
             self.actionStartCups.setText("Demarrer (démarré)")
             self.actionStopCups.setText("Arreter (démarré)")
@@ -2016,67 +1938,6 @@ class MainWindow(QMainWindow):
         self.constantLightMenu.menuAction().setVisible(not self.constantLightMenu.isEmpty())
         self.settingMenu.menuAction().setVisible(not self.settingMenu.isEmpty())
 
-        # self.actionRestartCups.setVisible(self.printingEnabled)
-        # self.actionStartCups.setVisible(self.printingEnabled)
-        # self.actionStopCups.setVisible(self.printingEnabled)
-        #contextM
-        # if self.constantLightEnabled is False:
-        #     self.menuConstantLight.setTitle("Eclairage constant (désactivé)")
-        # else:
-        #     self.menuConstantLight.setTitle("Eclairage constant")
-        #
-        #
-        # if self.speedLightEnabled is False:
-        #     self.menuSpeedLigth.setTitle("Eclairage flash (désactivé)")
-        # else:
-        #     self.menuSpeedLigth.setTitle("Eclairage flash")
-        #
-        # self.actionRestartCups.setVisible(self.printingEnabled)
-        # self.actionStartCups.setVisible(self.printingEnabled)
-        # self.actionStopCups.setVisible(self.printingEnabled)
-        #
-        # self.actionChooseCP800_0Printer.setVisible(self.printingEnabled)
-        # self.actionChooseCP800_1Printer.setVisible(self.printingEnabled)
-        # self.actionChooseCP800_2Printer.setVisible(self.printingEnabled)
-        # self.actionChooseCP800_3Printer.setVisible(self.printingEnabled)
-        #
-        # self.printerMenuAction.setEnabled(self.printingEnabled)
-        # self.printerMenuAction.setVisible(self.printingEnabled)
-        # self.printerMenuAction.setText("Imprimante (" + self.printerName + ")")
-        #
-        # self.actionChooseCP800_0Printer.setChecked(self.printerName == self.actionChooseCP800_0Printer.text())
-        # self.actionChooseCP800_1Printer.setChecked(self.printerName == self.actionChooseCP800_1Printer.text())
-        # self.actionChooseCP800_2Printer.setChecked(self.printerName == self.actionChooseCP800_2Printer.text())
-        # self.actionChooseCP800_3Printer.setChecked(self.printerName == self.actionChooseCP800_3Printer.text())
-        #
-        # if self.printingEnabled is False:
-        #     if self.is_service_running("cups") is False:
-        #         self.menuPrinters.setTitle("Impressions (désactivé, service arreté)")
-        #     else:
-        #         self.menuPrinters.setTitle("Impressions (désactivé, service démarré)")
-        # else:
-        #     if self.is_service_running("cups") is False:
-        #         self.menuPrinters.setTitle("Impressions (arreté)")
-        #         self.actionRestartCups.setText("Redemarrer service impression (arreté)")
-        #         self.actionStartCups.setText("Demarrer service impression (arreté)")
-        #         self.actionStopCups.setText("Arreter service impression (arreté)")
-        #     else:
-        #         self.menuPrinters.setTitle("Impressions (démarré)")
-        #         self.actionRestartCups.setText("Redemarrer service impression (démarré)")
-        #         self.actionStartCups.setText("Demarrer service impression (démarré)")
-        #         self.actionStopCups.setText("Arreter service impression (démarré)")
-        #
-        # sizeCapturesUSB = self.resources.getDirectorySize(self.resources.PATH.CAPTURE)
-        # sizeAssembliesUSB = self.resources.getDirectorySize(self.resources.PATH.ASSEMBLIES)
-        #
-        # self.actionCleanUSBCaptures.setText(
-        #     "Effacer toutes les photos de la memmoire usb (" + str("{:.2f}".format(sizeCapturesUSB)) + " MB)")
-        # self.actionCleanUSBAssemblies.setText(
-        #     "Effacer tous les assemblages de la memmoire usb (" + str("{:.2f}".format(sizeAssembliesUSB)) + " MB)")
-        # self.actionCleanAll.setText("Effacer toutes les donnees (" + str(
-        #     "{:.2f}".format(sizeCapturesLocal + sizeCapturesUSB + sizeAssembliesUSB)) + " MB)")
-        # self.menuCleaning.setTitle(
-        #     "Donnees (" + str("{:.2f}".format(sizeCapturesLocal + sizeCapturesUSB + sizeAssembliesUSB)) + " MB)")
         QApplication.processEvents()
 
     def showTriggerErrorPage(self):
@@ -2805,10 +2666,10 @@ QMenu {
     padding-bottom: 2px;
 }
 QMenu::item{
-    padding-top: 10px;
-    padding-left: 12px;
+    padding-top: 8px;
+    padding-left: 10px;
     padding-right: 25px;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 QMenu::item {
     background-color: transparent;

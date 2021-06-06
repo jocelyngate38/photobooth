@@ -1829,7 +1829,7 @@ class MainWindow(QMainWindow):
 
         self.skinMenu.addActions(self.skinActionList)
         self.backgroundMenu.addActions(self.backgroundActionList)
-        self.backgroundMenu.setToolTipsVisible(True)
+
         self.eventMenu.addActions(self.eventActionList)
 
         self.calibrateMenu = QMenu("Calibration",self)
@@ -1855,7 +1855,6 @@ class MainWindow(QMainWindow):
         self.contextMenu.addAction(self.actionExit)
 
     def updateMenu(self, type):
-
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)

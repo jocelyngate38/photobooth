@@ -4,7 +4,7 @@ from enum import Enum
 import os
 from PyQt5.QtCore import (QFile, QFileInfo, QSettings,
                           Qt, QIODevice)
-from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtGui import QPixmap, QPainter, QColor
 from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow)
 from logger import *
 import sys
@@ -399,7 +399,7 @@ class ressourcesManager:
         
         
             
-    def buildLayoutFromList(self, captureList, choosenLayout):
+    def buildLayoutFromList(self, captureList, choosenLayout, showCuttingLine=False):
 
         layoutId = choosenLayout["layoutId"]
         nbImages = choosenLayout["nbImages"]
@@ -440,6 +440,52 @@ class ressourcesManager:
             painter.translate(-x, -y)
 
         painter.drawPixmap(0, 0, pixLayout)
+
+        if showCuttingLine is True:
+            painter.setPen(QColor(255,110,0))  # add a red pen
+            borderMargin = 28
+
+            x00 = borderMargin
+            y00 = 0
+            x01 = x00
+            y01 = pixLayout.size().height()
+
+            x10 = pixLayout.size().width() - borderMargin
+            y10 = 0
+            x11 = x10
+            y11 = pixLayout.size().height()
+
+            x20 = 0
+            y20 = borderMargin
+            x21 = pixLayout.size().width()
+            y21 = y20
+
+            x30 = 0
+            y30 = pixLayout.size().height() - borderMargin
+            x31 = pixLayout.size().width()
+            y31 = y30
+
+            painter.drawLine(x00, y00, x01, y01)
+            painter.drawLine(x10, y10, x11, y11)
+            painter.drawLine(x20, y20, x21, y21)
+            painter.drawLine(x30, y30, x31, y31)
+
+            marginErrorPrint = 5
+            painter.setPen(QColor(0, 255, 0))
+
+            painter.drawLine(x00 + marginErrorPrint, y00, x01 + marginErrorPrint, y01)
+            painter.drawLine(x10 - marginErrorPrint, y10, x11 - marginErrorPrint, y11)
+            painter.drawLine(x20, y20 + marginErrorPrint, x21, y21 + marginErrorPrint)
+            painter.drawLine(x30, y30 - marginErrorPrint, x31, y31 - marginErrorPrint)
+
+
+            painter.setPen(QColor(255, 0, 0))
+            painter.drawLine(x00 - marginErrorPrint, y00, x01 - marginErrorPrint, y01)
+            painter.drawLine(x10 + marginErrorPrint, y10, x11 + marginErrorPrint, y11)
+            painter.drawLine(x20, y20 - marginErrorPrint, x21, y21 - marginErrorPrint)
+            painter.drawLine(x30, y30 + marginErrorPrint, x31, y31 + marginErrorPrint)
+
+
 
         savedPath = self.savePicture(outPixmap, outFile, 0, 0, "JPG")
 

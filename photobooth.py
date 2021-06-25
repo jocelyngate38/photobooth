@@ -976,7 +976,7 @@ class MainWindow(QMainWindow):
         self.connectInputButtonInterupts()
         self.switchLed(True, True, True)
 
-    def buildShuffleAssembly(self):
+    def buildShuffleAssembly(self,showCuttingLine=False):
 
         self.resources.getLogger().addInfo("BUILD SHUFFLE ASSEMBLY")
 
@@ -989,7 +989,8 @@ class MainWindow(QMainWindow):
         self.lastAssemblyLandscape = choosenLayout["landscape"]
         self.showAssemblyPixmap()
         [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(self.captureList,
-                                                                                                 choosenLayout)
+                                                                                                 choosenLayout,
+                                                                                                 showCuttingLine)
         self.showAssemblyPixmap()
 
     def showAssemblyPixmap(self):
@@ -1625,7 +1626,7 @@ class MainWindow(QMainWindow):
         self.captureList.clear()
         for i in range(n):
             self.captureList.append(QPixmap(self.resources.getPath(ressourcesManager.PATH.CALIBRATION_IMAGE)))
-        self.redoAssembly()
+        self.redoAssembly(True)
 
 
     def initActions(self):
@@ -1725,8 +1726,6 @@ class MainWindow(QMainWindow):
         self.actionShowAssemblyCalibration2.triggered.connect(self.onShowAssemblyCalibration2)
         self.actionShowAssemblyCalibration3.triggered.connect(self.onShowAssemblyCalibration3)
         self.actionShowAssemblyCalibration4.triggered.connect(self.onShowAssemblyCalibration4)
-
-
 
         self.eventActionList=[]
         list = [f.name for f in os.scandir(self.resources.getPath(ressourcesManager.PATH.EVENT_LIST_PATH)) if f.is_dir()]
@@ -2354,14 +2353,14 @@ class MainWindow(QMainWindow):
             self.led.showWarning(0)
             self.gotoStart()
 
-    def redoAssembly(self):
+    def redoAssembly(self,showCuttingLine=False):
 
         self.setCurrentMode(GPIOMode.DISPLAY_ASSEMBLY)
         self.disconnectInputButtonInterupts()
         self.switchLed(False, False, False)
         self.wait(0.2)
         QApplication.processEvents()
-        self.buildShuffleAssembly()
+        self.buildShuffleAssembly(showCuttingLine)
         self.switchLed(True, self.printingEnabled, True)
         self.connectInputButtonInterupts()
         QApplication.processEvents()

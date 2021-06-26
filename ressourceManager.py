@@ -23,6 +23,7 @@ else:
 
 class ressourcesManager:
     logger = None
+    lastChoice = -1
 
     class PATH(Enum):
 
@@ -198,7 +199,12 @@ class ressourcesManager:
         self.numberOfPrint = 0
         self.maxNumberOfPrint = 36
 
-        self.applicationPath = basePath + "/photobooth"
+        if EMULATE is True:
+            self.applicationPath = basePath + "/photobooth-software"
+        else:
+            self.applicationPath = basePath + "/photobooth"
+
+
         self.applicationPath = os.path.normpath(self.applicationPath)
 
         self.backgroundListPath = self.applicationPath + "/resources/backgrounds"
@@ -265,12 +271,12 @@ class ressourcesManager:
         displayDictPortrait = {}
         displayDictPortrait["x"] = 352
         displayDictPortrait["y"] = 50
-        displayDictPortrait["w"] = 582
-        displayDictPortrait["h"] = 870
+        displayDictPortrait["w"] = 545
+        displayDictPortrait["h"] = 820
         self.skinDiplayLayoutDatas["portrait"] = displayDictPortrait
 
         displayDictLandscape = {}
-        displayDictLandscape["x"] = 76
+        displayDictLandscape["x"] = 155
         displayDictLandscape["y"] = 86
         displayDictLandscape["w"] = 1029
         displayDictLandscape["h"] = 676
@@ -299,10 +305,11 @@ class ressourcesManager:
                 continue
 
             images = lay.findall("./images/image")
-            if len(images) != int(lay.find("./nbImages").text):
-                self.logger.addError("XML error too much images for this layout")
+            if len(images) != n and n !=1:
                 self.getLogger().addError("XML error too much/less images for this layout")
                 continue
+            if len(images) != n and n ==1:
+                self.getLogger().addInfo("XML Several images for layout 1")
 
             imagesDict = {}
             for im in images:
@@ -331,17 +338,48 @@ class ressourcesManager:
             choosenLayout = choosenLayoutList[i]
             self.buildLayout(filepath, choosenLayout)
 
+    def resetChoices(self):
+        self.lastChoice=-1
+
     def chooseRandomLayout(self, n):
 
         choosenLayoutList = self.getSkinLayoutDatas()[n - 1]
-        ran = range(len(choosenLayoutList))
-        if len(choosenLayoutList) == 0:
+        nLayouts = len(choosenLayoutList)
+
+        if nLayouts == 0:
             return None
-        choices = [*ran]
-        random.shuffle(choices)
-        index = choices.pop()
-        choosenLayout = choosenLayoutList[index]
-        return choosenLayout
+
+        c = self.lastChoice
+        print(str(c))
+        if c < -1 or c >= nLayouts-1 :
+            c = -1
+
+        if c == -1:
+            c = 0
+        else:
+            c = c+1
+        self.lastChoice=c
+
+        print(str(c) + " out of " + str(nLayouts))
+        return choosenLayoutList[c]
+
+
+
+
+
+        # choosenLayoutList = self.getSkinLayoutDatas()[n - 1]
+        # ran = range(len(choosenLayoutList))
+        # if len(choosenLayoutList) == 0:
+        #     return None
+        #
+        # if chooseFirstLayout is True:
+        #     return choosenLayoutList[0]
+        #
+        # choices = [*ran]
+        # random.shuffle(choices)
+        # index = choices.pop()
+        # choosenLayout = choosenLayoutList[index]
+        # return choosenLayout
 
 
 
@@ -438,6 +476,23 @@ class ressourcesManager:
             painter.translate(x, y)
             painter.drawPixmap(0, 0, pix)
             painter.translate(-x, -y)
+
+            if nbImages == 1 and len(choosenLayout["images"]) == 2:
+                x = choosenLayout["images"][(i + 2)]["x"]
+                y = choosenLayout["images"][(i + 2)]["y"]
+                w = choosenLayout["images"][(i + 2)]["w"]
+                h = choosenLayout["images"][(i + 2)]["h"]
+                angle = choosenLayout["images"][(i + 1)]["angle"]
+
+                pix = QPixmap(path)
+
+                if (w / h > 4 / 3):
+                    pix = pix.scaledToWidth(w)  # , transformMode=Qt.SmoothTransformation)
+                else:
+                    pix = pix.scaledToHeight(h)  # , transformMode=Qt.SmoothTransformation)
+                painter.translate(x, y)
+                painter.drawPixmap(0, 0, pix)
+                painter.translate(-x, -y)
 
         painter.drawPixmap(0, 0, pixLayout)
 

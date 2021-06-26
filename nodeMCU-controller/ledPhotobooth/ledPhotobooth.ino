@@ -29,7 +29,7 @@ uint8_t brightness = 200;
 
 struct {
 
-  int r = 0;//255;
+  int r = 255;
   int g = 0;
   int b = 0;
 
@@ -39,7 +39,7 @@ struct {
 
   int r = 0;
   int g = 0;
-  int b = 0;//255;
+  int b = 255;
 
 } LEDS_TEXT_BACK_COLOR;
 
@@ -47,7 +47,7 @@ struct {
 
   int r = 0;
   int g = 0;
-  int b = 0;//255;
+  int b = 255;
 
 } LEDS_SIDE_LEFT_COLOR;
 
@@ -55,15 +55,15 @@ struct {
 
   int r = 0;
   int g = 0;
-  int b = 0;//255;
+  int b = 255;
 
 } LEDS_SIDE_RIGHT_COLOR;
 
 struct {
 
-  int r = 0;//255;
-  int g = 0;//255;
-  int b = 0;//255;
+  int r = 255;
+  int g = 255;
+  int b = 255;
 
 } LEDS_FRONT_COLOR_1;
 
@@ -71,13 +71,13 @@ struct {
 
   int r = 0;
   int g = 0;
-  int b = 0;//255;
+  int b = 0;;
 
 } LEDS_FRONT_COLOR_2;
 
 struct {
 
-  int r = 0;//255;
+  int r = 255;
   int g = 0;
   int b = 0;
 

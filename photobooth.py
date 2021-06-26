@@ -383,10 +383,11 @@ class CaptureImageThread(QThread):
 
         self.ressourceManager.getLogger().addInfo("CAPTURE REQUEST")
 
+
         if EMULATE is True:
             self.ressourceManager.getLogger().addInfo("IMAGE CAPTURED : " + self.capture)
-            time.sleep(3)
-            Original_Image = Image.open("D:\PHOTOBOOTH\photobooth\capt0000.jpg")
+            time.sleep(1)
+            Original_Image = Image.open(self.ressourceManager.getPath(self.ressourceManager.PATH.CALIBRATION_IMAGE))
             Original_Image.save(self.capture)
             self.signal.emit(True, self.capture)
             return
@@ -949,21 +950,40 @@ class MainWindow(QMainWindow):
 
             if i < len(self.captureList):
                 preview = QPixmap(self.captureList[i])
-                pen = QPen(Qt.gray)
-                pen.setWidth(5)
-
-            elif i == len(self.captureList):
-                preview = QPixmap(capture)
-                pen = QPen(Qt.white)
-                pen.setWidth(10)
-
-            else:
-                preview = QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/avatar.png")
+                preview2 = QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/opacitor.png")
+                painter.translate(x, y)
+                painter.drawPixmap(0, 0,
+                                   preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+                painter.drawPixmap(0, 0,
+                                   preview2.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+                #
                 pen = QPen(Qt.gray)
                 pen.setWidth(3)
 
-            painter.translate(x, y)
-            painter.drawPixmap(0, 0, preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+            elif i == len(self.captureList):
+                preview = QPixmap(capture)
+                painter.translate(x, y)
+                painter.drawPixmap(0, 0,
+                                   preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+                pen = QPen(Qt.black)
+                pen.setWidth(6)
+                # painter.setPen(pen)
+                # painter.drawRect(-m,-m, w+2*m, h+2*m)
+
+
+            else:
+                preview = QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/avatar.png")
+                painter.translate(x, y)
+                painter.drawPixmap(0, 0,
+                                   preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+                pen = QPen(Qt.gray)
+                pen.setWidth(3)
+
+
+            #pen.setWidth(3)
+
+            # painter.translate(x, y)
+            # painter.drawPixmap(0, 0, preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
             painter.setPen(pen)
             painter.drawRect(0, 0, w, h)
 
@@ -976,10 +996,9 @@ class MainWindow(QMainWindow):
         self.connectInputButtonInterupts()
         self.switchLed(True, True, True)
 
-    def buildShuffleAssembly(self,showCuttingLine=False):
+    def buildShuffleAssembly(self, showCuttingLine=False):
 
         self.resources.getLogger().addInfo("BUILD SHUFFLE ASSEMBLY")
-
         choosenLayout = self.resources.chooseRandomLayout(len(self.captureList))
 
         if choosenLayout == None:
@@ -988,9 +1007,9 @@ class MainWindow(QMainWindow):
         self.lastAssemblyPixmap = None
         self.lastAssemblyLandscape = choosenLayout["landscape"]
         self.showAssemblyPixmap()
-        [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(self.captureList,
-                                                                                                 choosenLayout,
-                                                                                                 showCuttingLine)
+        [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(captureList=self.captureList,
+                                                                                                 choosenLayout=choosenLayout,
+                                                                                                 showCuttingLine=showCuttingLine)
         self.showAssemblyPixmap()
 
     def showAssemblyPixmap(self):
@@ -1238,6 +1257,7 @@ class MainWindow(QMainWindow):
             self.resources.logger.addInfo("BUTTON 1 PRESSED : PHOTO VALIDATED")
             self.storeLastCapture()
             if len(self.captureList) >= 4:
+                self.resources.resetChoices()
                 self.redoAssembly()
             else:
                 self.startCaptureProcess()
@@ -1349,6 +1369,7 @@ class MainWindow(QMainWindow):
         elif self.currentGPIOMode == GPIOMode.VALIDATE:
             self.resources.logger.addInfo("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
             self.storeLastCapture()
+            self.resources.resetChoices()
             self.redoAssembly()
 
         elif self.currentGPIOMode == GPIOMode.DISPLAY_ASSEMBLY:
@@ -1568,6 +1589,10 @@ class MainWindow(QMainWindow):
 
 
     def wait(self, delay):
+
+        if EMULATE is True:
+            time.sleep(delay/10)
+            return
         try:
             time.sleep(delay)
         except ValueError as e:
@@ -1626,7 +1651,7 @@ class MainWindow(QMainWindow):
         self.captureList.clear()
         for i in range(n):
             self.captureList.append(QPixmap(self.resources.getPath(ressourcesManager.PATH.CALIBRATION_IMAGE)))
-        self.redoAssembly(True)
+        self.redoAssembly(showCuttingLine=True)
 
 
     def initActions(self):
@@ -2360,7 +2385,7 @@ class MainWindow(QMainWindow):
         self.switchLed(False, False, False)
         self.wait(0.2)
         QApplication.processEvents()
-        self.buildShuffleAssembly(showCuttingLine)
+        self.buildShuffleAssembly(showCuttingLine=showCuttingLine)
         self.switchLed(True, self.printingEnabled, True)
         self.connectInputButtonInterupts()
         QApplication.processEvents()

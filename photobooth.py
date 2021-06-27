@@ -2217,7 +2217,7 @@ class MainWindow(QMainWindow):
         GPIO.setup(GPIOPin.RELAY_POWER_TOP_LIGHT, GPIO.OUT, initial=0)
 
         if PHOTOBOOTH_2 is False:
-            GPIO.setup(GPIOPin.RELAY_LED_STRIP, GPIO.OUT, initial=1)
+            GPIO.setup(GPIOPin.RELAY_LED_STRIP, GPIO.OUT, initial=0)
 
         GPIO.setup(GPIOPin.RELAY_2, GPIO.OUT, initial=1)
         GPIO.setup(GPIOPin.RELAY_3, GPIO.OUT, initial=1)

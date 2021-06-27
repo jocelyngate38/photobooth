@@ -6,8 +6,8 @@ try:
                               QElapsedTimer)
     from PyQt5.QtGui import QIcon, QKeySequence, QFont, QPixmap, QPainter, QPen, QColor, QMovie
     from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow,QToolTip)
-    from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-    from PyQt5.QtMultimediaWidgets import QVideoWidget
+    # from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+    # from PyQt5.QtMultimediaWidgets import QVideoWidget
 except:
     print("PyQt5 import error")
 
@@ -193,7 +193,7 @@ class PhotoBooth_2(PhotoBoothSettings):
         return 1024, 800
 
 
-PHOTOBOOTH_2 = True
+PHOTOBOOTH_2 = False
 DebugGPIO = False
 MAX_SERIAL_RETRY = 4
 

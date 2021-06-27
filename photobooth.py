@@ -232,9 +232,9 @@ if PHOTOBOOTH_2 is False:
         LED_BUTTON_3 = 13
         LED_0 = 19
 
-        BUTTON_1 = 20
+        BUTTON_1 = 12
         BUTTON_2 = 16
-        BUTTON_3 = 12
+        BUTTON_3 = 20
         BUTTON_4 = 21
 
         RELAY_POWER_TOP_LIGHT = 17

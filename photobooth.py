@@ -637,6 +637,7 @@ class MainWindow(QMainWindow):
         self.currentAssemblyPath = ""
         self.currentGPIOMode = GPIOMode.HOMEPAGE
         self.timeoutTimer = None
+        self.showCuttingLines = False
 
         self.captureList = []
         self.lastAssemblyPixmap = None
@@ -994,10 +995,10 @@ class MainWindow(QMainWindow):
         self.connectInputButtonInterupts()
         self.switchLed(True, True, True)
 
-    def buildShuffleAssembly(self, showCuttingLine=False):
+    def buildNextAssembly(self):
 
         self.resources.getLogger().addInfo("BUILD SHUFFLE ASSEMBLY")
-        choosenLayout = self.resources.chooseRandomLayout(len(self.captureList))
+        choosenLayout = self.resources.chooseNextLayout(len(self.captureList))
 
         if choosenLayout == None:
             return
@@ -1007,7 +1008,7 @@ class MainWindow(QMainWindow):
         self.showAssemblyPixmap()
         [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(captureList=self.captureList,
                                                                                                  choosenLayout=choosenLayout,
-                                                                                                 showCuttingLine=showCuttingLine)
+                                                                                                 showCuttingLine=self.showCuttingLines)
         self.showAssemblyPixmap()
 
     def showAssemblyPixmap(self):
@@ -1625,32 +1626,32 @@ class MainWindow(QMainWindow):
     def onShowAllTestAssemblies(self):
 
         self.onShowAssemblyCalibration1()
+        self.wait(5)
         self.onShowAssemblyCalibration2()
+        self.wait(5)
         self.onShowAssemblyCalibration3()
+        self.wait(5)
         self.onShowAssemblyCalibration4()
 
     def onShowAssemblyCalibration1(self):
         self.buildCalibrationAssembly(1)
-        self.wait(5)
 
     def onShowAssemblyCalibration2(self):
         self.buildCalibrationAssembly(2)
-        self.wait(5)
 
     def onShowAssemblyCalibration3(self):
         self.buildCalibrationAssembly(3)
-        self.wait(5)
 
     def onShowAssemblyCalibration4(self):
         self.buildCalibrationAssembly(4)
-        self.wait(5)
 
     def buildCalibrationAssembly(self, n):
 
+        self.showCuttingLines = True
         self.captureList.clear()
         for i in range(n):
             self.captureList.append(QPixmap(self.resources.getPath(ressourcesManager.PATH.CALIBRATION_IMAGE)))
-        self.redoAssembly(showCuttingLine=True)
+        self.redoAssembly()
 
 
     def initActions(self):
@@ -2379,14 +2380,14 @@ class MainWindow(QMainWindow):
             self.led.showWarning(0)
             self.gotoStart()
 
-    def redoAssembly(self,showCuttingLine=False):
+    def redoAssembly(self):
 
         self.setCurrentMode(GPIOMode.DISPLAY_ASSEMBLY)
         self.disconnectInputButtonInterupts()
         self.switchLed(False, False, False)
         self.wait(0.2)
         QApplication.processEvents()
-        self.buildShuffleAssembly(showCuttingLine=showCuttingLine)
+        self.buildNextAssembly()
         self.switchLed(True, self.printingEnabled, True)
         self.connectInputButtonInterupts()
         QApplication.processEvents()
@@ -2585,6 +2586,7 @@ class MainWindow(QMainWindow):
 
     def gotoStart(self, index=1):
 
+        self.showCuttingLines = False
         self.resources.logger.addInfo("GO HOME")
         # self.setCurrentMode(GPIOMode.HOMEPAGE)
         self.switchLed(False, False, True)

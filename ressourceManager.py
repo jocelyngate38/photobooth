@@ -326,7 +326,7 @@ class ressourcesManager:
 
     def buildShuttleAssembly(self, filepath, n):
 
-        choosenLayout = self.chooseRandomLayout(n)
+        choosenLayout = self.chooseNextLayout(n)
         if choosenLayout == None:
             return
         self.buildLayout(filepath, choosenLayout)
@@ -341,7 +341,7 @@ class ressourcesManager:
     def resetChoices(self):
         self.lastChoice=-1
 
-    def chooseRandomLayout(self, n):
+    def chooseNextLayout(self, n):
 
         choosenLayoutList = self.getSkinLayoutDatas()[n - 1]
         nLayouts = len(choosenLayoutList)

@@ -741,7 +741,7 @@ class MainWindow(QMainWindow):
 
     def initGUI(self):
 
-        self.label = Label(self.resources.getPath(ressourcesManager.PATH.APPLICATION) + "/resources/skins/default/")
+        self.label = Label(self.resources.getPath(ressourcesManager.PATH.SKIN))
 
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setScaledContents(True)

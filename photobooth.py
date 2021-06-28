@@ -1178,7 +1178,7 @@ class MainWindow(QMainWindow):
         offset = 4
         reset_default = [0, 2]
         reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
-        shutdown = [reprint[1] + offset, reprint[1] + offset + delay]
+        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
         menu = [shutdown[1] + offset, shutdown[1] + offset + delay]
         menu_advanced = [menu[1] + offset, menu[1] + offset + delay]
 
@@ -1284,7 +1284,7 @@ class MainWindow(QMainWindow):
         offset = 3
         reset_default = [0, 2]
         reprint = [reset_default[1] , reset_default[1] + delay]
-        shutdown = [reprint[1] + offset, reprint[1] + offset + delay]
+        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
         menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
         menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
@@ -1538,7 +1538,8 @@ class MainWindow(QMainWindow):
         self.contextMenu.exec_(QPoint(30, 200))
         self.resources.getLogger().addInfo("SHOW MENU")
         self.switchLed(True, True, True)
-        self.gotoStart()
+        if self.currentGPIOMode == GPIOMode.MENU:
+            self.gotoStart()
 
     def storeLastCapture(self):
 
@@ -2011,7 +2012,9 @@ class MainWindow(QMainWindow):
 
         self.resources.getLogger().addInfo("SHOW MENU")
         self.switchLed(True, True, True)
-        self.gotoStart()
+
+        if self.currentGPIOMode == GPIOMode.MENU_SETUP:
+            self.gotoStart()
 
     def cleanCaptures(self):
 

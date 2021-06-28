@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 try:
     from PyQt5.QtCore import (QFile, QFileInfo, QPoint, QRect, QRectF, QSettings, QSize, QUrl,
                               Qt, QTextStream, QThread, pyqtSignal, pyqtSlot, QTimer, QDateTime, QIODevice,
@@ -296,11 +298,12 @@ class PrinterMonitoringThread(QThread):
     printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
     label = None
 
-    def __init__(self, label, led, printerName):
+    def __init__(self, label, led, printerName, ressourceManager):
         QThread.__init__(self, label)
         self.label = label
         self.led = led
         self.printerName = printerName
+        self.ressourceManager=ressourceManager
         # run method gets called when we start the thread
 
     def changePrinterName(self, printerName):
@@ -703,7 +706,7 @@ class MainWindow(QMainWindow):
         self.initMenu()
         self.initDSLRTime()
 
-        self.printerMonitoring = PrinterMonitoringThread(self.label, self.led, self.printerName)
+        self.printerMonitoring = PrinterMonitoringThread(self.label, self.led, self.printerName,self.resources)
         self.printerMonitoring.start()
 
         self.showPowerOnPrinter()
@@ -2706,7 +2709,7 @@ class SimulatorButtonThread(QThread):
 
 
 if __name__ == '__main__':
-    import sys
+
 
     app = QApplication(sys.argv)
     mainWin = MainWindow()

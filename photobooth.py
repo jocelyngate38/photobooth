@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 
-import os
-os.environ['DISPLAY'] = ':0'
-
 try:
     from PyQt5.QtCore import (QFile, QFileInfo, QPoint, QRect, QRectF, QSettings, QSize, QUrl,
                               Qt, QTextStream, QThread, pyqtSignal, pyqtSlot, QTimer, QDateTime, QIODevice,
                               QElapsedTimer)
     from PyQt5.QtGui import QIcon, QKeySequence, QFont, QPixmap, QPainter, QPen, QColor, QMovie
     from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow,QToolTip)
-    # from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
-    # from PyQt5.QtMultimediaWidgets import QVideoWidget
 except:
     print("PyQt5 import error")
 

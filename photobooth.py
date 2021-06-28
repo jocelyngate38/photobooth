@@ -465,7 +465,7 @@ class Label(QLabel):
 
         iL = 0
         jL = 0
-        iR = 1280 - 229
+        iR = 1024 - 229
         jR = 0
         incw = 0
         inch = 85
@@ -669,13 +669,9 @@ class MainWindow(QMainWindow):
         self.topLightOn = False
         self.lastPrintId = 0
 
-        if PHOTOBOOTH_2 is False:
-            self.screenWidth = 1280
-            self.screenHeight = 1024
-        else:
-            # PHOTOBOOTH SETTINGS
-            self.screenWidth = 1024
-            self.screenHeight = 800
+        # PHOTOBOOTH SETTINGS
+        self.screenWidth = 1024
+        self.screenHeight = 768
 
         self.lastAssemblyLandscape = 1
         self.countDown = 4

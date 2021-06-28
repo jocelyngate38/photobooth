@@ -669,9 +669,13 @@ class MainWindow(QMainWindow):
         self.topLightOn = False
         self.lastPrintId = 0
 
-        # PHOTOBOOTH SETTINGS
-        self.screenWidth = 1024
-        self.screenHeight = 800
+        if PHOTOBOOTH_2 is False:
+            self.screenWidth = 1280
+            self.screenHeight = 1024
+        else:
+            # PHOTOBOOTH SETTINGS
+            self.screenWidth = 1024
+            self.screenHeight = 800
 
         self.lastAssemblyLandscape = 1
         self.countDown = 4
@@ -735,9 +739,6 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.printingEnabled = settings.value("printingEnabled", self.printingEnabled, bool)
-        self.printer1 = "CP800"
-        self.printer2 = "CP760"
-        self.printer3 = "CP910"
 
     def initGUI(self):
 

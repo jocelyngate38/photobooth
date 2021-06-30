@@ -2452,7 +2452,7 @@ class MainWindow(QMainWindow):
         except:
             self.resources.logger.addError("sendPrintingJob EXCEPTION")
 
-        self.wait(5)
+        self.wait(8)
         self.gotoStart()
 
     def cancelNotCompletedJobs(self):

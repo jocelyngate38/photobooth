@@ -2444,7 +2444,6 @@ class MainWindow(QMainWindow):
                 self.showPrintSentPage()
                 self.wait(5)
 
-
             else:
 
                 self.resources.logger.addError("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")
@@ -2453,6 +2452,7 @@ class MainWindow(QMainWindow):
         except:
             self.resources.logger.addError("sendPrintingJob EXCEPTION")
 
+        self.wait(5)
         self.gotoStart()
 
     def cancelNotCompletedJobs(self):

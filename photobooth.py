@@ -87,33 +87,45 @@ try:
 except:
     print("import Image from PIL error")
 
+import logging
 
 class PhotoBoothSettings():
 
+    class GPIOPin(IntEnum):
+
+        LED_BUTTON_1 = 1
+        LED_BUTTON_2 = 2
+        LED_BUTTON_3 = 3
+        LED_0 = 4
+        BUTTON_1 = 5
+        BUTTON_2 = 6
+        BUTTON_3 = 7
+        BUTTON_4 = 8
+        RELAY_POWER_TOP_LIGHT = 9
+        RELAY_LED_STRIP = 10
+        POWER_SPEEDLIGHT = 11
+        ON_OFF_SPEEDLIGHT = 12
+        POWER_DSLR = 13
+
+        # RELAY_2 = ?
+        # RELAY_3 = ?
+        # WIRE_3_4 = ?
+        # WIRE_3_5 = ?
+        # WIRE_3_6 = ?
+
+    GPIO_Pinout = {}
+    logger = logging.getLogger("PhotoBoothSetti")
+
+    def __init__(self):
+        pass
+
+    def getName(self):
+        return "Photobooth name not set"
+
     def has_external_flash(self):
-        pass
-
-    def has_constant_light(self):
-        pass
-
-    def can_restart_DSLR(self):
-        pass
+        return False
 
     def can_restart_external_flash(self):
-        pass
-
-    class GPIOPin(IntEnum):
-        pass
-
-    def getCameraName(self):
-        pass
-
-    def getScreenResolution(self):
-        pass
-
-
-class PhotoBooth_1(PhotoBoothSettings):
-    def has_external_flash(self):
         return False
 
     def has_constant_light(self):
@@ -122,156 +134,196 @@ class PhotoBooth_1(PhotoBoothSettings):
     def can_restart_DSLR(self):
         return False
 
+    def is_DSLR_up(self):
+        return True
+
+    def is_DSLR_up(self):
+        return True
+
+    def can_restart_led_strip(self):
+        return False
+
+    def have_led_strip(self):
+        return True
+
+    def get_led_strip_serial_Speed(self):
+        return 115200
+
+    def get_led_strip_serial_Port(self):
+        return "/dev/ttyUSB_LED_CONTROLLER"
+
+    def getCameraName(self):
+        return "Camera name not set"
+
+    def getScreenResolution(self):
+        return 1024, 768
+
+    def getGPIO(self, PinName):
+        if pinName in self.GPIOPin:
+            return GPIOPin(PinName)
+        else:
+            self.logger.error("ERROR, pinName not available.")
+            return 0
+
+
+    def setGPIO(self, pinName, pinNumber):
+
+        if pinName in self.GPIOPin:
+            self.GPIO_Pinout[pinName]=pinNumber
+        else:
+            self.logger.error("ERROR, pinName not available.")
+
+    def printGPIOs(self):
+
+        self.logger.info("GPIO_Pinout : ")
+        for x in self.GPIOPin:
+            if x in self.GPIO_Pinout:
+                self.logger.info(str(x) + " -> " + str(self.GPIO_Pinout[x]))
+            else:
+                self.logger.info(str(x) + " -> unused")
+
+    def printDetails(self):
+
+        self.logger.info("========          Photobooth details          ========")
+        self.logger.info("name : " + str( self.getName()) )
+        self.logger.info("getCameraName : " + str(self.getCameraName()))
+        self.logger.info("getScreenResolution : " + str(self.getScreenResolution()))
+        self.logger.info("has_external_flash : " + str( self.has_external_flash()) )
+        self.logger.info("can_restart_external_flash : " + str(self.can_restart_external_flash()))
+        self.logger.info("has_constant_light : " + str(self.has_constant_light()))
+        self.logger.info("can_restart_DSLR : " + str(self.can_restart_DSLR()))
+        self.logger.info("can_restart_led_strip : " + str(self.can_restart_led_strip()))
+        self.logger.info("have_led_strip : " + str(self.have_led_strip()))
+        self.logger.info("get_led_strip_serial_Speed : " + str(self.get_led_strip_serial_Speed()))
+        self.logger.info("get_led_strip_serial_Port : " + str(self.get_led_strip_serial_Port()))
+
+        self.printGPIOs()
+        self.logger.info("========        EOF Photobooth details        ========")
+
+class PhotoBoothSettings_1(PhotoBoothSettings):
+
+    def __init__(self):
+
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 6)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2, 26)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 13)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_0, 19)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1, 12)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2, 16)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3, 20)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_4, 21 )
+        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT, 17)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP, 4)
+
+    def getName(self):
+        return "PHOTOBOOTH 1"
+
+    def has_external_flash(self):
+        return False
+
+    def can_restart_DSLR(self):
+        return False
+
     def can_restart_external_flash(self):
         return False
 
-    class GPIOPin(IntEnum):
-        LED_BUTTON_1 = 6
-        LED_BUTTON_2 = 26
-        LED_BUTTON_3 = 13
-        LED_0 = 19
-
-        BUTTON_1 = 20
-        BUTTON_2 = 16
-        BUTTON_3 = 12
-        BUTTON_4 = 21
-
-        RELAY_POWER_TOP_LIGHT = 17
-        RELAY_LED_STRIP = 4
-        RELAY_2 = 23
-        RELAY_3 = 22
-
-        WIRE_3_4 = 23
-        WIRE_3_5 = 24
-        WIRE_3_6 = 25
+    def can_restart_led_strip(self):
+        return False
 
     def getCameraName(self):
         return "Nikon DSC D3200"
-        # camera = "Nikon DSC D70s (PTP mode)"
 
-    def getScreenResolution(self):
-        return 1280, 1024
+class PhotoBoothSettings_2(PhotoBoothSettings):
 
+    def __init__(self):
 
-class PhotoBooth_2(PhotoBoothSettings):
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 13)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2, 26)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 6)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_0, 19)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1, 20)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2, 16)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3, 12)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_4, 21)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT, 22)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP, 4)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT, 17)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT, 23)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR, 4)
+
+    def getName(self):
+        return "PHOTOBOOTH 2"
+
     def has_external_flash(self):
-        return True
-
-    def has_constant_light(self):
         return True
 
     def can_restart_DSLR(self):
         return True
 
+    def is_DSLR_up(self):
+        return False
+
     def can_restart_external_flash(self):
         return True
 
-    class GPIOPin(IntEnum):
-        LED_BUTTON_1 = 13
-        LED_BUTTON_2 = 26
-        LED_BUTTON_3 = 6
-        LED_0 = 19
-
-        BUTTON_1 = 20
-        BUTTON_2 = 16
-        BUTTON_3 = 12
-        BUTTON_4 = 21
-
-        RELAY_POWER_TOP_LIGHT = 22
-        RELAY_LED_STRIP = 4
-        RELAY_2 = 22
-        RELAY_3 = 22
-
-        POWER_SPEEDLIGHT = 17
-        ON_OFF_SPEEDLIGHT = 23
-        POWER_DSLR = 4
+    def can_restart_led_strip(self):
+        return True
 
     def getCameraName(self):
         return "Nikon DSC D70s (PTP mode)"
 
-    def getScreenResolution(self):
-        return 1024, 800
 
 
-PHOTOBOOTH_2 = False
-DebugGPIO = False
-MAX_SERIAL_RETRY = 4
-
-HAS_EXTERNAL_FLASH = False
-HAS_CONSTANT_LIGHT = True
-
-photoBooth = PhotoBooth_1()
-
-if PHOTOBOOTH_2 is True:
-    photoBooth = PhotoBooth_2()
-    HAS_EXTERNAL_FLASH = True
-    HAS_CONSTANT_LIGHT = True
-
-photoBooth = PhotoBooth_2()
-
-
-class ColorLED():
-    BLUE = [0, 0, 255]
-    GREEN = [0, 255, 0]
-    RED = [255, 0, 0]
-    LIGHT_BLUE = [0, 180, 180]
-    WHITE = [255, 255, 255]
-    ORANGE = [255, 180, 0]
-    BLACK = [0, 0, 0]
-
-
-if PHOTOBOOTH_2 is False:
-
-    class GPIOPin(IntEnum):
-
-        LED_BUTTON_1 = 6
-        LED_BUTTON_2 = 26
-        LED_BUTTON_3 = 13
-        LED_0 = 19
-
-        BUTTON_1 = 12
-        BUTTON_2 = 16
-        BUTTON_3 = 20
-        BUTTON_4 = 21
-
-        RELAY_POWER_TOP_LIGHT = 17
-        RELAY_LED_STRIP = 4
-        RELAY_2 = 23
-        RELAY_3 = 22
-
-        WIRE_3_4 = 23
-        WIRE_3_5 = 24
-        WIRE_3_6 = 25
-
-else:
-
-    class GPIOPin(IntEnum):
-
-        LED_BUTTON_1 = 13
-        LED_BUTTON_2 = 26
-        LED_BUTTON_3 = 6
-        LED_0 = 19
-
-        BUTTON_1 = 20
-        BUTTON_2 = 16
-        BUTTON_3 = 12
-        BUTTON_4 = 21
-
-        RELAY_POWER_TOP_LIGHT = 22
-        RELAY_LED_STRIP = 4
-        RELAY_2 = 22
-        RELAY_3 = 22
-
-        # WIRE_3_4 = 23
-        # WIRE_3_5 = 24
-        # WIRE_3_6 = 25
-
-        POWER_SPEEDLIGHT = 17
-        ON_OFF_SPEEDLIGHT = 23
-        POWER_DSLR = 4
+# if PHOTOBOOTH_2 is False:
+#
+#     class GPIOPin(IntEnum):
+#
+#         LED_BUTTON_1 = 6
+#         LED_BUTTON_2 = 26
+#         LED_BUTTON_3 = 13
+#         LED_0 = 19
+#
+#         BUTTON_1 = 12
+#         BUTTON_2 = 16
+#         BUTTON_3 = 20
+#         BUTTON_4 = 21
+#
+#         RELAY_POWER_TOP_LIGHT = 17
+#         RELAY_LED_STRIP = 4
+#
+#         #WIRE_3_4 = 23
+#         #WIRE_3_5 = 24
+#         #WIRE_3_6 = 25
+#
+# else:
+#
+#     class GPIOPin(IntEnum):
+#
+#         LED_BUTTON_1 = 13
+#         LED_BUTTON_2 = 26
+#         LED_BUTTON_3 = 6
+#         LED_0 = 19
+#
+#         BUTTON_1 = 20
+#         BUTTON_2 = 16
+#         BUTTON_3 = 12
+#         BUTTON_4 = 21
+#
+#         RELAY_POWER_TOP_LIGHT = 22
+#         RELAY_LED_STRIP = 4
+#
+#         # WIRE_3_4 = 23
+#         # WIRE_3_5 = 24
+#         # WIRE_3_6 = 25
+#
+#         POWER_SPEEDLIGHT = 17
+#         ON_OFF_SPEEDLIGHT = 23
+#         POWER_DSLR = 4
+#
 
 
-class GPIOMode(Enum):
+class DisplayMode(Enum):
+
     HOMEPAGE = 1
     PRINT = 2
     MENU = 3
@@ -298,12 +350,13 @@ class PrinterMonitoringThread(QThread):
     printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
     label = None
 
-    def __init__(self, label, led, printerName, ressourceManager):
+    logger = logging.getLogger("PrinterMonitori")
+
+    def __init__(self, label, led, printerName):
         QThread.__init__(self, label)
         self.label = label
         self.led = led
         self.printerName = printerName
-        self.ressourceManager=ressourceManager
         # run method gets called when we start the thread
 
     def changePrinterName(self, printerName):
@@ -319,30 +372,30 @@ class PrinterMonitoringThread(QThread):
 
                         if printers[printer]['printer-state'] == 5:
                             if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                self.ressourceManager.getLogger().addWarning("NO MORE PAPER, CONTACT SMBDY TO ADD PAPERS AGAIN")
+                                self.logger.warning("NO MORE PAPER, CONTACT SMBDY TO ADD PAPERS AGAIN")
                                 self.printerFailure.emit(printer, 1)
                                 self.label.setTrayMissingLeft(True)
                                 self.label.setTrayMissingRight(True)
-                                self.led.showWarning(1)
+                                self.ledStrip.showWarning(1)
 
                         if printers[printer]['printer-state'] == 3:
                             if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                self.ressourceManager.getLogger().addWarning("CARTOUCHE D'ENCRE VIDE, CONTACT SMBDY TO ADD PAPERS AGAIN")
+                                self.logger.warning("CARTOUCHE D'ENCRE VIDE, CONTACT SMBDY TO ADD PAPERS AGAIN")
                                 self.printerFailure.emit(printer, 2)
                                 self.label.setRibbonEmptyLeft(True)
                                 self.label.setRibbonEmptyRight(True)
-                                self.led.showWarning(1)
+                                self.ledStrip.showWarning(1)
 
                             if printers[printer]["printer-state-message"] == "Paper feed problem!":
-                                self.ressourceManager.getLogger().addWarning("PLUS DE PAPIER, VEUILLEZ EN RAJOUTER")
+                                self.logger.warning("PLUS DE PAPIER, VEUILLEZ EN RAJOUTER")
                                 self.printerFailure.emit(printer, 3)
                                 self.label.setPaperEmptyLeft(True)
                                 self.label.setPaperEmptyRight(True)
-                                self.led.showWarning(1)
+                                self.ledStrip.showWarning(1)
                 except cups.IPPError as e:
-                    self.ressourceManager.getLogger().addError("CUPS.IPPERROR " + str(e))
+                    self.logger.addError("CUPS.IPPERROR " + str(e))
                 except RuntimeError as e1:
-                    self.ressourceManager.getLogger().addError("RUNTIMEERROR " + str(e1))
+                    self.logger.addError("RUNTIMEERROR " + str(e1))
                     break
             time.sleep(2)
             self.label.update()
@@ -351,13 +404,14 @@ class PrinterMonitoringThread(QThread):
 class InputButtonThread(QThread):
     inputButtonEventDetected = pyqtSignal(int)
 
-    def __init__(self, *args, **kwargs):
-        QThread.__init__(self, *args, **kwargs)
+    def __init__(self, boxSettings):
+        QThread.__init__(self)
+        self.boxSettings=boxSettings
         self.queue = Queue()
         if EMULATE is False:
-            GPIO.add_event_detect(GPIOPin.BUTTON_1, GPIO.FALLING, callback=self.queue.put, bouncetime=500)
-            GPIO.add_event_detect(GPIOPin.BUTTON_3, GPIO.FALLING, callback=self.queue.put, bouncetime=500)
-            GPIO.add_event_detect(GPIOPin.BUTTON_2, GPIO.FALLING, callback=self.queue.put, bouncetime=500)
+            GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
+            GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
+            GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
         # GPIO 20 wired also
 
     def run(self):
@@ -368,66 +422,46 @@ class InputButtonThread(QThread):
 class CaptureImageThread(QThread):
     signal = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
-    def __init__(self, path, ressourceManager):
+    logger = logging.getLogger("CaptureImageThr")
+    def __init__(self, path, ressourceManager, photoboothSettings):
         QThread.__init__(self)
         self.capture = path
         self.ressourceManager = ressourceManager
+        self.photoboothSettings = photoboothSettings
     # run method gets called when we start the thread
 
     def getCameraName(self):
-        if PHOTOBOOTH_2 is False:
-            return "Nikon DSC D3200"
-        else:
-            return "Nikon DSC D70s (PTP mode)"
+        return self.photoboothSettings.getCameraName()
 
     def run(self):
 
-        self.ressourceManager.getLogger().addInfo("CAPTURE REQUEST")
-
+        self.logger.info("CAPTURE REQUEST")
 
         if EMULATE is True:
-            self.ressourceManager.getLogger().addInfo("IMAGE CAPTURED : " + self.capture)
+            self.logger.info("IMAGE CAPTURED : " + self.capture)
             time.sleep(1)
             Original_Image = Image.open(self.ressourceManager.getPath(self.ressourceManager.PATH.CALIBRATION_IMAGE))
             Original_Image.save(self.capture)
             self.signal.emit(True, self.capture)
             return
 
-        camera = self.getCameraName()
-
-        p = Popen(["gphoto2", "--camera", camera, "--capture-image-and-download",
+        p = Popen(["gphoto2", "--camera", self.photoboothSettings.getCameraName(), "--capture-image-and-download",
                    "--filename=" + self.capture], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
         rc = p.returncode
 
         if len(err) > 0:
-            self.ressourceManager.getLogger().addError(str(err))
+            self.logger.error(str(err))
             self.signal.emit(False, None)
         else:
-            self.ressourceManager.getLogger().addInfo( "IMAGE CAPTURED : " + self.capture)
-            if PHOTOBOOTH_2 is True:
+            self.logger.info( "IMAGE CAPTURED : " + self.capture)
+            if self.photoboothSettings.is_DSLR_up() is False:
                 Original_Image = Image.open(self.capture)
                 rotated_image1 = Original_Image.rotate(180)
                 Original_Image.close()
                 rotated_image1.save(self.capture)
 
             self.signal.emit(True, self.capture)
-
-
-
-
-
-# class Menu(QMenu):
-#
-#     def __init__(self, path, parent=None):
-#         super(Menu, self).__init__(parent=parent)
-#
-#     def event(self,e):
-#
-#         if activeAction() is not None :
-#               QToolTip::showText(helpEvent->globalPos(), activeAction()->toolTip());
-#
-#         super().event(e)
 
 
 class Label(QLabel):
@@ -494,11 +528,22 @@ class Label(QLabel):
         if self.paperEmptyRight is True:
             qp.drawPixmap(iR, jR, QPixmap(self.path + "/paperEmpty.png"))
 
+class ledStripControler():
 
-class ledControler():
     serialDevice = None
+    logger = logging.getLogger("LedStripControl")
 
-    class LEDLocation(Enum):
+    class Color():
+
+        BLUE = [0, 0, 255]
+        GREEN = [0, 255, 0]
+        RED = [255, 0, 0]
+        LIGHT_BLUE = [0, 180, 180]
+        WHITE = [255, 255, 255]
+        ORANGE = [255, 180, 0]
+        BLACK = [0, 0, 0]
+
+    class Location(Enum):
 
         RIGHT_SIDE = 1
         LEFT_SIDE = 2
@@ -507,12 +552,14 @@ class ledControler():
         CAMERA_ARROWS = 5
         CAMERA_BACK = 6
         ERROR = 7
+        ALL = 8
 
     def __init__(self, port, speed, ressourceManager):
 
         self.ressourceManager = ressourceManager
+
         if EMULATE is True:
-            self.ressourceManager.getLogger().addInfo("INITIALIZING LEDCONTROLER")
+            self.logger.info("INITIALIZING LEDCONTROLER")
             return
 
         self.port = port
@@ -520,13 +567,23 @@ class ledControler():
         self.init()
 
     def init(self):
+
         try:
+
             self.serialDevice = serial.Serial(self.port)
             self.serialDevice.baudrate = self.speed
-        except:
-            self.ressourceManager.getLogger().addError("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")
 
-    def sendCommand(self, command, retryMax):
+            self.setColor(Location.RIGHT_SIDE, [Color.LIGHT_BLUE])
+            self.setColor(Location.LEFT_SIDE, [Color.LIGHT_BLUE])
+            self.setColor(Location.CAMERA_ARROWS, [Color.BLACK, Color.WHITE])
+            self.setColor(Location.CAMERA_BACK, [Color.RED])
+            self.setColor(Location.TEXT_BACK, [Color.LIGHT_BLUE])
+            self.setColor(Location.ERROR, [Color.RED, Color.BLACK])
+
+        except:
+            self.logger.error("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")
+
+    def sendCommand(self, command, retryMax=4):
 
         if EMULATE is True:
             return
@@ -535,42 +592,44 @@ class ledControler():
         exception = False
 
         if retry < 0:
-            self.ressourceManager.getLogger().addError("LEDCONTROLER:TOO MUCH EXCEPTION IN SENDCOMMAND " + command)
+            self.logger.error("LEDCONTROLER:TOO MUCH EXCEPTION IN SENDCOMMAND " + command)
             return
 
         try:
             self.serialDevice.write((command).encode('utf-8'))
         except serial.SerialException as e:
-            self.ressourceManager.getLogger().addError("LEDCONTROLER:SENDCOMMAND:SERIAL.SERIALEXCEPTION " + str(e) + " command : " + command)
+            self.logger.error("LEDCONTROLER:SENDCOMMAND:SERIAL.SERIALEXCEPTION " + str(e) + " command : " + command)
             exception = True
         except TypeError as e:
-            self.ressourceManager.getLogger().addError("LEDCONTROLER:SENDCOMMAND:SERIAL.TYPEERROR " + str(e) + " command : " + command)
+            self.logger.error("LEDCONTROLER:SENDCOMMAND:SERIAL.TYPEERROR " + str(e) + " command : " + command)
             exception = True
         except AttributeError as e:
-            self.ressourceManager.getLogger().addError("LEDCONTROLER:SENDCOMMAND:SERIAL.ATTRIBUTEERROR " + str(e) + " command : " + command)
+            self.logger.error("LEDCONTROLER:SENDCOMMAND:SERIAL.ATTRIBUTEERROR " + str(e) + " command : " + command)
             exception = True
 
         if exception is True:
             self.init()
             self.sendCommand(command, retry)
 
+    @pyqtSlot(int)
     def blinkFront(self, ms):
-        self.ressourceManager.getLogger().addInfo("LEDCONTROLER:BLINKFRONT")
-        self.sendCommand('4,' + str(ms) + ';', MAX_SERIAL_RETRY)
+        self.logger.info("LEDCONTROLER:BLINKFRONT")
+        self.sendCommand('4,' + str(ms) + ';')
 
     def setColor(self, location, colors):
-        self.ressourceManager.getLogger().addInfo("LEDCONTROLER:SETCOLOR " + str(location) + str(colors))
-        if location == self.LEDLocation.RIGHT_SIDE:
+
+        self.logger.info("LEDCONTROLER:SETCOLOR " + str(location) + str(colors))
+        if location == self.Location.RIGHT_SIDE:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
-            self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
-        if location == self.LEDLocation.LEFT_SIDE:
+            self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+        if location == self.Location.LEFT_SIDE:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
-            self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
-        if location == self.LEDLocation.CAMERA_ARROWS:
+            self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+        if location == self.Location.CAMERA_ARROWS:
             r1 = colors[0][0]
             g1 = colors[0][1]
             b1 = colors[0][2]
@@ -578,29 +637,28 @@ class ledControler():
             g2 = colors[1][1]
             b2 = colors[1][2]
             self.sendCommand(
-                '5,' + str(r1) + ',' + str(g1) + ',' + str(b1) + ',' + str(r2) + ',' + str(g2) + ',' + str(b2) + ';',
-                MAX_SERIAL_RETRY)
+                '5,' + str(r1) + ',' + str(g1) + ',' + str(b1) + ',' + str(r2) + ',' + str(g2) + ',' + str(b2) + ';')
 
-        if location == self.LEDLocation.CAMERA_BACK:
+        if location == self.Location.CAMERA_BACK:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
-            self.sendCommand('9,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
+            self.sendCommand('9,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
 
-        if location == self.LEDLocation.TEXT_BACK:
+        if location == self.Location.TEXT_BACK:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
-            self.sendCommand('8,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
+            self.sendCommand('8,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
 
-        if location == self.LEDLocation.BOTH_SIDE:
+        if location == self.Location.BOTH_SIDE:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
-            self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
-            self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';', MAX_SERIAL_RETRY)
+            self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
 
-        if location == self.LEDLocation.ERROR:
+        if location == self.Location.ERROR:
             r1 = colors[0][0]
             g1 = colors[0][1]
             b1 = colors[0][2]
@@ -608,24 +666,35 @@ class ledControler():
             g2 = colors[1][1]
             b2 = colors[1][2]
             self.sendCommand(
-                '11,' + str(r1) + ',' + str(g1) + ',' + str(b1) + ',' + str(r2) + ',' + str(g2) + ',' + str(b2) + ';',
-                MAX_SERIAL_RETRY)
+                '11,' + str(r1) + ',' + str(g1) + ',' + str(b1) + ',' + str(r2) + ',' + str(g2) + ',' + str(b2) + ';')
+
+        if location == self.Location.ALL:
+            r = colors[0][0]
+            g = colors[0][1]
+            b = colors[0][2]
+            self.sendCommand('5,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('8,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('9,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+            self.sendCommand('11,' + str(r) + ',' + str(g) + ',' + str(b)
+                             + ',' + str(r) + ',' + str(g) + ',' + str(b) + ';')
 
     def showWarning(self, isDefault):
-        self.ressourceManager.getLogger().addInfo("LEDCONTROLER:SHOWDEFAULT " + str(isDefault))
+        self.logger.info("LEDCONTROLER:SHOWDEFAULT " + str(isDefault))
         if isDefault == 1:
             self.setBrightness(255)
         else:
             self.setBrightness(180)
-        self.sendCommand('10,' + str(isDefault) + ';', MAX_SERIAL_RETRY)
+        self.sendCommand('10,' + str(isDefault) + ';')
 
     def restart(self):
-        self.ressourceManager.getLogger().addInfo("LEDCONTROLER:RESTART")
-        self.sendCommand('3;', MAX_SERIAL_RETRY)
+        self.logger.info("LEDCONTROLER:RESTART")
+        self.sendCommand('3;')
 
     def setBrightness(self, brightness):
-        self.ressourceManager.getLogger().addInfo("LEDCONTROLER:SETBRIGHTNESS")
-        self.sendCommand('12,' + str(brightness) + ';', MAX_SERIAL_RETRY)
+        self.logger.info("LEDCONTROLER:SETBRIGHTNESS")
+        self.sendCommand('12,' + str(brightness) + ';')
 
 
 if EMULATE is False:
@@ -633,19 +702,38 @@ if EMULATE is False:
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
+    DebugGPIO = False
+    boxSettings = None
+
+    logger = logging.getLogger("MainWindow")
+
+    def __init__(self, box_index):
         super(MainWindow, self).__init__()
+
+        if box_index == 1:
+            self.boxSettings = PhotoBoothSettings_1()
+        elif box_index == 2:
+            self.boxSettings = PhotoBoothSettings_2()
+        else:
+            self.boxSettings = PhotoBoothSettings_1()
+
+        self.logger.info("################################################################################")
+        self.logger.info("##      NEW INSTANCE STARTED                                                  ##")
+        self.logger.info("##                            NEW INSTANCE STARTED                            ##")
+        self.logger.info("##                                                  NEW INSTANCE STARTED      ##")
+        self.logger.info("################################################################################")
+
+        # self.boxSettings.printDetails()
 
         self.interuptsConnected = False
         self.currentAssemblyPath = ""
-        self.currentGPIOMode = GPIOMode.HOMEPAGE
+        self.displayMode = DisplayMode.HOMEPAGE
         self.timeoutTimer = None
         self.showCuttingLines = False
 
         self.captureList = []
         self.lastAssemblyPixmap = None
         self.inputButtonThread = None
-        self.movie = None
         self.label = None
         self.resources = None
 
@@ -654,7 +742,8 @@ class MainWindow(QMainWindow):
         self.resources = ressourcesManager()
         self.resources.loadResources()
         self.resources.logInfos()
-        self.resources.getLogger().addInfo("INITIALIZING PHOTOBOOTH")
+
+        self.logger.info("INITIALIZING PHOTOBOOTH")
 
         # DSLR SETTINGS
         self.Wcapture = 3008
@@ -676,29 +765,22 @@ class MainWindow(QMainWindow):
         self.lastAssemblyLandscape = 1
         self.countDown = 4
 
-        self.setCurrentMode(GPIOMode.UNDEFINED)
+        self.setDisplayMode(DisplayMode.UNDEFINED)
 
         self.initGPIO()
 
-        self.led = ledControler("/dev/ttyUSB_LED_CONTROLLER", 115200, self.resources)
-
-        self.led.setColor(ledControler.LEDLocation.RIGHT_SIDE, [ColorLED.LIGHT_BLUE])
-        self.led.setColor(ledControler.LEDLocation.LEFT_SIDE, [ColorLED.LIGHT_BLUE])
-        self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLACK, ColorLED.WHITE])
-        self.led.setColor(ledControler.LEDLocation.CAMERA_BACK, [ColorLED.RED])
-        self.led.setColor(ledControler.LEDLocation.TEXT_BACK, [ColorLED.LIGHT_BLUE])
-        self.led.setColor(ledControler.LEDLocation.ERROR, [ColorLED.RED, ColorLED.BLACK])
-
-        self.led.showWarning(1)
+        self.ledStrip = ledStripControler("/dev/ttyUSB_LED_CONTROLLER", 115200, self.resources)
+        self.ledStrip.showWarning(1)
 
         if EMULATE is True:
             self.show()
         else:
             self.showFullScreen()
+
         self.initGUI()
 
         self.showStartupPixmap()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
 
         self.initSettings()
         self.initDevices()
@@ -706,29 +788,30 @@ class MainWindow(QMainWindow):
         self.initMenu()
         self.initDSLRTime()
 
-        self.printerMonitoring = PrinterMonitoringThread(self.label, self.led, self.printerName,self.resources)
+        self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName)
         self.printerMonitoring.start()
 
         self.showPowerOnPrinter()
         self.switchConstantLight(False)
 
+
+    def defineTimeout(self, delaySec):
+
+        if delaySec <= 0:
+            self.logger.info("REMOVING TIMEOUT")
+            self.timeoutTimer.stop()
+        else:
+            self.timeoutTimer.start(1000 * delaySec)
+            self.logger.info("SETTING TIMEOUT TO " + str(delaySec) + " SECONDES")
+
     def initDSLRTime(self):
 
-        self.resources.logger.addInfo("INITIALIZING DSLR DATETIME")
+        self.logger.info("INITIALIZING DSLR DATETIME")
 
         if EMULATE is True:
             return
 
         subprocess.call("gphoto2 --set-config datetime=$(date +%s)", shell=True)
-
-    def defineTimeout(self, delaySec):
-
-        if delaySec <= 0:
-            self.resources.getLogger().addInfo("REMOVING TIMEOUT")
-            self.timeoutTimer.stop()
-        else:
-            self.timeoutTimer.start(1000 * delaySec)
-            self.resources.getLogger().addInfo("SETTING TIMEOUT TO " + str(delaySec) + " SECONDES")
 
     def initSettings(self):
 
@@ -744,10 +827,8 @@ class MainWindow(QMainWindow):
         self.label.setScaledContents(True)
         self.label.setMinimumSize(self.screenWidth, self.screenHeight)
         self.label.setMaximumSize(self.screenWidth, self.screenHeight)
-
         self.setCentralWidget(self.label)
         self.cacheHomePicture()
-
 
         self.timeoutTimer = QTimer()
         self.timeoutTimer.timeout.connect(self.onTimeout)
@@ -757,86 +838,72 @@ class MainWindow(QMainWindow):
         self.homeDisplay = self.resources.getPath(
             ressourcesManager.PATH.EVENT) + "/" + self.resources.homePageDisplayFilename
 
-        self.movie = None
-        if self.homeDisplay.endswith(('.gif')):
-            self.movie = QMovie(self.homeDisplay)
-            self.movie.setCacheMode(QMovie.CacheAll)
-            self.movie.loopCount()
+    def setDisplayMode(self, mode):
 
-    def setCurrentMode(self, mode):
-
-        if self.currentGPIOMode == mode:
-            self.resources.getLogger().addWarning(
+        if self.displayMode == mode:
+            self.logger.warning(
                 "CHANGING CURRENT MODE TO THE SAME MODE " + mode.name + "(" + str(mode.value) + ")")
         else:
-            self.resources.getLogger().addInfo(
-                "CHANGING CURRENT MODE " + self.currentGPIOMode.name + "(" + str(
-                    self.currentGPIOMode.value) + ") to mode " + mode.name + "(" + str(mode.value) + ")")
+            self.logger.info(
+                "CHANGING CURRENT MODE " + self.displayMode.name + "(" + str(
+                    self.displayMode.value) + ") to mode " + mode.name + "(" + str(mode.value) + ")")
 
-        self.currentGPIOMode = mode
+        self.displayMode = mode
 
-        if mode == GPIOMode.HOMEPAGE:
+        if mode == DisplayMode.HOMEPAGE:
             self.defineTimeout(-1)
 
-        elif mode == GPIOMode.PRINT:
+        elif mode == DisplayMode.PRINT:
             self.defineTimeout(-1)
 
-        elif mode == GPIOMode.MENU:
+        elif mode == DisplayMode.MENU:
             self.defineTimeout(-1)
             self.defineTimeout(40)
 
-        elif mode == GPIOMode.POWER_PRINTER:
+        elif mode == DisplayMode.POWER_PRINTER:
             self.defineTimeout(-1)
             self.defineTimeout(60 * 5)
 
-        elif mode == GPIOMode.MENU_SETUP:
+        elif mode == DisplayMode.MENU_SETUP:
             self.defineTimeout(-1)
             self.defineTimeout(40)
 
-        elif mode == GPIOMode.COMPUTING:
+        elif mode == DisplayMode.COMPUTING:
             self.defineTimeout(-1)
             self.defineTimeout(60 * 4)
 
-        elif mode == GPIOMode.VALIDATE:
+        elif mode == DisplayMode.VALIDATE:
             self.defineTimeout(-1)
             self.defineTimeout(30)
 
-        elif mode == GPIOMode.DISPLAY_ASSEMBLY:
+        elif mode == DisplayMode.DISPLAY_ASSEMBLY:
             self.defineTimeout(-1)
             self.defineTimeout(60 * 2)
 
-        elif mode == GPIOMode.TRIGGER_ERROR:
+        elif mode == DisplayMode.TRIGGER_ERROR:
             self.defineTimeout(-1)
             self.defineTimeout(30)
 
-        elif mode == GPIOMode.RUNNING:
+        elif mode == DisplayMode.RUNNING:
             self.defineTimeout(30)
 
     def showHomePage(self):
 
-        if self.currentGPIOMode == GPIOMode.HOMEPAGE:
+        if self.displayMode == DisplayMode.HOMEPAGE:
             return
 
-        self.setCurrentMode(GPIOMode.HOMEPAGE)
-
-        if self.movie is None:
-            outPixmap = QPixmap(self.homeDisplay)
-            self.label.setPixmap(outPixmap)
-
-        else:
-            self.label.setMovie(self.movie)
-            self.movie.start()
-
+        self.setDisplayMode(DisplayMode.HOMEPAGE)
+        outPixmap = QPixmap(self.homeDisplay)
+        self.label.setPixmap(outPixmap)
         QApplication.processEvents()
 
     def showComputingPixmap(self):
 
-        if self.currentGPIOMode == GPIOMode.COMPUTING:
+        if self.displayMode == DisplayMode.COMPUTING:
             return
 
-        self.setCurrentMode(GPIOMode.COMPUTING)
-
-        self.resources.getLogger().addInfo("COMPUTING PAGE")
+        self.setDisplayMode(DisplayMode.COMPUTING)
+        self.logger.info("COMPUTING PAGE")
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -848,11 +915,7 @@ class MainWindow(QMainWindow):
 
     def startPictureAssembly(self):
 
-        self.resources.getLogger().addInfo("START PICTURE ASSEMBLY")
-
-        if self.movie is not None:
-            self.movie.stop()
-
+        self.logger.info("START PICTURE ASSEMBLY")
         QApplication.processEvents()
         QApplication.processEvents()
         QApplication.processEvents()
@@ -861,24 +924,24 @@ class MainWindow(QMainWindow):
     def startCaptureProcess(self):
 
         imPath = self.resources.getPath(ressourcesManager.PATH.CAPTURE) + "/" + str(uuid.uuid4()) + ".jpg"
-        self.resources.getLogger().addInfo("CAPTURE PROCESS " + imPath)
-        self.setCurrentMode(GPIOMode.RUNNING)
+        self.logger.info("CAPTURE PROCESS " + imPath)
+        self.setDisplayMode(DisplayMode.RUNNING)
         self.disconnectInputButtonInterupts()
 
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
 
         self.countDown = 4
         for x in range(0, self.countDown):
 
             if x == 0:
-                self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLUE, ColorLED.BLACK])
-                self.led.blinkFront(400)
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.blinkFront(400)
             if x == 1:
-                self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLUE, ColorLED.BLACK])
-                self.led.blinkFront(300)
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.blinkFront(300)
             if x == 2:
-                self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLUE, ColorLED.BLACK])
-                self.led.blinkFront(200)
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.blinkFront(200)
                 self.switchConstantLight(True)
 
             delay = self.showPixmap(self.countDown - x, False, False, False)
@@ -886,10 +949,10 @@ class MainWindow(QMainWindow):
             delay = self.showPixmap(0, True, False, False)
             self.wait(0.6 - delay)
 
-        captureThread = CaptureImageThread(imPath, self.resources)
+        captureThread = CaptureImageThread(imPath, self.resources, self.boxSettings)
         captureThread.signal.connect(self.onCaptureProcessFinished)
         self.start = time.time()
-        self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLUE, ColorLED.BLACK])
+        self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
 
         captureThread.start()
 
@@ -901,21 +964,21 @@ class MainWindow(QMainWindow):
     def onCaptureProcessFinished(self, result, capture):
 
         if result is True:
-            self.resources.getLogger().addInfo("CAPTURE PROCESS FINISHED TRUE :" + str(time.time() - self.start) + "s")
+            self.logger.info("CAPTURE PROCESS FINISHED TRUE :" + str(time.time() - self.start) + "s")
             self.showValidatingPage(capture)
         else:
-            self.resources.getLogger().addWarning("CAPTURE PROCESS FINISHED FALSE")
+            self.logger.warning("CAPTURE PROCESS FINISHED FALSE")
             self.showTriggerErrorPage()
 
         self.switchConstantLight(False)
 
     def showValidatingPage(self, capture):
 
-        self.resources.getLogger().addInfo("SHOW VALIDATION PAGE")
-        self.setCurrentMode(GPIOMode.VALIDATE)
+        self.logger.info("SHOW VALIDATION PAGE")
+        self.setDisplayMode(DisplayMode.VALIDATE)
         self.lastCapture = capture
         self.disconnectInputButtonInterupts()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -966,8 +1029,6 @@ class MainWindow(QMainWindow):
                                    preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
                 pen = QPen(Qt.black)
                 pen.setWidth(6)
-                # painter.setPen(pen)
-                # painter.drawRect(-m,-m, w+2*m, h+2*m)
 
 
             else:
@@ -978,11 +1039,6 @@ class MainWindow(QMainWindow):
                 pen = QPen(Qt.gray)
                 pen.setWidth(3)
 
-
-            #pen.setWidth(3)
-
-            # painter.translate(x, y)
-            # painter.drawPixmap(0, 0, preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
             painter.setPen(pen)
             painter.drawRect(0, 0, w, h)
 
@@ -993,11 +1049,11 @@ class MainWindow(QMainWindow):
 
         QApplication.processEvents()
         self.connectInputButtonInterupts()
-        self.switchLed(True, True, True)
+        self.setLedButonBlinking(True, True, True)
 
     def buildNextAssembly(self):
 
-        self.resources.getLogger().addInfo("BUILD SHUFFLE ASSEMBLY")
+        self.logger.info("BUILD NEXT ASSEMBLY")
         choosenLayout = self.resources.chooseNextLayout(len(self.captureList))
 
         if choosenLayout == None:
@@ -1013,7 +1069,7 @@ class MainWindow(QMainWindow):
 
     def showAssemblyPixmap(self):
 
-        self.resources.getLogger().addInfo("SHOW ASSEMBLY PAGE")
+        self.logger.info("SHOW ASSEMBLY PAGE")
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -1053,7 +1109,7 @@ class MainWindow(QMainWindow):
 
     def showPixmapMenu(self):
 
-        self.resources.getLogger().addInfo("SHOW MENU PAGE")
+        self.logger.info("SHOW MENU PAGE")
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -1065,11 +1121,11 @@ class MainWindow(QMainWindow):
 
     def showPowerOnPrinter(self):
 
-        if self.currentGPIOMode == GPIOMode.POWER_PRINTER:
+        if self.displayMode == DisplayMode.POWER_PRINTER:
             return
 
-        self.setCurrentMode(GPIOMode.POWER_PRINTER)
-        self.resources.getLogger().addInfo("SHOW POWER ON PRINTER")
+        self.setDisplayMode(DisplayMode.POWER_PRINTER)
+        self.logger.info("SHOW POWER ON PRINTER")
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -1078,11 +1134,11 @@ class MainWindow(QMainWindow):
         self.label.setPixmap(outPixmap)
         del painter
         self.connectInputButtonInterupts()
-        self.switchLed(False, False, True)
+        self.setLedButonBlinking(False, True, False)
 
     def showStartupPixmap(self):
 
-        self.resources.getLogger().addInfo("SHOW STARTUP PAGE")
+        self.logger.info("SHOW STARTUP PAGE")
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -1094,7 +1150,7 @@ class MainWindow(QMainWindow):
 
     def showShutdownPixmap(self):
 
-        self.resources.getLogger().addInfo("SHOW SHUTDOWN PAGE")
+        self.logger.info("SHOW SHUTDOWN PAGE")
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -1107,7 +1163,7 @@ class MainWindow(QMainWindow):
 
     def showGoHomePixmap(self):
 
-        self.resources.getLogger().addInfo("SHOW GO HOME PAGE")
+        self.logger.info("SHOW GO HOME PAGE")
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -1159,19 +1215,19 @@ class MainWindow(QMainWindow):
             self.blinkState = 0
 
         if self.buttonRightLedEnabled:
-            GPIO.output(GPIOPin.LED_BUTTON_3, self.blinkState)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), self.blinkState)
         else:
-            GPIO.output(GPIOPin.LED_BUTTON_3, onValue)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), onValue)
 
         if self.buttonLeftLedEnabled:
-            GPIO.output(GPIOPin.LED_BUTTON_1, self.blinkState)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), self.blinkState)
         else:
-            GPIO.output(GPIOPin.LED_BUTTON_1, onValue)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), onValue)
 
         if self.buttonDownLedEnabled:
-            GPIO.output(GPIOPin.LED_BUTTON_2, self.blinkState)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), self.blinkState)
         else:
-            GPIO.output(GPIOPin.LED_BUTTON_2, onValue)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), onValue)
 
     def onButton1Pressed(self):
 
@@ -1183,25 +1239,25 @@ class MainWindow(QMainWindow):
         menu = [shutdown[1] + offset, shutdown[1] + offset + delay]
         menu_advanced = [menu[1] + offset, menu[1] + offset + delay]
 
-        if DebugGPIO is True:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED")
-            self.switchLed(True, False, False)
-            self.led.showWarning(0)
+        if self.DebugGPIO is True:
+            self.logger.info("BUTTON 1 PRESSED")
+            self.setLedButonBlinking(True, False, False)
+            self.ledStrip.showWarning(0)
             return
 
         if self.interuptsConnected is False:
             return
 
-        self.resources.logger.addInfo("BUTTON 1 PRESSED")
+            self.logger.info("BUTTON 1 PRESSED")
 
-        if self.currentGPIOMode == GPIOMode.HOMEPAGE:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED : 4 POSSIBLE ACTIONS")
+        if self.displayMode == DisplayMode.HOMEPAGE:
+            self.logger.info("BUTTON 1 PRESSED : 4 POSSIBLE ACTIONS")
 
             start = time.time()
             stop = 0
             duration = 0
             if EMULATE is False:
-                while GPIO.input(GPIOPin.BUTTON_1) == 0:
+                while GPIO.input(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1)) == 0:
                     self.wait(0.1)
                     QApplication.processEvents()
                     delay = (time.time() - start)
@@ -1219,41 +1275,41 @@ class MainWindow(QMainWindow):
             duration = (time.time() - start)
 
             if duration < reset_default[1] and duration >= reset_default[0]:
-                self.resources.logger.addInfo("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
+                self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
                 self.resetPrinterErrors()
                 self.enablePrinter()
                 self.cancelAllNotCompletedJobs()
                 self.printerMonitoring.start()
                 self.gotoStart()
             elif duration >= reprint[0] and duration < reprint[1]:
-                self.resources.logger.addInfo("BUTTON 1 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
+                self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
                 self.sendPrintingJob()
             elif duration >= shutdown[0] and duration < shutdown[1]:
-                self.resources.logger.addInfo("BUTTON 1 PRESSED : SHUTDOWN")
+                self.logger.info("BUTTON 1 PRESSED : SHUTDOWN")
                 self.onShutdown()
             elif duration >= menu[0] and duration < menu[1]:
-                self.resources.logger.addInfo("BUTTON 1 PRESSED : SHOW MENU")
+                self.logger.info("BUTTON 1 PRESSED : SHOW MENU")
                 self.onShowMenu()
             elif duration >= menu_advanced[0] and duration < menu_advanced[1]:
-                self.resources.logger.addInfo("BUTTON 1 PRESSED : SHOW MENU ADVANCED")
+                self.logger.info("BUTTON 1 PRESSED : SHOW MENU ADVANCED")
                 self.onShowAdvancedMenu()
 
-        elif self.currentGPIOMode == GPIOMode.PRINT:
-            self.resources.logger.addWarning("BUTTON 1 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.PRINT:
+            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.MENU:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
+        elif self.displayMode == DisplayMode.MENU:
+            self.logger.info("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
             self.onRightButtonGPIO()
 
-        elif self.currentGPIOMode == GPIOMode.MENU_SETUP:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
+        elif self.displayMode == DisplayMode.MENU_SETUP:
+            self.logger.info("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
             self.onRightButtonGPIO()
 
-        elif self.currentGPIOMode == GPIOMode.COMPUTING:
-            self.resources.logger.addWarning("BUTTON 1 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.COMPUTING:
+            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.VALIDATE:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED : PHOTO VALIDATED")
+        elif self.displayMode == DisplayMode.VALIDATE:
+            self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
             self.storeLastCapture()
             if len(self.captureList) >= 4:
                 self.resources.resetChoices()
@@ -1261,23 +1317,23 @@ class MainWindow(QMainWindow):
             else:
                 self.startCaptureProcess()
 
-        elif self.currentGPIOMode == GPIOMode.DISPLAY_ASSEMBLY:
-            self.resources.logger.addInfo("BUTTON 1 PRESSED : OTHER ASSEMBLY")
+        elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
+            self.logger.info("BUTTON 1 PRESSED : OTHER ASSEMBLY")
             self.redoAssembly()
 
-        elif self.currentGPIOMode == GPIOMode.TRIGGER_ERROR:
-            self.resources.logger.addWarning("RETRYING CAPTURE ")
+        elif self.displayMode == DisplayMode.TRIGGER_ERROR:
+            self.logger.warning("RETRYING CAPTURE ")
             self.startCaptureProcess()
 
-        elif self.currentGPIOMode == GPIOMode.RUNNING:
-            self.resources.logger.addWarning("BUTTON 1 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.RUNNING:
+            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.POWER_PRINTER:
-            self.resources.logger.addWarning("BUTTON 1 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.POWER_PRINTER:
+            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
 
         else:
-            self.resources.logger.addWarning(
-                "BUTTON 1 PRESSED : This mode (" + str(self.currentGPIOMode.value) + ") is not handled.")
+            self.logger.warning(
+                "BUTTON 1 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
 
     def onButton3Pressed(self):
 
@@ -1289,31 +1345,31 @@ class MainWindow(QMainWindow):
         menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
         menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
-        if DebugGPIO is True:
-            self.resources.logger.addInfo("BUTTON 3 PRESSED")
-            self.switchLed(False, True, False)
-            self.led.showWarning(1)
+        if self.DebugGPIO is True:
+            self.logger.info("BUTTON 3 PRESSED")
+            self.setLedButonBlinking(False, False, True)
+            self.ledStrip.showWarning(1)
             return
 
         if self.interuptsConnected is False:
             return
 
-        self.resources.logger.addInfo("BUTTON 3 PRESSED")
+        self.logger.info("BUTTON 3 PRESSED")
 
-        if self.currentGPIOMode == GPIOMode.HOMEPAGE:
-            self.resources.logger.addInfo("BUTTON 3 PRESSED : 4 POSSIBLE ACTIONS")
+        if self.displayMode == DisplayMode.HOMEPAGE:
+            self.logger.info("BUTTON 3 PRESSED : 4 POSSIBLE ACTIONS")
 
-            self.resources.logger.addInfo("RESET PRINTER ERRORS : " + str(reset_default[0]) + "s to " + str(reset_default[1]) + "s")
-            self.resources.logger.addInfo("RE PRINT LAST PHOTO  : " + str(reprint[0]) + "s to " + str(reprint[1]) + "s")
-            self.resources.logger.addInfo("SHUTDOWN PHOTOBOOTH  : " + str(shutdown[0]) + "s to " + str(shutdown[1]) + "s")
-            self.resources.logger.addInfo("SHOW MENU            : " + str(menu[0]) + "s to " + str(menu[1]) + "s")
-            self.resources.logger.addInfo("SHOW EXPERT MENU     : " + str(menu_advanced[0]) + "s to " + str(menu_advanced[1]) + "s")
+            self.logger.info("RESET PRINTER ERRORS : " + str(reset_default[0]) + "s to " + str(reset_default[1]) + "s")
+            self.logger.info("RE PRINT LAST PHOTO  : " + str(reprint[0]) + "s to " + str(reprint[1]) + "s")
+            self.logger.info("SHUTDOWN PHOTOBOOTH  : " + str(shutdown[0]) + "s to " + str(shutdown[1]) + "s")
+            self.logger.info("SHOW MENU            : " + str(menu[0]) + "s to " + str(menu[1]) + "s")
+            self.logger.info("SHOW EXPERT MENU     : " + str(menu_advanced[0]) + "s to " + str(menu_advanced[1]) + "s")
 
             start = time.time()
             stop = 0
             duration = 0
             if EMULATE is False:
-                while GPIO.input(GPIOPin.BUTTON_3) == 0:
+                while GPIO.input(self.boxSettings.getGPIO(photoBooth.GPIOPin.BUTTON_3)) == 0:
                     self.wait(0.1)
                     QApplication.processEvents()
                     delay = (time.time() - start)
@@ -1331,57 +1387,57 @@ class MainWindow(QMainWindow):
             duration = (time.time() - start)
 
             if duration < reset_default[1] and duration >= reset_default[0]:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
+                self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
                 self.resetPrinterErrors()
                 self.enablePrinter()
                 self.cancelAllNotCompletedJobs()
                 self.printerMonitoring.start()
                 self.gotoStart()
             elif duration >= reprint[0] and duration < reprint[1]:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
+                self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
                 self.sendPrintingJob()
             elif duration >= shutdown[0] and duration < shutdown[1]:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : SHUTDOWN")
+                self.logger.info("BUTTON 3 PRESSED : SHUTDOWN")
                 self.onShutdown()
             elif duration >= menu[0] and duration < menu[1]:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : SHOW MENU")
+                self.logger.info("BUTTON 3 PRESSED : SHOW MENU")
                 self.onShowMenu()
             elif duration >= menu_advanced[0] and duration < menu_advanced[1]:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : SHOW MENU ADVANCED")
+                self.logger.info("BUTTON 3 PRESSED : SHOW MENU ADVANCED")
                 self.onShowAdvancedMenu()
 
-        elif self.currentGPIOMode == GPIOMode.PRINT:
-            self.resources.logger.addWarning("BUTTON 3 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.PRINT:
+            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.MENU:
-            self.resources.logger.addInfo("BUTTON 3 PRESSED : MENU BACK")
+        elif self.displayMode == DisplayMode.MENU:
+            self.logger.info("BUTTON 3 PRESSED : MENU BACK")
             self.onLeftButtonGPIO()
 
 
-        elif self.currentGPIOMode == GPIOMode.MENU_SETUP:
-            self.resources.logger.addInfo("BUTTON 3 PRESSED : MENU BACK")
+        elif self.displayMode == DisplayMode.MENU_SETUP:
+            self.logger.info("BUTTON 3 PRESSED : MENU BACK")
             self.onLeftButtonGPIO()
 
-        elif self.currentGPIOMode == GPIOMode.COMPUTING:
-            self.resources.logger.addWarning("BUTTON 3 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.COMPUTING:
+            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.VALIDATE:
-            self.resources.logger.addInfo("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
+        elif self.displayMode == DisplayMode.VALIDATE:
+            self.logger.info("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
             self.storeLastCapture()
             self.resources.resetChoices()
             self.redoAssembly()
 
-        elif self.currentGPIOMode == GPIOMode.DISPLAY_ASSEMBLY:
+        elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             if self.printingEnabled is True:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : PRINT")
+                self.logger.info("BUTTON 3 PRESSED : PRINT")
                 self.sendPrintingJob()
 
             else:
-                self.resources.logger.addInfo("BUTTON 3 PRESSED : PRINT NOT ENABLED, DO NOTHING")
+                self.logger.info("BUTTON 3 PRESSED : PRINT NOT ENABLED, DO NOTHING")
 
-        elif self.currentGPIOMode == GPIOMode.TRIGGER_ERROR:
+        elif self.displayMode == DisplayMode.TRIGGER_ERROR:
 
-            self.resources.logger.addWarning("IGNORING THIS CAPTURE ")
+            self.logger.warning("IGNORING THIS CAPTURE ")
             if len(self.captureList) < self.resources.nbImageMax:
                 self.startCaptureProcess()
 
@@ -1389,39 +1445,39 @@ class MainWindow(QMainWindow):
                 self.redoAssembly()
 
 
-        elif self.currentGPIOMode == GPIOMode.RUNNING:
-            self.resources.logger.addWarning("BUTTON 3 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.RUNNING:
+            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.POWER_PRINTER:
-            self.resources.logger.addWarning("BUTTON 3 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.POWER_PRINTER:
+            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
 
         else:
-            self.resources.logger.addWarning(
-                "BUTTON 3 PRESSED : This mode (" + str(self.currentGPIOMode.value) + ") is not handled.")
+            self.logger.warning(
+                "BUTTON 3 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
 
     def onButton2Pressed(self):
 
         capture = [0, 2]
         constant_light = [4, 8]
 
-        if DebugGPIO is True:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED")
-            self.switchLed(False, False, True)
-            self.led.blinkFront(300)
+        if self.DebugGPIO is True:
+            self.logger.info("BUTTON 2 PRESSED")
+            self.setLedButonBlinking(False, True, False)
+            self.ledStrip.blinkFront(300)
             return
 
         if self.interuptsConnected is False:
             return
 
-        self.resources.logger.addInfo("BUTTON 2 PRESSED")
+        self.logger.info("BUTTON 2 PRESSED")
 
-        if self.currentGPIOMode == GPIOMode.HOMEPAGE:
+        if self.displayMode == DisplayMode.HOMEPAGE:
 
             start = time.time()
             stop = 0
             duration = 0
             if EMULATE is False:
-                while GPIO.input(GPIOPin.BUTTON_2) == 0:
+                while GPIO.input(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2)) == 0:
                     self.wait(0.1)
                     QApplication.processEvents()
                     delay = (time.time() - start)
@@ -1435,59 +1491,59 @@ class MainWindow(QMainWindow):
             duration = (time.time() - start)
 
             if duration < capture[1] and duration >= capture[0]:
-                self.resources.logger.addInfo("BUTTON 2 PRESSED : START ASSEMBLY")
+                self.logger.info("BUTTON 2 PRESSED : START ASSEMBLY")
                 self.startPictureAssembly()
 
             elif duration < constant_light[1] and duration >= constant_light[0]:
-                self.resources.logger.addInfo("BUTTON 2 PRESSED : TOGGLE TOP LIGHT")
+                self.logger.info("BUTTON 2 PRESSED : TOGGLE TOP LIGHT")
                 self.topLightOn = not self.topLightOn
                 self.switchConstantLight(self.topLightOn)
                 self.showHomePage()
 
-        elif self.currentGPIOMode == GPIOMode.PRINT:
-            self.resources.logger.addWarning("BUTTON 2 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.PRINT:
+            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.POWER_PRINTER:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED : POWER_PRINTER ACK -> HOMEPAGE")
-            self.led.showWarning(0)
+        elif self.displayMode == DisplayMode.POWER_PRINTER:
+            self.logger.info("BUTTON 2 PRESSED : POWER_PRINTER ACK -> HOMEPAGE")
+            self.ledStrip.showWarning(0)
             self.gotoStart()
             self.switchConstantLight(False)
 
-        elif self.currentGPIOMode == GPIOMode.MENU:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED : NAVIGATE MENU")
+        elif self.displayMode == DisplayMode.MENU:
+            self.logger.info("BUTTON 2 PRESSED : NAVIGATE MENU")
             self.onDownButtonGPIO()
 
-        elif self.currentGPIOMode == GPIOMode.MENU_SETUP:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED : NAVIGATE MENU")
+        elif self.displayMode == DisplayMode.MENU_SETUP:
+            self.logger.info("BUTTON 2 PRESSED : NAVIGATE MENU")
             self.onDownButtonGPIO()
 
-        elif self.currentGPIOMode == GPIOMode.COMPUTING:
-            self.resources.logger.addWarning("BUTTON 2 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.COMPUTING:
+            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
 
-        elif self.currentGPIOMode == GPIOMode.VALIDATE:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED : REDO LAST PICTURE")
+        elif self.displayMode == DisplayMode.VALIDATE:
+            self.logger.info("BUTTON 2 PRESSED : REDO LAST PICTURE")
             self.startCaptureProcess()
 
-        elif self.currentGPIOMode == GPIOMode.DISPLAY_ASSEMBLY:
-            self.resources.logger.addInfo("BUTTON 2 PRESSED : DISPLAY_ASSEMBLY -> HOMEPAGE")
+        elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
+            self.logger.info("BUTTON 2 PRESSED : DISPLAY_ASSEMBLY -> HOMEPAGE")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.TRIGGER_ERROR:
-            self.resources.logger.addWarning(
+        elif self.displayMode == DisplayMode.TRIGGER_ERROR:
+            self.logger.warning(
                 "BUTTON 2 PRESSED : CANCELING")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.RUNNING:
-            self.resources.logger.addWarning("BUTTON 2 PRESSED : No option map to this button")
+        elif self.displayMode == DisplayMode.RUNNING:
+            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
 
         else:
-            self.resources.logger.addWarning(
-                "BUTTON 2 PRESSED : This mode (" + str(self.currentGPIOMode.value) + ") is not handled.")
+            self.logger.warning(
+                "BUTTON 2 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
 
     def resetPrinterErrors(self):
 
         self.disconnectInputButtonInterupts()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
 
         self.printerMonitoring.quit()
         self.label.setRibbonEmptyLeft(False)
@@ -1496,16 +1552,17 @@ class MainWindow(QMainWindow):
         self.label.setTrayMissingRight(False)
         self.label.setPaperEmptyLeft(False)
         self.label.setPaperEmptyRight(False)
-        self.led.showWarning(0)
+        self.ledStrip.showWarning(0)
 
     @pyqtSlot(int)
     def onInputButtonPressed(self, channel):
-        if channel == GPIOPin.BUTTON_3:
-            self.onButton3Pressed()
-        elif channel == GPIOPin.BUTTON_1:
+
+        if channel == self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1):
             self.onButton1Pressed()
-        elif channel == GPIOPin.BUTTON_2:
+        elif channel == self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2):
             self.onButton2Pressed()
+        elif channel == self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3):
+            self.onButton3Pressed()
 
     def onRightButtonGPIO(self):
         try:
@@ -1514,6 +1571,7 @@ class MainWindow(QMainWindow):
             pyautogui.press('enter')
         except pyautogui.FailSafeException as e:
             print(e)
+
     def onLeftButtonGPIO(self):
         try:
             self.defineTimeout(-1)
@@ -1532,52 +1590,53 @@ class MainWindow(QMainWindow):
 
     def onShowMenu(self):
 
-        self.setCurrentMode(GPIOMode.MENU)
-        self.switchLed(False, False, False)
+        self.setDisplayMode(DisplayMode.MENU)
+        self.setLedButonBlinking(False, False, False)
         self.showPixmapMenu()
         self.updateMenu(False)
         self.contextMenu.exec_(QPoint(30, 200))
-        self.resources.getLogger().addInfo("SHOW MENU")
-        self.switchLed(True, True, True)
-        if self.currentGPIOMode == GPIOMode.MENU:
+        self.logger.info("SHOW MENU")
+        self.setLedButonBlinking(True, True, True)
+        if self.displayMode == DisplayMode.MENU:
             self.gotoStart()
 
     def storeLastCapture(self):
 
-        self.resources.getLogger().addInfo("STORE CAPTURE")
+        self.logger.info("STORE CAPTURE")
         self.captureList.append(self.lastCapture)
 
-
+    @pyqtSlot()
     def setImagequality0(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         settings.setValue("imagequality", 0)
-        self.resources.getLogger().addInfo("SET IMAGE QUALITY=0")
+        self.logger.info("SET IMAGE QUALITY=0")
 
         if EMULATE is False:
             subprocess.call("gphoto2 --set-config imagequality=0", shell=True)
 
+    @pyqtSlot()
     def setImagequality1(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         settings.setValue("imagequality", 1)
-        self.resources.getLogger().addInfo("SET IMAGE QUALITY=1")
+        self.logger.info("SET IMAGE QUALITY=1")
         if EMULATE is False:
             subprocess.call("gphoto2 --set-config imagequality=1", shell=True)
 
+    @pyqtSlot()
     def setImagequality2(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         settings.setValue("imagequality", 2)
-        self.resources.getLogger().addInfo("SET IMAGE QUALITY=2")
+        self.logger.info("SET IMAGE QUALITY=2")
         if EMULATE is False:
             subprocess.call("gphoto2 --set-config imagequality=2", shell=True)
 
-
-
+    @pyqtSlot()
     def onSetCurrentPrinter(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -1596,8 +1655,9 @@ class MainWindow(QMainWindow):
         try:
             time.sleep(delay)
         except ValueError as e:
-            self.resources.logger.addError("TIME.SLEEP EXCEPTION " + str(e))
+            self.logger.error("TIME.SLEEP EXCEPTION " + str(e))
 
+    @pyqtSlot()
     def onSetCurrentEvent(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -1607,6 +1667,7 @@ class MainWindow(QMainWindow):
         self.resources.logInfos()
         self.cacheHomePicture()
 
+    @pyqtSlot()
     def onSetCurrentSkin(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -1615,6 +1676,7 @@ class MainWindow(QMainWindow):
         self.resources.loadResources()
         self.cacheHomePicture()
 
+    @pyqtSlot()
     def onSetCurrentBackGround(self):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
@@ -1622,7 +1684,7 @@ class MainWindow(QMainWindow):
         self.resources.loadResources()
         self.cacheHomePicture()
 
-
+    @pyqtSlot()
     def onShowAllTestAssemblies(self):
 
         self.onShowAssemblyCalibration1()
@@ -1633,15 +1695,19 @@ class MainWindow(QMainWindow):
         self.wait(5)
         self.onShowAssemblyCalibration4()
 
+    @pyqtSlot()
     def onShowAssemblyCalibration1(self):
         self.buildCalibrationAssembly(1)
 
+    @pyqtSlot()
     def onShowAssemblyCalibration2(self):
         self.buildCalibrationAssembly(2)
 
+    @pyqtSlot()
     def onShowAssemblyCalibration3(self):
         self.buildCalibrationAssembly(3)
 
+    @pyqtSlot()
     def onShowAssemblyCalibration4(self):
         self.buildCalibrationAssembly(4)
 
@@ -1659,7 +1725,7 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.imagequality = settings.value("imagequality", 0, int)
-        self.printerName = settings.value("printerName", "Canon_CP800")
+        self.printerName = settings.value("printerName", "Canon_CP800_0")
         security = settings.value("security", True, bool)
 
         if EMULATE is False:
@@ -1715,7 +1781,6 @@ class MainWindow(QMainWindow):
             act.triggered.connect(self.onSetCurrentPrinter)
             self.printerActionList.append(act)
 
-
         self.actionEnablePrinting = QAction("Activer/Désactiver", self)
         self.actionEnablePrinting.setCheckable(True)
         self.actionEnablePrinting.triggered.connect(self.toogleEnablePrinting)
@@ -1727,8 +1792,6 @@ class MainWindow(QMainWindow):
         self.actionReboot.triggered.connect(self.onReboot)
 
         self.actionExit = QAction("<- Sortir du menu", self)
-
-
         self.actionRestartCups = QAction("Redemarrer cups", self)
         self.actionStartCups = QAction("Demarrer cups", self)
         self.actionStopCups = QAction("Arreter cups", self)
@@ -1779,14 +1842,16 @@ class MainWindow(QMainWindow):
             self.backgroundActionList.append(act)
             act.setToolTip("<img src='"+self.resources.getPath(ressourcesManager.PATH.BACKGROUND_LIST_PATH) + "/" + f +"'" + " width='350' height='233' >")
 
-
+    @pyqtSlot(QAction)
     def onMoveMouseAbove(self, act):
+
         if self.lastAct != act:
             self.lastAct = act
             QToolTip.showText(QPoint(0,0), act.toolTip())
 
 
     def initMenu(self):
+
         self.lastAct = None
         has_speed_light = True
         has_constant_light = True
@@ -1805,7 +1870,7 @@ class MainWindow(QMainWindow):
         self.dataMenu.addAction(self.actionCleanAssemblies)
         self.dataMenu.addAction(self.actionCleanEventDatas)
 
-        self.dslrMenu  = QMenu(CaptureImageThread(None,None).getCameraName(),self)
+        self.dslrMenu  = QMenu(self.boxSettings.getCameraName(),self)
         self.settingMenu.addMenu(self.dslrMenu)
 
         self.speedLightMenu = QMenu("Eclairage flash", self)
@@ -1823,7 +1888,6 @@ class MainWindow(QMainWindow):
         if has_constant_light is True:
             self.settingMenu.addMenu(self.constantLightMenu)
 
-
         self.printerMenu = QMenu("Impression", self)
         self.cupsMenu = QMenu("Cups", self)
         self.printerMenu.addAction(self.actionEnablePrinting)
@@ -1835,8 +1899,6 @@ class MainWindow(QMainWindow):
 
         if has_printer is True:
             self.settingMenu.addMenu(self.printerMenu)
-
-
 
         if can_restart_dslr is True:
             self.dslrMenu.addAction(self.actionRestartDSLR)
@@ -1989,7 +2051,7 @@ class MainWindow(QMainWindow):
     def showTriggerErrorPage(self):
 
         self.resources.getLogger().addError("TRIGGER CAPTURE ERROR")
-        self.setCurrentMode(GPIOMode.TRIGGER_ERROR)
+        self.setDisplayMode(DisplayMode.TRIGGER_ERROR)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2000,63 +2062,68 @@ class MainWindow(QMainWindow):
         del painter
         QApplication.processEvents()
 
-        self.switchLed(True, True, True)
+        self.setLedButonBlinking(True, True, True)
         self.connectInputButtonInterupts()
 
     def onShowAdvancedMenu(self):
 
-        self.setCurrentMode(GPIOMode.MENU_SETUP)
-        self.switchLed(False, False, False)
+        self.setDisplayMode(DisplayMode.MENU_SETUP)
+        self.setLedButonBlinking(False, False, False)
         self.showPixmapMenu()
         self.updateMenu(True)
         self.contextMenu.exec_(QPoint(30, 200))
 
-        self.resources.getLogger().addInfo("SHOW MENU")
-        self.switchLed(True, True, True)
+        self.logger.info("SHOW MENU")
+        self.setLedButonBlinking(True, True, True)
 
-        if self.currentGPIOMode == GPIOMode.MENU_SETUP:
+        if self.displayMode == DisplayMode.MENU_SETUP:
             self.gotoStart()
 
+    @pyqtSlot()
     def cleanCaptures(self):
 
-        self.resources.getLogger().addInfo("ERASE CAPTURES")
+        self.logger.info("ERASE CAPTURES")
         shutil.rmtree(self.resources.getPath(ressourcesManager.PATH.CAPTURE))
         os.mkdir(self.resources.getPath(ressourcesManager.PATH.CAPTURE))
 
-
+    @pyqtSlot()
     def cleanEventDatas(self):
 
-        self.resources.getLogger().addInfo("ERASE ALL")
+        self.logger.info("ERASE ALL")
         self.cleanAssemblies()
         self.cleanCaptures()
 
+    @pyqtSlot()
     def cleanAssemblies(self):
 
-        self.resources.getLogger().addInfo("ERASE ASSEMBLIES")
+        self.logger.info("ERASE ASSEMBLIES")
         shutil.rmtree(self.resources.getPath(ressourcesManager.PATH.ASSEMBLIES))
         os.mkdir(self.resources.getPath(ressourcesManager.PATH.ASSEMBLIES))
 
+    @pyqtSlot()
     def toogleEnableSpeedlight(self):
 
-        self.resources.getLogger().addInfo("ENABLE SPEEDLIGHT")
+        self.logger.info("ENABLE SPEEDLIGHT")
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         enable = not settings.value("speedLightEnabled", True, bool)
         settings.setValue("speedLightEnabled", enable)
         self.switchSpeedLight(enable)
 
+    @pyqtSlot()
     def restartSpeedLight(self):
 
-        self.resources.getLogger().addInfo("RESTART SPEEDLIGHT")
+        self.logger.info("RESTART SPEEDLIGHT")
         if EMULATE is True:
             return
         self.switchSpeedLight(False)
         self.wait(2)
         self.switchSpeedLight(True)
 
+    @pyqtSlot()
     def restartDSLR(self):
 
-        self.resources.getLogger().addInfo("RESTART DSLR")
+        self.logger.info("RESTART DSLR")
         if EMULATE is True:
             return
         self.switchDSLR(False)
@@ -2065,12 +2132,12 @@ class MainWindow(QMainWindow):
 
     def initDevicesFast(self):
 
-        self.resources.getLogger().addInfo("INIT DEVICES FAST")
+        self.logger.info("INIT DEVICES FAST")
         self.switchDSLR(True)
 
     def initDevices(self):
 
-        self.resources.getLogger().addInfo("INIT DEVICES")
+        self.logger.info("INIT DEVICES")
         self.restartDSLR()
         self.restartSpeedLight()
         QApplication.processEvents()
@@ -2082,6 +2149,7 @@ class MainWindow(QMainWindow):
 
         self.switchConstantLight(True)
 
+    @pyqtSlot()
     def toogleEnablePrinting(self):
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -2093,9 +2161,10 @@ class MainWindow(QMainWindow):
         else:
             self.startCUPS()
 
+    @pyqtSlot()
     def restartCUPS(self):
 
-        self.resources.logger.addInfo("RESTARTING CUPS")
+        self.logger.info("RESTARTING CUPS")
         if EMULATE is True:
             return
 
@@ -2107,9 +2176,10 @@ class MainWindow(QMainWindow):
         else:
             subprocess.Popen(["/etc/init.d/cups", "stop"])
 
+    @pyqtSlot()
     def startCUPS(self):
 
-        self.resources.logger.addInfo("STARTING CUPS")
+        self.logger.info("STARTING CUPS")
 
         if EMULATE is True:
             return
@@ -2121,53 +2191,57 @@ class MainWindow(QMainWindow):
         else:
             subprocess.Popen(["/etc/init.d/cups", "stop"])
 
+    @pyqtSlot()
     def stopCUPS(self):
 
-        self.resources.logger.addInfo("STOPING CUPS")
+        self.logger.info("STOPING CUPS")
 
         if EMULATE is True:
             return
         subprocess.Popen(["/etc/init.d/cups", "stop"])
 
+    @pyqtSlot()
     def onShutdown(self):
 
         self.showShutdownPixmap()
-        self.resources.getLogger().addInfo("ARRET NORMAL DU PHOTOBOOTH")
+        self.logger.info("ARRET NORMAL DU PHOTOBOOTH")
 
         if EMULATE is False:
             self.switchSpeedLight(False)
             self.switchDSLR(False)
-            self.switchLed(False, False, False)
-            self.led.setColor(ledControler.LEDLocation.RIGHT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.LEFT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLACK, ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.TEXT_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.ERROR, [ColorLED.BLACK, ColorLED.BLACK])
+            self.setLedButonBlinking(False, False, False)
+            self.ledStrip.setColor(ledStripControler.Location.RIGHT_SIDE, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.LEFT_SIDE, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLACK, ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.ERROR, [ledStripControler.Color.BLACK, Color.BLACK])
 
         self.command("shutdown")
 
+    @pyqtSlot()
     def onReboot(self):
 
         self.showShutdownPixmap()
-        self.resources.getLogger().addInfo("REDEMARRAGE NORMAL DU PHOTOBOOTH")
+        self.logger.info("REDEMARRAGE NORMAL DU PHOTOBOOTH")
 
         if EMULATE is False:
             self.switchSpeedLight(False)
             self.switchDSLR(False)
-            self.switchLed(False, False, False)
-            self.led.setColor(ledControler.LEDLocation.RIGHT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.LEFT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLACK, ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.TEXT_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.ERROR, [ColorLED.BLACK, ColorLED.BLACK])
+            self.setLedButonBlinking(False, False, False)
+            self.ledStrip.setColor(ledStripControler.Location.RIGHT_SIDE, [Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.LEFT_SIDE, [Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [Color.BLACK, Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.ERROR, [Color.BLACK, Color.BLACK])
 
         self.command("reboot")
 
+    @pyqtSlot()
     def onGenerateAllSingleAssemblies(self):
 
-        self.resources.getLogger().addInfo("GENERATE ALL SINGLE ASSEMBLIES")
+        self.logger.info("GENERATE ALL SINGLE ASSEMBLIES")
         self.generateAllSingleAssemblies(self.resources.getPath(ressourcesManager.PATH.CAPTURE),
                                          self.resources.getPath(ressourcesManager.PATH.ASSEMBLIES))
 
@@ -2196,7 +2270,7 @@ class MainWindow(QMainWindow):
 
     def initGPIO(self):
 
-        self.resources.logger.addInfo("INITIALIZING PARSPBERRY PI GPIOS.")
+        self.logger.info("INITIALIZING PARSPBERRY PI GPIOS.")
 
         if EMULATE is True:
             return
@@ -2205,49 +2279,50 @@ class MainWindow(QMainWindow):
 
         # GPIO IN 20 wired
 
-        GPIO.setup(GPIOPin.BUTTON_3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(GPIOPin.BUTTON_2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(GPIOPin.BUTTON_1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        GPIO.setup(GPIOPin.LED_BUTTON_3, GPIO.OUT, initial=1)
-        GPIO.setup(GPIOPin.LED_BUTTON_2, GPIO.OUT, initial=1)
-        GPIO.setup(GPIOPin.LED_BUTTON_1, GPIO.OUT, initial=1)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), GPIO.OUT, initial=1)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), GPIO.OUT, initial=1)
+        GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), GPIO.OUT, initial=1)
 
-        GPIO.setup(GPIOPin.RELAY_POWER_TOP_LIGHT, GPIO.OUT, initial=0)
+        if photoBooth.has_constant_light() is True:
+            GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), GPIO.OUT, initial=0)
 
-        if PHOTOBOOTH_2 is False:
-            GPIO.setup(GPIOPin.RELAY_LED_STRIP, GPIO.OUT, initial=0)
+        if photoBooth.have_led_strip() is True and photoBooth.can_restart_led_strip() is True:
+            GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), GPIO.OUT, initial=0)
 
-        GPIO.setup(GPIOPin.RELAY_2, GPIO.OUT, initial=1)
-        GPIO.setup(GPIOPin.RELAY_3, GPIO.OUT, initial=1)
+        if  photoBooth.has_external_flash() is True and photoBooth.can_restart_external_flash() is True:
+            GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT), GPIO.OUT, initial=1)
+            GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), GPIO.OUT, initial=1)
 
-        if PHOTOBOOTH_2 is True:
-            GPIO.setup(GPIOPin.POWER_SPEEDLIGHT, GPIO.OUT, initial=1)
-            GPIO.setup(GPIOPin.ON_OFF_SPEEDLIGHT, GPIO.OUT, initial=1)
-            GPIO.setup(GPIOPin.POWER_DSLR, GPIO.OUT, initial=1)
+        if photoBooth.can_restart_DSLR() is True:
+            GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), GPIO.OUT, initial=1)
 
         self.blinkingTimer = QTimer()
         self.blinkingTimer.timeout.connect(self.blink)
         self.blinkingTimer.start(300)
 
-        self.inputButtonThread = InputButtonThread()
+        self.inputButtonThread = InputButtonThread(self.boxSettings)
         self.disconnectInputButtonInterupts()
         self.inputButtonThread.start()
 
     def switchConstantLight(self, on):
 
-        self.resources.logger.addInfo("CONSTANT LIGHT SWITCHED TO " + str(on))
+        self.logger.info("CONSTANT LIGHT SWITCHED TO " + str(on))
         if EMULATE is True:
             return
 
         if on is True:
-            GPIO.output(GPIOPin.RELAY_POWER_TOP_LIGHT, 0)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), 0)
         else:
-            GPIO.output(GPIOPin.RELAY_POWER_TOP_LIGHT, 1)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), 1)
 
+    @pyqtSlot()
     def toogleEnableConstantLight(self):
 
-        self.resources.getLogger().addInfo("ENABLE CONSTANT LIGHT")
+        self.logger.info("ENABLE CONSTANT LIGHT")
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         enable = not settings.value("constantLightEnabled", True, bool)
@@ -2257,18 +2332,20 @@ class MainWindow(QMainWindow):
             self.wait(2)
             self.switchConstantLight(False)
 
+    @pyqtSlot()
     def switchOnConstantLight(self):
         self.switchConstantLight(True)
 
+    @pyqtSlot()
     def switchOffConstantLight(self):
         self.switchConstantLight(False)
 
 
     def testRelays(self):
 
-        GPIO.output(GPIOPin.RELAY_POWER_TOP_LIGHT, 0)
+        GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), 0)
         self.wait(2)
-        GPIO.output(GPIOPin.RELAY_LED_STRIP, 0)
+        GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), 0)
         self.wait(2)
 
     def switchSpeedLight(self, on):
@@ -2285,18 +2362,18 @@ class MainWindow(QMainWindow):
 
         if on is True and en is True:
 
-            GPIO.output(GPIOPin.POWER_SPEEDLIGHT, 0)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT), 0)
             self.wait(1)
-            GPIO.output(GPIOPin.ON_OFF_SPEEDLIGHT, 0)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), 0)
             self.wait(2)
-            GPIO.output(GPIOPin.ON_OFF_SPEEDLIGHT, 1)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), 1)
 
         else:
 
-            GPIO.output(GPIOPin.ON_OFF_SPEEDLIGHT, 0)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), 0)
             self.wait(2)
-            GPIO.output(GPIOPin.ON_OFF_SPEEDLIGHT, 1)
-            GPIO.output(GPIOPin.POWER_SPEEDLIGHT, 1)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), 1)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT), 1)
             self.wait(1)
 
     def switchDSLR(self, on):
@@ -2308,26 +2385,27 @@ class MainWindow(QMainWindow):
             return
 
         if on is True:
-            GPIO.output(GPIOPin.POWER_DSLR, 0)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), 0)
             self.wait(1)
         else:
-            GPIO.output(GPIOPin.POWER_DSLR, 1)
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), 1)
             self.wait(1)
 
+    @pyqtSlot()
     def onTimeout(self):
 
         self.defineTimeout(-1)
 
-        if self.currentGPIOMode == GPIOMode.HOMEPAGE:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED DO NOTHING")
+        if self.displayMode == DisplayMode.HOMEPAGE:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED DO NOTHING")
             pass
 
-        elif self.currentGPIOMode == GPIOMode.PRINT:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.PRINT:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.MENU:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.MENU:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
                 return
             try:
@@ -2342,8 +2420,8 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
 
-        elif self.currentGPIOMode == GPIOMode.MENU_SETUP:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.MENU_SETUP:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
                 return
             try:
@@ -2355,46 +2433,46 @@ class MainWindow(QMainWindow):
                 print(e)
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.COMPUTING:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.COMPUTING:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.VALIDATE:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
+        elif self.displayMode == DisplayMode.VALIDATE:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
             self.onButton3Pressed()
 
-        elif self.currentGPIOMode == GPIOMode.DISPLAY_ASSEMBLY:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.TRIGGER_ERROR:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
+        elif self.displayMode == DisplayMode.TRIGGER_ERROR:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
             self.onLeftButtonPressed()
 
-        elif self.currentGPIOMode == GPIOMode.RUNNING:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+        elif self.displayMode == DisplayMode.RUNNING:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             self.gotoStart()
 
-        elif self.currentGPIOMode == GPIOMode.POWER_PRINTER:
-            self.resources.logger.addInfo(self.currentGPIOMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
-            self.led.showWarning(0)
+        elif self.displayMode == DisplayMode.POWER_PRINTER:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.ledStrip.showWarning(0)
             self.gotoStart()
 
     def redoAssembly(self):
 
-        self.setCurrentMode(GPIOMode.DISPLAY_ASSEMBLY)
+        self.setDisplayMode(DisplayMode.DISPLAY_ASSEMBLY)
         self.disconnectInputButtonInterupts()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
         self.wait(0.2)
         QApplication.processEvents()
         self.buildNextAssembly()
-        self.switchLed(True, self.printingEnabled, True)
+        self.setLedButonBlinking(True, True, self.printingEnabled)
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 
     def connectInputButtonInterupts(self):
 
-        self.resources.logger.addInfo("ENABLE BUTTON HANDLER")
+        self.logger.info("ENABLE BUTTON HANDLER")
         if EMULATE is True:
             if self.interuptsConnected is False:
                 self.interuptsConnected = True
@@ -2406,7 +2484,7 @@ class MainWindow(QMainWindow):
 
     def disconnectInputButtonInterupts(self):
 
-        self.resources.logger.addInfo("DISABLE BUTTON HANDLER")
+        self.logger.info("DISABLE BUTTON HANDLER")
         if EMULATE is True:
             if self.interuptsConnected is True:
                 self.interuptsConnected = False
@@ -2425,7 +2503,7 @@ class MainWindow(QMainWindow):
             return
 
         self.disconnectInputButtonInterupts()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
         self.enablePrinter()
 
         self.resetPrinterErrors()
@@ -2439,18 +2517,18 @@ class MainWindow(QMainWindow):
 
                 self.lastPrintId = conn.printFile(self.printerName, self.currentAssemblyPath, title='boxaselfi_job',
                                                   options={})
-                self.resources.logger.addInfo(
+                self.logger.info(
                     "NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
                 self.showPrintSentPage()
                 self.wait(5)
 
             else:
 
-                self.resources.logger.addError("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")
+                self.logger.error("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")
 
             self.printerMonitoring.start()
         except:
-            self.resources.logger.addError("sendPrintingJob EXCEPTION")
+            self.logger.error("sendPrintingJob EXCEPTION")
 
         self.wait(8)
         self.gotoStart()
@@ -2461,34 +2539,34 @@ class MainWindow(QMainWindow):
             # printers = conn.getPrinters()
             for key, val in conn.getJobs(which_jobs='not-completed', my_jobs=False, limit=-1, first_job_id=-1).items():
                 if key != self.lastPrintId:
-                    self.resources.logger.addInfo("CANCEL JOB ID : " + str(key))
+                    self.logger.info("CANCEL JOB ID : " + str(key))
                     conn.cancelJob(key, purge_job=False)
                 else:
-                    self.resources.logger.addInfo("DO NOT CANCEL LAST JOB ID : " + str(key))
+                    self.logger.info("DO NOT CANCEL LAST JOB ID : " + str(key))
         except:
-            self.resources.logger.addError("cancelNotCompletedJobs EXCEPTION")
+            self.logger.error("cancelNotCompletedJobs EXCEPTION")
 
     def cancelAllNotCompletedJobs(self):
         try:
             conn = cups.Connection()
             # printers = conn.getPrinters()
             for key, val in conn.getJobs(which_jobs='not-completed', my_jobs=False, limit=-1, first_job_id=-1).items():
-                self.resources.logger.addInfo("CANCEL JOB ID : " + str(key))
+                self.logger.info("CANCEL JOB ID : " + str(key))
                 conn.cancelJob(key, purge_job=False)
         except:
-            self.resources.logger.addError("cancelAllNotCompletedJobs EXCEPTION")
+            self.logger.error("cancelAllNotCompletedJobs EXCEPTION")
 
     def enablePrinter(self):
         try:
             conn = cups.Connection()
             conn.enablePrinter(self.printerName)
         except:
-            self.resources.logger.addError("ENABLE PRINTER CUPS EXCEPTION")
+            self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
 
     def showPrintSentPage(self):
 
-        self.resources.logger.addInfo("SHOW NEW PRINT JOB SENT")
-        self.setCurrentMode(GPIOMode.PRINT)
+        self.logger.info("SHOW NEW PRINT JOB SENT")
+        self.setDisplayMode(DisplayMode.PRINT)
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -2500,10 +2578,10 @@ class MainWindow(QMainWindow):
 
     def showReleaseForSwitchConstantLightPage(self):
 
-        if (self.currentGPIOMode == GPIOMode.INFO_SWITCH_CONSTANT_LIGHT):
+        if (self.displayMode == DisplayMode.INFO_SWITCH_CONSTANT_LIGHT):
             return
-        self.resources.logger.addInfo("SHOW RELEASE TO SWITCH CONSTANT LIGHT")
-        self.setCurrentMode(GPIOMode.INFO_SWITCH_CONSTANT_LIGHT)
+        self.logger.info("SHOW RELEASE TO SWITCH CONSTANT LIGHT")
+        self.setDisplayMode(DisplayMode.INFO_SWITCH_CONSTANT_LIGHT)
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -2516,10 +2594,10 @@ class MainWindow(QMainWindow):
 
     def showReleaseForShutdownPage(self):
 
-        if (self.currentGPIOMode == GPIOMode.INFO_SHUTDOWN):
+        if (self.displayMode == DisplayMode.INFO_SHUTDOWN):
             return
-        self.resources.logger.addInfo("SHOW RELEASE TO SHUTDOWN")
-        self.setCurrentMode(GPIOMode.INFO_SHUTDOWN)
+        self.logger.info("SHOW RELEASE TO SHUTDOWN")
+        self.setDisplayMode(DisplayMode.INFO_SHUTDOWN)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2532,10 +2610,10 @@ class MainWindow(QMainWindow):
 
     def showReleaseForMenuPage(self):
 
-        if (self.currentGPIOMode == GPIOMode.INFO_MENU):
+        if (self.displayMode == DisplayMode.INFO_MENU):
             return
-        self.resources.logger.addInfo("SHOW RELEASE FO MENU")
-        self.setCurrentMode(GPIOMode.INFO_MENU)
+        self.logger.info("SHOW RELEASE FO MENU")
+        self.setDisplayMode(DisplayMode.INFO_MENU)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2548,10 +2626,10 @@ class MainWindow(QMainWindow):
 
     def showReleaseForAdvancedMenuPage(self):
 
-        if (self.currentGPIOMode == GPIOMode.INFO_MENU_ADVANCED):
+        if (self.displayMode == DisplayMode.INFO_MENU_ADVANCED):
             return
-        self.resources.logger.addInfo("SHOW RELEASE FOR ADVANCED MENU")
-        self.setCurrentMode(GPIOMode.INFO_MENU_ADVANCED)
+        self.logger.info("SHOW RELEASE FOR ADVANCED MENU")
+        self.setDisplayMode(DisplayMode.INFO_MENU_ADVANCED)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2565,10 +2643,10 @@ class MainWindow(QMainWindow):
 
     def showReleaseForReprintPage(self):
 
-        if (self.currentGPIOMode == GPIOMode.INFO_REPRINT):
+        if (self.displayMode == DisplayMode.INFO_REPRINT):
             return
-        self.resources.logger.addInfo("SHOW RELEASE FOR REPRINT")
-        self.setCurrentMode(GPIOMode.INFO_REPRINT)
+        self.logger.info("SHOW RELEASE FOR REPRINT")
+        self.setDisplayMode(DisplayMode.INFO_REPRINT)
 
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2581,20 +2659,20 @@ class MainWindow(QMainWindow):
 
     def erasePrinterStatusBox(self):
 
-        self.resources.logger.addInfo("JOB PRINT STATUS : CLEANING THE LIST")
+        self.logger.info("JOB PRINT STATUS : CLEANING THE LIST")
         self.printJobStatusList = []
 
     def gotoStart(self, index=1):
 
         self.showCuttingLines = False
-        self.resources.logger.addInfo("GO HOME")
-        # self.setCurrentMode(GPIOMode.HOMEPAGE)
-        self.switchLed(False, False, True)
+        self.logger.info("GO HOME")
+        # self.setDisplayMode(DisplayMode.HOMEPAGE)
+        self.setLedButonBlinking(False, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()
         self.showHomePage()
 
-    def switchLed(self, Right, Left, Downn):
+    def setLedButonBlinking(self, Right, Left, Downn):
 
         self.setButtonRightLedEnabled(Right)
         self.setButtonLeftLedEnabled(Left)
@@ -2638,13 +2716,8 @@ class MainWindow(QMainWindow):
         if EMULATE is False:
             self.switchSpeedLight(False)
             self.switchDSLR(False)
-            self.switchLed(False, False, False)
-            self.led.setColor(ledControler.LEDLocation.RIGHT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.LEFT_SIDE, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLACK, ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.CAMERA_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.TEXT_BACK, [ColorLED.BLACK])
-            self.led.setColor(ledControler.LEDLocation.ERROR, [ColorLED.BLACK, ColorLED.BLACK])
+            self.setLedButonBlinking(False, False, False)
+            self.ledStrip.setColor(ledStripControler.Location.ALL, [ledStripControler.Color.BLACK])
 
         exit(140)
 
@@ -2652,7 +2725,7 @@ class MainWindow(QMainWindow):
 
         self.showComputingPixmap()
         self.disconnectInputButtonInterupts()
-        self.switchLed(False, False, False)
+        self.setLedButonBlinking(False, False, False)
 
         choosenLayoutList = self.resources.getSkinLayoutDatas()[0]
         choosenLayout = None
@@ -2707,9 +2780,29 @@ class SimulatorButtonThread(QThread):
 
 if __name__ == '__main__':
 
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(asctime)s][%(levelname)7s] [%(name)15s-%(lineno)5s] > %(message)s",
+        handlers=[
+            logging.FileHandler("../photobooth-datas/logs/trace.log"),
+            logging.StreamHandler()
+        ]
+    )
 
     app = QApplication(sys.argv)
-    mainWin = MainWindow()
+
+    args = sys.argv[1:]
+    n=1
+    if len(args) == 2 and args[0] == '-photobooth':
+        n = int(args[1])
+    else :
+        print("ERROR : USAGE -photobooth <int> photobooth_number [1..n]")
+        sys.exit(1)
+
+    if isinstance(n, int) is False :
+        sys.exit(1)
+
+    mainWin = MainWindow(n)
     mainWin.setStyleSheet(
 """
 QMenu {
@@ -2739,19 +2832,16 @@ QMenu::item:selected {
 }
 """
     )
+
     mainWin.show()
     ret = app.exec_()
 
     if EMULATE is False:
         mainWin.switchSpeedLight(False)
         mainWin.switchDSLR(False)
-        mainWin.switchLed(False, False, False)
-        mainWin.led.setColor(ledControler.LEDLocation.RIGHT_SIDE, [ColorLED.BLACK])
-        mainWin.led.setColor(ledControler.LEDLocation.LEFT_SIDE, [ColorLED.BLACK])
-        mainWin.led.setColor(ledControler.LEDLocation.CAMERA_ARROWS, [ColorLED.BLACK, ColorLED.BLACK])
-        mainWin.led.setColor(ledControler.LEDLocation.CAMERA_BACK, [ColorLED.BLACK])
-        mainWin.led.setColor(ledControler.LEDLocation.TEXT_BACK, [ColorLED.BLACK])
-        mainWin.led.setColor(ledControler.LEDLocation.ERROR, [ColorLED.BLACK, ColorLED.BLACK])
+        mainWin.setLedButonBlinking(False, False, False)
+        mainWin.ledStrip.setColor(ledStripControler.Location.ALL,[ledStripControler.Color.BLACK])
+
         GPIO.cleanup()
 
     sys.exit(ret)

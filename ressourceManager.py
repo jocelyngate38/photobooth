@@ -6,13 +6,16 @@ from PyQt5.QtCore import (QFile, QFileInfo, QSettings,
                           Qt, QIODevice)
 from PyQt5.QtGui import QPixmap, QPainter, QColor
 from PyQt5.QtWidgets import (QMenu, QAction, QLabel, QApplication, QMainWindow)
-from logger import *
+
 import sys
 import xml.etree.ElementTree as ET
 import random
 import json
 import platform
 import uuid
+import logging
+
+
 
 if platform.system() == 'Windows':
     EMULATE = True
@@ -22,8 +25,10 @@ else:
 
 
 class ressourcesManager:
+
     logger = None
     lastChoice = -1
+    logger = logging.getLogger("RessourcesManag")
 
     class PATH(Enum):
 
@@ -43,6 +48,7 @@ class ressourcesManager:
         EVENT_LIST_PATH=14
 
     def getDirectorySize(self, Path):
+
         start_path = self.getPath(Path)
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(start_path):
@@ -52,6 +58,7 @@ class ressourcesManager:
         return float(total_size / 1024.0 / 1024.0)
 
     def getDirectoryFileNumber(self, Path):
+
         totalFiles=0
         for base, dirs, files in os.walk(self.getPath(Path)):
             for Files in files:
@@ -59,27 +66,26 @@ class ressourcesManager:
         return totalFiles
 
     def __init__(self ):
-        pass
 
-        # self.loadCurrentXmlSkinDescriptor()
+        pass
 
     def logInfos(self):
 
-        self.logger.addInfo("RESSOURCE PATHS")
-        self.logger.addInfo("CAPTURE : " + self.getPath(self.PATH.CAPTURE))
-        self.logger.addInfo("ASSEMBLIES : " + self.getPath(self.PATH.ASSEMBLIES))
-        self.logger.addInfo("SKIN : " + self.getPath(self.PATH.SKIN))
-        self.logger.addInfo("BACKGROUND_IMAGE : " + self.getPath(self.PATH.BACKGROUND_IMAGE))
-        self.logger.addInfo("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
-        self.logger.addInfo("PAGE : " + self.getPath(self.PATH.PAGE))
-        self.logger.addInfo("EVENT : " + self.getPath(self.PATH.EVENT))
-        self.logger.addInfo("LOG : " + self.getPath(self.PATH.LOG))
-        self.logger.addInfo("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
-        self.logger.addInfo("THUMB : " + self.getPath(self.PATH.THUMB))
-        self.logger.addInfo("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
-        self.logger.addInfo("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
-        self.logger.addInfo("EVENT_LIST_PATH : " + self.getPath(self.PATH.EVENT_LIST_PATH))
-        self.logger.addInfo("CALIBRATION_IMAGE : " + self.getPath(self.PATH.CALIBRATION_IMAGE))
+        self.logger.info("RESSOURCE PATHS")
+        self.logger.info("CAPTURE : " + self.getPath(self.PATH.CAPTURE))
+        self.logger.info("ASSEMBLIES : " + self.getPath(self.PATH.ASSEMBLIES))
+        self.logger.info("SKIN : " + self.getPath(self.PATH.SKIN))
+        self.logger.info("BACKGROUND_IMAGE : " + self.getPath(self.PATH.BACKGROUND_IMAGE))
+        self.logger.info("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
+        self.logger.info("PAGE : " + self.getPath(self.PATH.PAGE))
+        self.logger.info("EVENT : " + self.getPath(self.PATH.EVENT))
+        self.logger.info("LOG : " + self.getPath(self.PATH.LOG))
+        self.logger.info("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
+        self.logger.info("THUMB : " + self.getPath(self.PATH.THUMB))
+        self.logger.info("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
+        self.logger.info("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
+        self.logger.info("EVENT_LIST_PATH : " + self.getPath(self.PATH.EVENT_LIST_PATH))
+        self.logger.info("CALIBRATION_IMAGE : " + self.getPath(self.PATH.CALIBRATION_IMAGE))
 
     def printPaths(self):
 
@@ -103,15 +109,15 @@ class ressourcesManager:
         print("============================================================")
 
     def getSkinPageDatas(self):
+
         return self.skinPageDatas
 
     def getSkinLayoutDatas(self):
+
         return self.skinLayoutDatas
 
-    def getLogger(self):
-        return self.logger
-
     def setPath(self, Path, value):
+
         if not os.path.exists(value):
             os.makedirs(value)
         if Path == ressourcesManager.PATH.CAPTURE:
@@ -144,6 +150,7 @@ class ressourcesManager:
             self.skinListPath = value
 
     def getPath(self, Path):
+
         if Path == ressourcesManager.PATH.CAPTURE:
             return self.capturePath
         if Path == ressourcesManager.PATH.CALIBRATION_IMAGE:
@@ -192,9 +199,9 @@ class ressourcesManager:
         self.logFile = self.logPath + '/photobooth.log'
         self.logFile = os.path.normpath(self.logFile)
 
-        self.logger = logger(self.logFile, 2)
+        #self.logger = logger(self.logFile, 2)
 
-        self.logger.addInfo("STARTING RESSOURCE MANAGER")
+        self.logger.info("STARTING RESSOURCE MANAGER")
         self.printDuration = 60
         self.numberOfPrint = 0
         self.maxNumberOfPrint = 36
@@ -204,7 +211,6 @@ class ressourcesManager:
         else:
             self.applicationPath = basePath + "/photobooth"
 
-
         self.applicationPath = os.path.normpath(self.applicationPath)
 
         self.backgroundListPath = self.applicationPath + "/resources/backgrounds"
@@ -212,7 +218,6 @@ class ressourcesManager:
 
         self.calibrationImagePath = self.applicationPath + "/resources/calibration_image.jpg"
         self.calibrationImagePath = os.path.normpath(self.calibrationImagePath)
-
 
         self.skinListPath = self.applicationPath + "/resources/skins"
         self.skinListPath = os.path.normpath(self.skinListPath)
@@ -299,17 +304,17 @@ class ressourcesManager:
             layoutDict["layoutId"] = layoutId
 
             if not os.path.isfile(self.getPath(ressourcesManager.PATH.EVENT) + "/" + path):
-                self.logger.addError("XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
-                self.getLogger().addError(
+                self.logger.error("XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
+                self.logger.error(
                     "XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
                 continue
 
             images = lay.findall("./images/image")
             if len(images) != n and n !=1:
-                self.getLogger().addError("XML error too much/less images for this layout")
+                self.logger.error("XML error too much/less images for this layout")
                 continue
             if len(images) != n and n ==1:
-                self.getLogger().addInfo("XML Several images for layout 1")
+                self.logger.info("XML Several images for layout 1")
 
             imagesDict = {}
             for im in images:
@@ -339,6 +344,7 @@ class ressourcesManager:
             self.buildLayout(filepath, choosenLayout)
 
     def resetChoices(self):
+
         self.lastChoice=-1
 
     def chooseNextLayout(self, n):
@@ -364,25 +370,6 @@ class ressourcesManager:
         return choosenLayoutList[c]
 
 
-
-
-
-        # choosenLayoutList = self.getSkinLayoutDatas()[n - 1]
-        # ran = range(len(choosenLayoutList))
-        # if len(choosenLayoutList) == 0:
-        #     return None
-        #
-        # if chooseFirstLayout is True:
-        #     return choosenLayoutList[0]
-        #
-        # choices = [*ran]
-        # random.shuffle(choices)
-        # index = choices.pop()
-        # choosenLayout = choosenLayoutList[index]
-        # return choosenLayout
-
-
-
     def buildLayout2(self, idName, choosenLayout, thumb):
 
         layoutId = choosenLayout["layoutId"]
@@ -391,13 +378,13 @@ class ressourcesManager:
         outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES) + "/" + idName + "_" + layoutId + "_" + str(thumb) + ".jpg"
 
         if os.path.isfile(outFile):
-            self.logger.addInfo("This assembly already exists, we dont loose time to rebuild it")
+            self.logger.info("This assembly already exists, we dont loose time to rebuild it")
             return QPixmap(outFile), os.path.normpath(outFile)
 
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            self.logger.addWarning("The current layout template does not exists")
+            self.logger.warning("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -434,8 +421,7 @@ class ressourcesManager:
         del painter
 
         return outPixmap, savedPath
-        
-        
+
             
     def buildLayoutFromList(self, captureList, choosenLayout, showCuttingLine=False):
 
@@ -446,7 +432,7 @@ class ressourcesManager:
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            self.logger.addWarning("The current layout template does not exists")
+            self.logger.warning("The current layout template does not exists")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -470,9 +456,9 @@ class ressourcesManager:
             pix = QPixmap(path)
             
             if(w/h > 4/3):           
-                pix = pix.scaledToWidth(w)#, transformMode=Qt.SmoothTransformation)
+                pix = pix.scaledToWidth(w)
             else:
-                pix = pix.scaledToHeight(h)#, transformMode=Qt.SmoothTransformation)
+                pix = pix.scaledToHeight(h)
             painter.translate(x, y)
             painter.drawPixmap(0, 0, pix)
             painter.translate(-x, -y)
@@ -487,9 +473,9 @@ class ressourcesManager:
                 pix = QPixmap(path)
 
                 if (w / h > 4 / 3):
-                    pix = pix.scaledToWidth(w)  # , transformMode=Qt.SmoothTransformation)
+                    pix = pix.scaledToWidth(w)
                 else:
-                    pix = pix.scaledToHeight(h)  # , transformMode=Qt.SmoothTransformation)
+                    pix = pix.scaledToHeight(h)
                 painter.translate(x, y)
                 painter.drawPixmap(0, 0, pix)
                 painter.translate(-x, -y)
@@ -540,15 +526,11 @@ class ressourcesManager:
             painter.drawLine(x20, y20 - marginErrorPrint, x21, y21 - marginErrorPrint)
             painter.drawLine(x30, y30 + marginErrorPrint, x31, y31 + marginErrorPrint)
 
-
-
         savedPath = self.savePicture(outPixmap, outFile, 0, 0, "JPG")
 
         del painter
 
         return outPixmap, savedPath
-        
-        
         
     def buildLayout(self, idName, choosenLayout):
 
@@ -631,7 +613,6 @@ class ressourcesManager:
         self.savePicture(outPixmap, outFile, 0, 0, "JPG")
         del painter
 
-
     def savePicture(self, pixmap, path, w, h, format):
 
         normPath = os.path.normpath(path)
@@ -645,9 +626,10 @@ class ressourcesManager:
 
 
 if __name__ == '__main__':
+
     app = QApplication(sys.argv)
     resources = ressourcesManager()
     conn = cups.Connection()
     printers = conn.getPrinters()
-    resources.logger.addInfo(json.dumps(printers))
+    self.logger.info(json.dumps(printers))
     sys.exit(1)

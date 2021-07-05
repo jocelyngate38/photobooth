@@ -2780,8 +2780,7 @@ if __name__ == '__main__':
     if len(args) == 4 and args[2] == '-simulate':
         dsim = int(args[3])
     else :
-        print("ERROR : USAGE -simulate <int> simulation delay msec [500ms, -> 50000ms]")
-        sys.exit(1)
+        print("USAGE -simulate <int> simulation delay msec [500ms, -> 50000ms]")
 
     if isinstance(n, int) is False :
         sys.exit(1)

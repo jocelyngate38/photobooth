@@ -2735,19 +2735,19 @@ class MainWindow(QMainWindow):
 
 
 class SimulatorButtonThread(QThread):
-    
+
     logger = logging.getLogger("SimulatorButton")
     def __init__(self, mm, delay):
         QThread.__init__(self)
         self.mainWindow = mm
         self.delay = delay
-        self.logger("SIMULATOR STARTED WITH DELAY OF " + str(self.delay) + " SEC.")
+        self.logger.info("SIMULATOR STARTED WITH DELAY OF " + str(self.delay) + " SEC.")
 
     def run(self):
         while True:
             j = random.randint(1, 3)
             time.sleep(self.delay)
-            self.logger("BUTTON " + str(j) + " SIMULATED.")
+            self.logger.info("BUTTON " + str(j) + " SIMULATED.")
             if j == 1:
                 self.mainWindow.onButton1Pressed()
             if j == 2:

@@ -2735,16 +2735,19 @@ class MainWindow(QMainWindow):
 
 
 class SimulatorButtonThread(QThread):
-
+    
+    logger = logging.getLogger("SimulatorButton")
     def __init__(self, mm, delay):
         QThread.__init__(self)
         self.mainWindow = mm
         self.delay = delay
+        self.logger("SIMULATOR STARTED WITH DELAY OF " + str(self.delay) + " SEC.")
 
     def run(self):
         while True:
             j = random.randint(1, 3)
             time.sleep(self.delay)
+            self.logger("BUTTON " + str(j) + " SIMULATED.")
             if j == 1:
                 self.mainWindow.onButton1Pressed()
             if j == 2:
@@ -2784,8 +2787,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     mainWin = MainWindow(n)
+
     if dsim > 0:
-        mainWin.generateRandomIO(dsim)
+        mainWin.generateRandomIO(dsim/1000.0)
 
     mainWin.setStyleSheet(
 """

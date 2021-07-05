@@ -169,9 +169,9 @@ class PhotoBoothSettings():
     def getScreenResolution(self):
         return 1024, 768
 
-    def getGPIO(self, PinName):
+    def getGPIO(self, pinName):
         if pinName in self.GPIOPin:
-            return GPIOPin(PinName)
+            return self.GPIO_Pinout(PinName)
         else:
             self.logger.error("ERROR, pinName not available.")
             return 0

@@ -717,9 +717,9 @@ class MainWindow(QMainWindow):
 
         self.blinkState = 0
 
-        self.buttonDownLedEnabled = True
-        self.buttonRightLedEnabled = True
-        self.buttonLeftLedEnabled = True
+        self.button1LedEnabled = True
+        self.button2LedEnabled = True
+        self.button3LedEnabled = True
 
         self.topLightOn = False
         self.lastPrintId = 0
@@ -1181,20 +1181,20 @@ class MainWindow(QMainWindow):
         else:
             self.blinkState = 0
 
-        if self.buttonRightLedEnabled:
-            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), self.blinkState)
-        else:
-            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), onValue)
-
-        if self.buttonLeftLedEnabled:
+        if self.button1LedEnabled:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), self.blinkState)
         else:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), onValue)
 
-        if self.buttonDownLedEnabled:
+        if self.button2LedEnabled:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), self.blinkState)
         else:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), onValue)
+
+        if self.button3LedEnabled:
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), self.blinkState)
+        else:
+            GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3), onValue)
 
     def onButton1Pressed(self):
 
@@ -2647,26 +2647,26 @@ class MainWindow(QMainWindow):
         self.captureList.clear()
         self.showHomePage()
 
-    def setLedButonBlinking(self, Right, Left, Downn):
+    def setLedButonBlinking(self, bt1, bt2, bt3):
 
-        self.setButtonRightLedEnabled(Right)
-        self.setButtonLeftLedEnabled(Left)
-        self.setButtonDownLedEnabled(Downn)
+        self.setButton1LedEnabled(bt1)
+        self.setButton2LedEnabled(bt2)
+        self.setButton3LedEnabled(bt3)
         QApplication.processEvents()
         QApplication.processEvents()
         QApplication.processEvents()
 
-    def setButtonRightLedEnabled(self, enabled):
+    def setButton1LedEnabled(self, enabled):
 
-        self.buttonRightLedEnabled = enabled
+        self.button1LedEnabled = enabled
 
-    def setButtonLeftLedEnabled(self, enabled):
+    def setButton3LedEnabled(self, enabled):
 
-        self.buttonLeftLedEnabled = enabled
+        self.button3LedEnabled = enabled
 
-    def setButtonDownLedEnabled(self, enabled):
+    def setButton2LedEnabled(self, enabled):
 
-        self.buttonDownLedEnabled = enabled
+        self.button2LedEnabled = enabled
 
     def contextMenuEvent(self, event):
 

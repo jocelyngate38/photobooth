@@ -359,9 +359,9 @@ class PrinterMonitoringThread(QThread):
                                 self.label.setPaperEmptyRight(True)
                                 self.ledStrip.showWarning(1)
                 except cups.IPPError as e:
-                    self.logger.addError("CUPS.IPPERROR " + str(e))
+                    self.logger.error("CUPS.IPPERROR " + str(e))
                 except RuntimeError as e1:
-                    self.logger.addError("RUNTIMEERROR " + str(e1))
+                    self.logger.error("RUNTIMEERROR " + str(e1))
                     break
             time.sleep(2)
             self.label.update()
@@ -2017,7 +2017,7 @@ class MainWindow(QMainWindow):
 
     def showTriggerErrorPage(self):
 
-        self.resources.getLogger().addError("TRIGGER CAPTURE ERROR")
+        self.logger.error("TRIGGER CAPTURE ERROR")
         self.setDisplayMode(DisplayMode.TRIGGER_ERROR)
 
         outPixmap = None

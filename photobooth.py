@@ -148,7 +148,7 @@ class PhotoBoothSettings():
     def can_restart_led_strip(self):
         return False
 
-    def have_led_strip(self):
+    def has_led_strip(self):
         return True
 
     def get_led_strip_serial_Speed(self):
@@ -2257,14 +2257,14 @@ class MainWindow(QMainWindow):
         if self.boxSettings.has_constant_light() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), GPIO.OUT, initial=0)
 
-        if self.boxSettings.has.have_led_strip() is True and self.boxSettings.has.can_restart_led_strip() is True:
+        if self.boxSettings.has_led_strip() is True and self.boxSettings.can_restart_led_strip() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), GPIO.OUT, initial=0)
 
-        if  self.boxSettings.has.has_external_flash() is True and self.boxSettings.has.can_restart_external_flash() is True:
+        if  self.boxSettings.has_external_flash() is True and self.boxSettings.has.can_restart_external_flash() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT), GPIO.OUT, initial=1)
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), GPIO.OUT, initial=1)
 
-        if self.boxSettings.has.can_restart_DSLR() is True:
+        if self.boxSettings.can_restart_DSLR() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), GPIO.OUT, initial=1)
 
         self.blinkingTimer = QTimer()

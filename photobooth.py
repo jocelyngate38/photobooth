@@ -2731,7 +2731,7 @@ class MainWindow(QMainWindow):
         generator = SimulatorButtonThread(self, delay)
         generator.start()
         QApplication.processEvents()
-        self.wait(2)
+        self.wait(1)
 
 
 class SimulatorButtonThread(QThread):
@@ -2768,16 +2768,25 @@ if __name__ == '__main__':
 
     args = sys.argv[1:]
     n=1
-    if len(args) == 2 and args[0] == '-photobooth':
+    if len(args) >= 2 and len(args) <= 4 and args[0] == '-photobooth':
         n = int(args[1])
     else :
         print("ERROR : USAGE -photobooth <int> photobooth_number [1..n]")
+        sys.exit(1)
+    dsim = -1
+    if len(args) == 4 and args[2] == '-simulate':
+        dsim = int(args[3])
+    else :
+        print("ERROR : USAGE -simulate <int> simulation delay msec [500ms, -> 50000ms]")
         sys.exit(1)
 
     if isinstance(n, int) is False :
         sys.exit(1)
 
     mainWin = MainWindow(n)
+    if dsim > 0:
+        mainWin.generateRandomIO(dsim)
+
     mainWin.setStyleSheet(
 """
 QMenu {
@@ -2807,6 +2816,8 @@ QMenu::item:selected {
 }
 """
     )
+
+
 
     mainWin.show()
     ret = app.exec_()

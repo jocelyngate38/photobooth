@@ -207,7 +207,7 @@ class PhotoBoothSettings():
         self.logger.info("has_constant_light : " + str(self.has_constant_light()))
         self.logger.info("can_restart_DSLR : " + str(self.can_restart_DSLR()))
         self.logger.info("can_restart_led_strip : " + str(self.can_restart_led_strip()))
-        self.logger.info("have_led_strip : " + str(self.have_led_strip()))
+        self.logger.info("has_led_strip : " + str(self.has_led_strip()))
         self.logger.info("get_led_strip_serial_Speed : " + str(self.get_led_strip_serial_Speed()))
         self.logger.info("get_led_strip_serial_Port : " + str(self.get_led_strip_serial_Port()))
         self.logger.info("has_printer_port : " + str(self.has_printer_port()))

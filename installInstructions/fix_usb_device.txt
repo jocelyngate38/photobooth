@@ -1,0 +1,13 @@
+How to fix a tty to a certain device.
+
+dmesg | grep ttyUSB
+
+devadm info --name=/dev/ttyUSB0 --attribute-walk
+
+sudo nano /etc/udev/rules.d/10-usb-serial.rules
+
+ADD this line :
+
+SUBSYSTEM="tty", ATTRS{product}=="USB2.0-Serial", ATTRS{idVendor}=="1a86", SYMLINK+="ttyUSB_LED_CONTROLLER"
+
+sudo udevadm trigger

@@ -438,22 +438,24 @@ class ressourcesManager:
             painter.drawPixmap(0, 0, pix)
             painter.translate(-x, -y)
 
-            if nbImages == 1 and len(choosenLayout["images"]) == 2:
-                x = choosenLayout["images"][(i + 2)]["x"]
-                y = choosenLayout["images"][(i + 2)]["y"]
-                w = choosenLayout["images"][(i + 2)]["w"]
-                h = choosenLayout["images"][(i + 2)]["h"]
-                angle = choosenLayout["images"][(i + 1)]["angle"]
+            if nbImages == 1 and len(choosenLayout["images"]) > 1:
+                for a in range( 1, len(choosenLayout["images"])+1):
+                    print("a=" + str(a))
+                    x = choosenLayout["images"][(i + a)]["x"]
+                    y = choosenLayout["images"][(i + a)]["y"]
+                    w = choosenLayout["images"][(i + a)]["w"]
+                    h = choosenLayout["images"][(i + a)]["h"]
+                    angle = choosenLayout["images"][(i + a)]["angle"]
 
-                pix = QPixmap(path)
+                    pix = QPixmap(path)
 
-                if (w / h > 4 / 3):
-                    pix = pix.scaledToWidth(w)
-                else:
-                    pix = pix.scaledToHeight(h)
-                painter.translate(x, y)
-                painter.drawPixmap(0, 0, pix)
-                painter.translate(-x, -y)
+                    if (w / h > 4 / 3):
+                        pix = pix.scaledToWidth(w)
+                    else:
+                        pix = pix.scaledToHeight(h)
+                    painter.translate(x, y)
+                    painter.drawPixmap(0, 0, pix)
+                    painter.translate(-x, -y)
 
         painter.drawPixmap(0, 0, pixLayout)
 

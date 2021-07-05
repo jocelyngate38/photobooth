@@ -318,10 +318,10 @@ class PrinterMonitoringThread(QThread):
 
     logger = logging.getLogger("PrinterMonitori")
 
-    def __init__(self, label, led, printerName):
+    def __init__(self, label, ledStrip, printerName):
         QThread.__init__(self, label)
         self.label = label
-        self.led = led
+        self.ledStrip = ledStrip
         self.printerName = printerName
         # run method gets called when we start the thread
 

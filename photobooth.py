@@ -171,9 +171,12 @@ class PhotoBoothSettings():
 
     def getGPIO(self, pinName):
         if pinName in self.GPIOPin:
-            return self.GPIO_Pinout(pinName)
+            if pinName in self.GPIO_Pinout:
+                return self.GPIO_Pinout[pinName]
+            else:
+                self.logger.error("ERROR, pinName not set.")
         else:
-            self.logger.error("ERROR, pinName not available.")
+            self.logger.error("ERROR, unknown pinName.")
             return 0
 
 

@@ -1336,7 +1336,7 @@ class MainWindow(QMainWindow):
             stop = 0
             duration = 0
             if EMULATE is False:
-                while GPIO.input(self.boxSettings.getGPIO(photoBooth.GPIOPin.BUTTON_3)) == 0:
+                while GPIO.input(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3)) == 0:
                     self.wait(0.1)
                     QApplication.processEvents()
                     delay = (time.time() - start)

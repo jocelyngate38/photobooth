@@ -89,6 +89,11 @@ except:
 
 import logging
 
+if EMULATE is False:
+    GPIO.setmode(GPIO.BCM)
+
+
+
 class PhotoBoothSettings():
 
     class GPIOPin(IntEnum):
@@ -152,6 +157,12 @@ class PhotoBoothSettings():
     def get_led_strip_serial_Port(self):
         return "/dev/ttyUSB_LED_CONTROLLER"
 
+    def has_printer_port(self):
+        return True
+
+    def is_LedPullUp(self):
+        return True
+
     def getCameraName(self):
         return "Camera name not set"
 
@@ -196,7 +207,7 @@ class PhotoBoothSettings():
         self.logger.info("have_led_strip : " + str(self.have_led_strip()))
         self.logger.info("get_led_strip_serial_Speed : " + str(self.get_led_strip_serial_Speed()))
         self.logger.info("get_led_strip_serial_Port : " + str(self.get_led_strip_serial_Port()))
-
+        self.logger.info("has_printer_port : " + str(self.has_printer_port()))
         self.printGPIOs()
         self.logger.info("========        EOF Photobooth details        ========")
 
@@ -228,6 +239,9 @@ class PhotoBoothSettings_1(PhotoBoothSettings):
         return False
 
     def can_restart_led_strip(self):
+        return False
+
+    def is_LedPullUp(self):
         return False
 
     def getCameraName(self):
@@ -269,57 +283,11 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
     def can_restart_led_strip(self):
         return True
 
+    def is_LedPullUp(self):
+        return True
+
     def getCameraName(self):
         return "Nikon DSC D70s (PTP mode)"
-
-
-
-# if PHOTOBOOTH_2 is False:
-#
-#     class GPIOPin(IntEnum):
-#
-#         LED_BUTTON_1 = 6
-#         LED_BUTTON_2 = 26
-#         LED_BUTTON_3 = 13
-#         LED_0 = 19
-#
-#         BUTTON_1 = 12
-#         BUTTON_2 = 16
-#         BUTTON_3 = 20
-#         BUTTON_4 = 21
-#
-#         RELAY_POWER_TOP_LIGHT = 17
-#         RELAY_LED_STRIP = 4
-#
-#         #WIRE_3_4 = 23
-#         #WIRE_3_5 = 24
-#         #WIRE_3_6 = 25
-#
-# else:
-#
-#     class GPIOPin(IntEnum):
-#
-#         LED_BUTTON_1 = 13
-#         LED_BUTTON_2 = 26
-#         LED_BUTTON_3 = 6
-#         LED_0 = 19
-#
-#         BUTTON_1 = 20
-#         BUTTON_2 = 16
-#         BUTTON_3 = 12
-#         BUTTON_4 = 21
-#
-#         RELAY_POWER_TOP_LIGHT = 22
-#         RELAY_LED_STRIP = 4
-#
-#         # WIRE_3_4 = 23
-#         # WIRE_3_5 = 24
-#         # WIRE_3_6 = 25
-#
-#         POWER_SPEEDLIGHT = 17
-#         ON_OFF_SPEEDLIGHT = 23
-#         POWER_DSLR = 4
-#
 
 
 class DisplayMode(Enum):
@@ -340,11 +308,6 @@ class DisplayMode(Enum):
     INFO_REPRINT = 14
     INFO_SWITCH_CONSTANT_LIGHT = 15
     UNDEFINED = 255
-
-
-if EMULATE is False:
-    GPIO.setmode(GPIO.BCM)
-
 
 class PrinterMonitoringThread(QThread):
     printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
@@ -717,13 +680,13 @@ class MainWindow(QMainWindow):
         else:
             self.boxSettings = PhotoBoothSettings_1()
 
-        self.logger.info("################################################################################")
-        self.logger.info("##      NEW INSTANCE STARTED                                                  ##")
-        self.logger.info("##                            NEW INSTANCE STARTED                            ##")
-        self.logger.info("##                                                  NEW INSTANCE STARTED      ##")
-        self.logger.info("################################################################################")
+        self.logger.info("####################################################################################")
+        self.logger.info("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
+        self.logger.info("##                              NEW INSTANCE STARTED                              ##")
+        self.logger.info("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
+        self.logger.info("####################################################################################")
 
-        # self.boxSettings.printDetails()
+        self.boxSettings.printDetails()
 
         self.interuptsConnected = False
         self.currentAssemblyPath = ""
@@ -1205,8 +1168,9 @@ class MainWindow(QMainWindow):
 
     def blink(self):
 
-        onValue = 0
-        if PHOTOBOOTH_2:
+        if self.boxSettings.is_LedPullUp() is False:
+            onValue = 0
+        else:
             onValue = 1
 
         if self.blinkState == 0:
@@ -1295,7 +1259,7 @@ class MainWindow(QMainWindow):
                 self.onShowAdvancedMenu()
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.MENU:
             self.logger.info("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
@@ -1306,7 +1270,7 @@ class MainWindow(QMainWindow):
             self.onRightButtonGPIO()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
@@ -1326,14 +1290,14 @@ class MainWindow(QMainWindow):
             self.startCaptureProcess()
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
-            self.logger.warning("BUTTON 1 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         else:
             self.logger.warning(
-                "BUTTON 1 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
+                "BUTTON 1 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
 
     def onButton3Pressed(self):
 
@@ -1407,7 +1371,7 @@ class MainWindow(QMainWindow):
                 self.onShowAdvancedMenu()
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.MENU:
             self.logger.info("BUTTON 3 PRESSED : MENU BACK")
@@ -1419,7 +1383,7 @@ class MainWindow(QMainWindow):
             self.onLeftButtonGPIO()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.info("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
@@ -1446,14 +1410,14 @@ class MainWindow(QMainWindow):
 
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
-            self.logger.warning("BUTTON 3 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         else:
             self.logger.warning(
-                "BUTTON 3 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
+                "BUTTON 3 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
 
     def onButton2Pressed(self):
 
@@ -1501,7 +1465,7 @@ class MainWindow(QMainWindow):
                 self.showHomePage()
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
             self.logger.info("BUTTON 2 PRESSED : POWER_PRINTER ACK -> HOMEPAGE")
@@ -1518,7 +1482,7 @@ class MainWindow(QMainWindow):
             self.onDownButtonGPIO()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.info("BUTTON 2 PRESSED : REDO LAST PICTURE")
@@ -1534,11 +1498,11 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 2 PRESSED : No option map to this button")
+            self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         else:
             self.logger.warning(
-                "BUTTON 2 PRESSED : This mode (" + str(self.displayMode.value) + ") is not handled.")
+                "BUTTON 2 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
 
     def resetPrinterErrors(self):
 
@@ -1853,10 +1817,10 @@ class MainWindow(QMainWindow):
     def initMenu(self):
 
         self.lastAct = None
-        has_speed_light = True
-        has_constant_light = True
-        has_printer = True
-        can_restart_dslr = True
+
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        settings.setFallbacksEnabled(False)
+        self.printingEnabled = settings.value("printingEnabled", True, bool)
 
         self.contextMenu = QMenu("Context menu", self)
 
@@ -1877,7 +1841,7 @@ class MainWindow(QMainWindow):
         self.speedLightMenu.addAction(self.actionEnableSpeedLight)
         self.speedLightMenu.addAction(self.actionRestartSpeedLight)
 
-        if has_speed_light is True:
+        if self.boxSettings.has_external_flash() is True:
             self.settingMenu.addMenu(self.speedLightMenu)
 
         self.constantLightMenu = QMenu("Eclairage constant", self)
@@ -1885,7 +1849,7 @@ class MainWindow(QMainWindow):
         self.constantLightMenu.addAction(self.actionSwitchOnConstantLight)
         self.constantLightMenu.addAction(self.actionSwitchOffConstantLight)
 
-        if has_constant_light is True:
+        if self.boxSettings.has_constant_light() is True:
             self.settingMenu.addMenu(self.constantLightMenu)
 
         self.printerMenu = QMenu("Impression", self)
@@ -1897,10 +1861,10 @@ class MainWindow(QMainWindow):
         self.cupsMenu.addAction(self.actionStartCups)
         self.cupsMenu.addAction(self.actionStopCups)
 
-        if has_printer is True:
+        if self.boxSettings.has_printer_port() is True and self.printingEnabled:
             self.settingMenu.addMenu(self.printerMenu)
 
-        if can_restart_dslr is True:
+        if self.boxSettings.can_restart_DSLR() is True:
             self.dslrMenu.addAction(self.actionRestartDSLR)
 
         self.dslrMenu.addAction(self.actionImagequality0)
@@ -2287,17 +2251,17 @@ class MainWindow(QMainWindow):
         GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2), GPIO.OUT, initial=1)
         GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1), GPIO.OUT, initial=1)
 
-        if photoBooth.has_constant_light() is True:
+        if self.boxSettings.has_constant_light() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), GPIO.OUT, initial=0)
 
-        if photoBooth.have_led_strip() is True and photoBooth.can_restart_led_strip() is True:
+        if self.boxSettings.has.have_led_strip() is True and self.boxSettings.has.can_restart_led_strip() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), GPIO.OUT, initial=0)
 
-        if  photoBooth.has_external_flash() is True and photoBooth.can_restart_external_flash() is True:
+        if  self.boxSettings.has.has_external_flash() is True and self.boxSettings.has.can_restart_external_flash() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT), GPIO.OUT, initial=1)
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT), GPIO.OUT, initial=1)
 
-        if photoBooth.can_restart_DSLR() is True:
+        if self.boxSettings.has.can_restart_DSLR() is True:
             GPIO.setup(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), GPIO.OUT, initial=1)
 
         self.blinkingTimer = QTimer()
@@ -2309,6 +2273,10 @@ class MainWindow(QMainWindow):
         self.inputButtonThread.start()
 
     def switchConstantLight(self, on):
+
+        if self.boxSettings.has_constant_light() is False:
+            self.logger.info("NO CONSTANT LIGHT ON THIS DEVICE")
+            return
 
         self.logger.info("CONSTANT LIGHT SWITCHED TO " + str(on))
         if EMULATE is True:
@@ -2322,13 +2290,17 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def toogleEnableConstantLight(self):
 
+        if self.boxSettings.has_constant_light() is False:
+            self.logger.info("NO CONSTANT LIGHT ON THIS DEVICE")
+            return
+
         self.logger.info("ENABLE CONSTANT LIGHT")
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
-        enable = not settings.value("constantLightEnabled", True, bool)
-        settings.setValue("constantLightEnabled", enable)
-        self.switchConstantLight(enable)
-        if enable is True:
+        constantLightEnabled = not settings.value("constantLightEnabled", True, bool)
+        settings.setValue("constantLightEnabled", constantLightEnabled)
+        self.switchConstantLight(constantLightEnabled)
+        if constantLightEnabled is True:
             self.wait(2)
             self.switchConstantLight(False)
 
@@ -2350,10 +2322,10 @@ class MainWindow(QMainWindow):
 
     def switchSpeedLight(self, on):
 
-        if PHOTOBOOTH_2 is False:
+        if EMULATE is True:
             return
 
-        if EMULATE is True:
+        if self.boxSettings.has_external_flash() is False or self.boxSettings.can_restart_external_flash() is False:
             return
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
@@ -2378,10 +2350,10 @@ class MainWindow(QMainWindow):
 
     def switchDSLR(self, on):
 
-        if PHOTOBOOTH_2 is False:
+        if EMULATE is True:
             return
 
-        if EMULATE is True:
+        if self.boxSettings.can_restart_DSLR() is False:
             return
 
         if on is True:

@@ -39,8 +39,6 @@ class ressourcesManager:
         APPLICATION = 5
         PAGE = 6
         EVENT = 7
-        LOG = 8
-        LOG_FILE = 9
         THUMB=10
         BACKGROUND_IMAGE=11
         BACKGROUND_LIST_PATH=12
@@ -79,8 +77,6 @@ class ressourcesManager:
         self.logger.info("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
         self.logger.info("PAGE : " + self.getPath(self.PATH.PAGE))
         self.logger.info("EVENT : " + self.getPath(self.PATH.EVENT))
-        self.logger.info("LOG : " + self.getPath(self.PATH.LOG))
-        self.logger.info("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
         self.logger.info("THUMB : " + self.getPath(self.PATH.THUMB))
         self.logger.info("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
         self.logger.info("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
@@ -99,8 +95,6 @@ class ressourcesManager:
         print("APPLICATION : " + self.getPath(self.PATH.APPLICATION))
         print("PAGE : " + self.getPath(self.PATH.PAGE))
         print("EVENT : " + self.getPath(self.PATH.EVENT))
-        print("LOG : " + self.getPath(self.PATH.LOG))
-        print("LOG_FILE : " + self.getPath(self.PATH.LOG_FILE))
         print("THUMB : " + self.getPath(self.PATH.THUMB))
         print("BACKGROUND_LIST_PATH : " + self.getPath(self.PATH.BACKGROUND_LIST_PATH))
         print("SKIN_LIST_PATH : " + self.getPath(self.PATH.SKIN_LIST_PATH))
@@ -134,10 +128,6 @@ class ressourcesManager:
             self.pagesPath = value
         if Path == ressourcesManager.PATH.EVENT:
             self.layoutPath = value
-        if Path == ressourcesManager.PATH.LOG:
-            self.logPath = value
-        if Path == ressourcesManager.PATH.LOG_FILE:
-            self.logFile = value
         if Path == ressourcesManager.PATH.THUMB:
             self.thumbPath = value
         if Path == ressourcesManager.PATH.BACKGROUND_IMAGE:
@@ -165,10 +155,6 @@ class ressourcesManager:
             return self.pagesPath
         if Path == ressourcesManager.PATH.EVENT:
             return self.layoutPath
-        if Path == ressourcesManager.PATH.LOG:
-            return self.logPath
-        if Path == ressourcesManager.PATH.LOG_FILE:
-            return self.logFile
         if Path == ressourcesManager.PATH.THUMB:
             return self.thumbPath
         if Path == ressourcesManager.PATH.BACKGROUND_IMAGE:
@@ -190,16 +176,6 @@ class ressourcesManager:
         self.skinName = settings.value("skin", "error")
         self.eventName = settings.value("event", "error")
         self.background = settings.value("background", "error")
-
-        self.logPath = basePath + "/photobooth-datas/logs"
-        if not os.path.exists(self.logPath):
-            os.makedirs(self.logPath)
-        self.logPath = os.path.normpath(self.logPath)
-
-        self.logFile = self.logPath + '/photobooth.log'
-        self.logFile = os.path.normpath(self.logFile)
-
-        #self.logger = logger(self.logFile, 2)
 
         self.logger.info("STARTING RESSOURCE MANAGER")
         self.printDuration = 60
@@ -304,17 +280,17 @@ class ressourcesManager:
             layoutDict["layoutId"] = layoutId
 
             if not os.path.isfile(self.getPath(ressourcesManager.PATH.EVENT) + "/" + path):
-                self.logger.error("XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
+                self.logger.error("XML ERROR NO SUCH FILE " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
                 self.logger.error(
                     "XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
                 continue
 
             images = lay.findall("./images/image")
             if len(images) != n and n !=1:
-                self.logger.error("XML error too much/less images for this layout")
+                self.logger.error("XML ERROR TOO MUCH/LESS IMAGES FOR THIS LAYOUT")
                 continue
             if len(images) != n and n ==1:
-                self.logger.info("XML Several images for layout 1")
+                self.logger.info("XML SEVERAL IMAGES FOR LAYOUT 1")
 
             imagesDict = {}
             for im in images:
@@ -356,7 +332,6 @@ class ressourcesManager:
             return None
 
         c = self.lastChoice
-        print(str(c))
         if c < -1 or c >= nLayouts-1 :
             c = -1
 
@@ -366,7 +341,7 @@ class ressourcesManager:
             c = c+1
         self.lastChoice=c
 
-        print(str(c) + " out of " + str(nLayouts))
+        self.logger.info("CHOOSEN LAYOUT ID : " + str(c) + " over [" + str(range(nLayouts-1)) +"]")
         return choosenLayoutList[c]
 
 
@@ -378,13 +353,13 @@ class ressourcesManager:
         outFile = self.getPath(ressourcesManager.PATH.ASSEMBLIES) + "/" + idName + "_" + layoutId + "_" + str(thumb) + ".jpg"
 
         if os.path.isfile(outFile):
-            self.logger.info("This assembly already exists, we dont loose time to rebuild it")
+            self.logger.info("THIS ASSEMBLY ALREADY EXISTS, WE DONT LOOSE TIME TO REBUILD IT")
             return QPixmap(outFile), os.path.normpath(outFile)
 
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            self.logger.warning("The current layout template does not exists")
+            self.logger.warning("THE CURRENT LAYOUT TEMPLATE DOES NOT EXISTS")
             return
 
         pixLayout = QPixmap(layoutPixPath)
@@ -432,7 +407,7 @@ class ressourcesManager:
         layoutPixPath = self.getPath(ressourcesManager.PATH.EVENT) + "/" + choosenLayout["filename"]
 
         if not os.path.isfile(layoutPixPath):
-            self.logger.warning("The current layout template does not exists")
+            self.logger.warning("THE CURRENT LAYOUT TEMPLATE DOES NOT EXISTS")
             return
 
         pixLayout = QPixmap(layoutPixPath)

@@ -484,7 +484,7 @@ class Label(QLabel):
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
 
             if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
-                qp.drawPixmap(60, 768-180, QPixmap(self.path + "/printerHelp.png"))
+                qp.drawPixmap(40, 768-170, QPixmap(self.path + "/printerHelp.png"))
 
 
 class ledStripControler():

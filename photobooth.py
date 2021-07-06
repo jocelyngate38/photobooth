@@ -484,7 +484,7 @@ class Label(QLabel):
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
 
             if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
-                qp.drawPixmap(70, 768-210, QPixmap(self.path + "/printerHelp.png"))
+                qp.drawPixmap(60, 768-180, QPixmap(self.path + "/printerHelp.png"))
 
 
 class ledStripControler():
@@ -2224,7 +2224,7 @@ class MainWindow(QMainWindow):
             self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLACK, ledStripControler.Color.BLACK])
             self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [ledStripControler.Color.BLACK])
             self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [ledStripControler.Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.ERROR, [ledStripControler.Color.BLACK, Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.ERROR, [ledStripControler.Color.BLACK, ledStripControler.Color.BLACK])
 
         self.command("shutdown")
 

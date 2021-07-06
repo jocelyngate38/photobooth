@@ -829,14 +829,14 @@ class MainWindow(QMainWindow):
         self.displayMode = mode
 
         #Only allow warning display on the home page
-        if mode == DisplayMode.HOMEPAGE:
-            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-                self.label.setWarningVisible(True)
+        if self.label is not None:
+            if mode == DisplayMode.HOMEPAGE:
+                if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+                    self.label.setWarningVisible(True)
+                else:
+                   self.label.setWarningVisible(False)
             else:
                 self.label.setWarningVisible(False)
-
-        else:
-            self.label.setWarningVisible(False)
 
         if mode == DisplayMode.HOMEPAGE:
             self.label.setWarningVisible(True)

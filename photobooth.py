@@ -330,7 +330,7 @@ class PrinterMonitoringThread(QThread):
 
     def run(self):
         while True:
-            if EMULATE is False:
+            if EMULATE is False :
                 try:
                     conn = cups.Connection()
                     printers = conn.getPrinters()
@@ -338,7 +338,7 @@ class PrinterMonitoringThread(QThread):
 
                         if printers[printer]['printer-state'] == 5:
                             if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                self.logger.warning("NO MORE PAPER, CONTACT SMBDY TO ADD PAPERS AGAIN")
+                                self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
                                 self.printerFailure.emit(printer, 1)
                                 self.label.setTrayMissingLeft(True)
                                 self.label.setTrayMissingRight(True)
@@ -346,14 +346,14 @@ class PrinterMonitoringThread(QThread):
 
                         if printers[printer]['printer-state'] == 3:
                             if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                self.logger.warning("CARTOUCHE D'ENCRE VIDE, CONTACT SMBDY TO ADD PAPERS AGAIN")
+                                self.logger.warning("PRINTER : RIBBON DEPLETED!")
                                 self.printerFailure.emit(printer, 2)
                                 self.label.setRibbonEmptyLeft(True)
                                 self.label.setRibbonEmptyRight(True)
                                 self.ledStrip.showWarning(1)
 
                             if printers[printer]["printer-state-message"] == "Paper feed problem!":
-                                self.logger.warning("PLUS DE PAPIER, VEUILLEZ EN RAJOUTER")
+                                self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
                                 self.printerFailure.emit(printer, 3)
                                 self.label.setPaperEmptyLeft(True)
                                 self.label.setPaperEmptyRight(True)
@@ -754,10 +754,15 @@ class MainWindow(QMainWindow):
         self.initMenu()
         self.initDSLRTime()
 
-        self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName)
-        self.printerMonitoring.start()
+        if self.boxSettings.has_printer_port() is True:
+            self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName)
+            self.printerMonitoring.start()
 
-        self.showPowerOnPrinter()
+        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            self.showPowerOnPrinter()
+        else:
+            self.gotoStart()
+
         self.switchConstantLight(False)
 
 
@@ -1041,11 +1046,11 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        if self.printingEnabled is False:
+        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png"))
+        else:
             painter.drawPixmap(0, 0,
                                QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly-noprint.png"))
-        else:
-            painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png"))
 
         if self.lastAssemblyPixmap is not None:
             if self.lastAssemblyLandscape == 1:
@@ -1395,10 +1400,9 @@ class MainWindow(QMainWindow):
             self.redoAssembly()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
-            if self.printingEnabled is True:
+            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
                 self.logger.info("BUTTON 3 PRESSED : PRINT")
                 self.sendPrintingJob()
-
             else:
                 self.logger.info("BUTTON 3 PRESSED : PRINT NOT ENABLED, DO NOTHING")
 
@@ -1876,7 +1880,7 @@ class MainWindow(QMainWindow):
 
         self.backgroundMenu  = QMenu("Arriere plan",self)
         self.backgroundMenu.hovered.connect(self.onMoveMouseAbove)
-        self.skinMenu  = QMenu("Thème",self)
+        self.skinMenu  = QMenu("Theme",self)
         self.displayMenu.addMenu(self.backgroundMenu)
         self.displayMenu.addMenu(self.skinMenu)
 
@@ -2108,12 +2112,7 @@ class MainWindow(QMainWindow):
         self.restartDSLR()
         self.restartSpeedLight()
         QApplication.processEvents()
-
-        if self.printingEnabled is True:
-            self.startCUPS()
-        else:
-            self.stopCUPS()
-
+        self.startCUPS()
         self.switchConstantLight(True)
 
     @pyqtSlot()
@@ -2135,13 +2134,10 @@ class MainWindow(QMainWindow):
         if EMULATE is True:
             return
 
-        settings = QSettings('settings.ini', QSettings.IniFormat)
-        settings.setFallbacksEnabled(False)
-        en = settings.value("printingEnabled", True, bool)
-        if en is True:
-            subprocess.Popen(["/etc/init.d/cups", "restart"])
-        else:
-            subprocess.Popen(["/etc/init.d/cups", "stop"])
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
+        subprocess.Popen(["/etc/init.d/cups", "restart"])
 
     @pyqtSlot()
     def startCUPS(self):
@@ -2150,13 +2146,11 @@ class MainWindow(QMainWindow):
 
         if EMULATE is True:
             return
-        settings = QSettings('settings.ini', QSettings.IniFormat)
-        settings.setFallbacksEnabled(False)
-        en = settings.value("printingEnabled", True, bool)
-        if en is True:
-            subprocess.Popen(["/etc/init.d/cups", "start"])
-        else:
-            subprocess.Popen(["/etc/init.d/cups", "stop"])
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
+        subprocess.Popen(["/etc/init.d/cups", "start"])
 
     @pyqtSlot()
     def stopCUPS(self):
@@ -2165,6 +2159,10 @@ class MainWindow(QMainWindow):
 
         if EMULATE is True:
             return
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
         subprocess.Popen(["/etc/init.d/cups", "stop"])
 
     @pyqtSlot()
@@ -2202,7 +2200,6 @@ class MainWindow(QMainWindow):
             self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [Color.BLACK])
             self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [Color.BLACK])
             self.ledStrip.setColor(ledStripControler.Location.ERROR, [Color.BLACK, Color.BLACK])
-
         self.command("reboot")
 
     @pyqtSlot()
@@ -2471,6 +2468,14 @@ class MainWindow(QMainWindow):
 
     def sendPrintingJob(self):
 
+        if self.boxSettings.has_printer_port() is False:
+            self.gotoStart()
+            return
+
+        if self.printingEnabled is False:
+            self.gotoStart()
+            return
+
         if EMULATE is True:
             self.showPrintSentPage()
             self.wait(3)
@@ -2509,6 +2514,10 @@ class MainWindow(QMainWindow):
         self.gotoStart()
 
     def cancelNotCompletedJobs(self):
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
         try:
             conn = cups.Connection()
             # printers = conn.getPrinters()
@@ -2522,6 +2531,10 @@ class MainWindow(QMainWindow):
             self.logger.error("cancelNotCompletedJobs EXCEPTION")
 
     def cancelAllNotCompletedJobs(self):
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
         try:
             conn = cups.Connection()
             # printers = conn.getPrinters()
@@ -2532,6 +2545,10 @@ class MainWindow(QMainWindow):
             self.logger.error("cancelAllNotCompletedJobs EXCEPTION")
 
     def enablePrinter(self):
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
         try:
             conn = cups.Connection()
             conn.enablePrinter(self.printerName)
@@ -2637,11 +2654,10 @@ class MainWindow(QMainWindow):
         self.logger.info("JOB PRINT STATUS : CLEANING THE LIST")
         self.printJobStatusList = []
 
-    def gotoStart(self, index=1):
+    def gotoStart(self):
 
         self.showCuttingLines = False
         self.logger.info("GO HOME")
-        # self.setDisplayMode(DisplayMode.HOMEPAGE)
         self.setLedButonBlinking(False, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()

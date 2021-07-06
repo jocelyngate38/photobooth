@@ -336,8 +336,7 @@ class PrinterMonitoringThread(QThread):
                     printers = conn.getPrinters()
                     for printer in printers:
                         if self.printerName == printer :
-                            print(printer)
-                            print(printers[printer])
+                            print(printers[printer]["printer-state-message"])
                             if printers[printer]['printer-state'] == 5:
                                 if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                     self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
@@ -365,7 +364,7 @@ class PrinterMonitoringThread(QThread):
                 except RuntimeError as e1:
                     self.logger.error("RUNTIMEERROR " + str(e1))
                     break
-            time.sleep(2)
+            time.sleep(5)
             self.label.update()
 
 
@@ -445,56 +444,62 @@ class Label(QLabel):
         self.ribbonEmptyRight = b
 
     def setPaperEmptyRight(self, b):
-        self.trayMissingRight = b
+        self.paperEmptyRight = b
+
 
     def setTrayMissingRight(self, b):
-        self.paperEmptyRight = b
+        self.trayMissingRight = b
 
     def setRibbonEmptyLeft(self, b):
         self.ribbonEmptyLeft = b
 
     def setPaperEmptyLeft(self, b):
-        self.trayMissingLeft = b
+        self.paperEmptyLeft = b
 
     def setTrayMissingLeft(self, b):
-        self.paperEmptyLeft = b
+        self.trayMissingLeft = b
+
+    def setWarningVisible(self, visible):
+        self.warningVisible = visible
 
     def __init__(self, path, parent=None):
         super(Label, self).__init__(parent=parent)
         self.path = path
+        self.warningVisible = False
 
     def paintEvent(self, e):
 
-        iL = 0
-        jL = 0
-        iR = 1024 - 229
-        jR = 0
-        incw = 0
-        inch = 85
-
         super().paintEvent(e)
-        qp = QPainter(self)
-        if self.ribbonEmptyLeft is True:
-            qp.drawPixmap(iL, jL, QPixmap(self.path + "/ribbonEmpty.png"))
-            iL = iL + incw
-            jL = jL + inch
-        if self.trayMissingLeft is True:
-            qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
-            iL = iL + incw
-            jL = jL + inch
-        if self.paperEmptyLeft is True:
-            qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
+        if self.warningVisible is True:
+            iL = 10
+            jL = 10
+            iR = 1024 - 295
+            jR = 10
+            incw = 0
+            inch = 255
 
-        if self.ribbonEmptyRight is True:
-            qp.drawPixmap(iR, jR, QPixmap(self.path + "/ribbonEmpty.png"))
-            iR = iR + incw
-            jR = jR + inch
-        if self.trayMissingRight is True:
-            qp.drawPixmap(iR, jR, QPixmap(self.path + "/trayMissing.png"))
-            iR = iR + incw
-            jR = jR + inch
-        if self.paperEmptyRight is True:
-            qp.drawPixmap(iR, jR, QPixmap(self.path + "/paperEmpty.png"))
+            qp = QPainter(self)
+            if self.ribbonEmptyLeft is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/ribbonEmpty.png"))
+                iL = iL + incw
+                jL = jL + inch
+            if self.trayMissingLeft is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
+                iL = iL + incw
+                jL = jL + inch
+            if self.paperEmptyLeft is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
+
+            if self.ribbonEmptyRight is True:
+                qp.drawPixmap(iR, jR, QPixmap(self.path + "/ribbonEmpty.png"))
+                iR = iR + incw
+                jR = jR + inch
+            if self.trayMissingRight is True:
+                qp.drawPixmap(iR, jR, QPixmap(self.path + "/trayMissing.png"))
+                iR = iR + incw
+                jR = jR + inch
+            if self.paperEmptyRight is True:
+                qp.drawPixmap(iR, jR, QPixmap(self.path + "/paperEmpty.png"))
 
 class ledStripControler():
 
@@ -541,12 +546,12 @@ class ledStripControler():
             self.serialDevice = serial.Serial(self.port)
             self.serialDevice.baudrate = self.speed
 
-            self.setColor(Location.RIGHT_SIDE, [Color.LIGHT_BLUE])
-            self.setColor(Location.LEFT_SIDE, [Color.LIGHT_BLUE])
-            self.setColor(Location.CAMERA_ARROWS, [Color.BLACK, Color.WHITE])
-            self.setColor(Location.CAMERA_BACK, [Color.RED])
-            self.setColor(Location.TEXT_BACK, [Color.LIGHT_BLUE])
-            self.setColor(Location.ERROR, [Color.RED, Color.BLACK])
+            self.setColor(self.Location.RIGHT_SIDE, [self.Color.LIGHT_BLUE])
+            self.setColor(self.Location.LEFT_SIDE, [self.Color.LIGHT_BLUE])
+            self.setColor(self.Location.CAMERA_ARROWS, [self.Color.BLACK, self.Color.WHITE])
+            self.setColor(self.Location.CAMERA_BACK, [self.Color.RED])
+            self.setColor(self.Location.TEXT_BACK, [self.Color.LIGHT_BLUE])
+            self.setColor(self.Location.ERROR, [self.Color.RED, self.Color.BLACK])
 
         except:
             self.logger.error("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")
@@ -823,7 +828,18 @@ class MainWindow(QMainWindow):
 
         self.displayMode = mode
 
+        #Only allow warning display on the home page
         if mode == DisplayMode.HOMEPAGE:
+            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+                self.label.setWarningVisible(True)
+            else:
+                self.label.setWarningVisible(False)
+
+        else:
+            self.label.setWarningVisible(False)
+
+        if mode == DisplayMode.HOMEPAGE:
+            self.label.setWarningVisible(True)
             self.defineTimeout(-1)
 
         elif mode == DisplayMode.PRINT:

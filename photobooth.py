@@ -1459,9 +1459,12 @@ class MainWindow(QMainWindow):
             self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
-            self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
-            self.sendPrintingJob()
-
+            self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY OR START CAPTURE")
+            exists = os.path.isfile(self.currentAssemblyPath)
+            if exists:
+                self.sendPrintingJob()
+            else:
+                self.startCaptureProcess()
         else:
             self.logger.warning(
                 "BUTTON 3 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
@@ -2539,23 +2542,18 @@ class MainWindow(QMainWindow):
 
             exists = os.path.isfile(self.currentAssemblyPath)
             if exists:
-
                 self.lastPrintId = conn.printFile(self.printerName, self.currentAssemblyPath, title='boxaselfi_job',
                                                   options={})
                 self.logger.info(
                     "NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
                 self.showPrintSentPage()
                 self.wait(5)
-
+                self.printerMonitoring.start()
+                self.wait(8)
             else:
-
                 self.logger.error("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")
-
-            self.printerMonitoring.start()
         except:
             self.logger.error("sendPrintingJob EXCEPTION")
-
-        self.wait(8)
         self.gotoStart()
 
     def cancelNotCompletedJobs(self):

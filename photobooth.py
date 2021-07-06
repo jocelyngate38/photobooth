@@ -452,8 +452,8 @@ class Label(QLabel):
     def setWarningVisible(self, visible):
         self.warningVisible = visible
 
-    def hasWarning(self):
-        return self.ribbonEmpty is True and self.trayMissing is True and self.paperEmpty is True and self.printerHelpButtonVisible is True
+    def hasVisibleWarning(self):
+        return (self.ribbonEmpty is True or self.trayMissing is True or self.paperEmpty is True) and self.printerHelpButtonVisible is True
 
     def setPrinterHelpButtonVisible(self, visible):
         self.printerHelpButtonVisible = visible
@@ -1277,7 +1277,7 @@ class MainWindow(QMainWindow):
             duration = (time.time() - start)
 
             if duration < reset_default[1] and duration >= reset_default[0]:
-                if self.label.hasWarning() is True:
+                if self.label.hasVisibleWarning() is True:
                     self.showHelpPrinter()
                 # self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
                 # self.resetPrinterErrors()
@@ -2706,7 +2706,7 @@ class MainWindow(QMainWindow):
         en = False
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
             if self.label is not None:
-                en = self.label.hasWarning()
+                en = self.label.hasVisibleWarning()
 
         self.setLedButonBlinking(en, True, False)
         self.connectInputButtonInterupts()

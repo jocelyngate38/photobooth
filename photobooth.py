@@ -335,32 +335,31 @@ class PrinterMonitoringThread(QThread):
                     conn = cups.Connection()
                     printers = conn.getPrinters()
                     for printer in printers:
-                        print(printers[printer])
-                        print(printers[printer]['printer-state'])
-                        print(printers[printer]["printer-state-message"])
-                        
-                        if printers[printer]['printer-state'] == 5:
-                            if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
-                                self.printerFailure.emit(printer, 1)
-                                self.label.setTrayMissingLeft(True)
-                                self.label.setTrayMissingRight(True)
-                                self.ledStrip.showWarning(1)
+                        if self.printerName == printer :
+                            print(printer)
+                            print(printers[printer])
+                            if printers[printer]['printer-state'] == 5:
+                                if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
+                                    self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
+                                    self.printerFailure.emit(printer, 1)
+                                    self.label.setTrayMissingLeft(True)
+                                    self.label.setTrayMissingRight(True)
+                                    self.ledStrip.showWarning(1)
 
-                        if printers[printer]['printer-state'] == 3:
-                            if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                self.logger.warning("PRINTER : RIBBON DEPLETED!")
-                                self.printerFailure.emit(printer, 2)
-                                self.label.setRibbonEmptyLeft(True)
-                                self.label.setRibbonEmptyRight(True)
-                                self.ledStrip.showWarning(1)
+                            if printers[printer]['printer-state'] == 3:
+                                if printers[printer]["printer-state-message"] == "Ribbon depleted!":
+                                    self.logger.warning("PRINTER : RIBBON DEPLETED!")
+                                    self.printerFailure.emit(printer, 2)
+                                    self.label.setRibbonEmptyLeft(True)
+                                    self.label.setRibbonEmptyRight(True)
+                                    self.ledStrip.showWarning(1)
 
-                            if printers[printer]["printer-state-message"] == "Paper feed problem!":
-                                self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
-                                self.printerFailure.emit(printer, 3)
-                                self.label.setPaperEmptyLeft(True)
-                                self.label.setPaperEmptyRight(True)
-                                self.ledStrip.showWarning(1)
+                                if printers[printer]["printer-state-message"] == "Paper feed problem!":
+                                    self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
+                                    self.printerFailure.emit(printer, 3)
+                                    self.label.setPaperEmptyLeft(True)
+                                    self.label.setPaperEmptyRight(True)
+                                    self.ledStrip.showWarning(1)
                 except cups.IPPError as e:
                     self.logger.error("CUPS.IPPERROR " + str(e))
                 except RuntimeError as e1:

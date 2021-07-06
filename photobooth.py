@@ -310,6 +310,7 @@ class DisplayMode(Enum):
     INFO_MENU_ADVANCED = 13
     INFO_REPRINT = 14
     INFO_SWITCH_CONSTANT_LIGHT = 15
+    HELP_PRINTER = 16
     UNDEFINED = 255
 
 class PrinterMonitoringThread(QThread):
@@ -341,23 +342,20 @@ class PrinterMonitoringThread(QThread):
                                 if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                     self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
                                     self.printerFailure.emit(printer, 1)
-                                    self.label.setTrayMissingLeft(True)
-                                    self.label.setTrayMissingRight(True)
+                                    self.label.setTrayMissing(True)
                                     self.ledStrip.showWarning(1)
 
                             if printers[printer]['printer-state'] == 3:
                                 if printers[printer]["printer-state-message"] == "Ribbon depleted!":
                                     self.logger.warning("PRINTER : RIBBON DEPLETED!")
                                     self.printerFailure.emit(printer, 2)
-                                    self.label.setRibbonEmptyLeft(True)
-                                    self.label.setRibbonEmptyRight(True)
+                                    self.label.setRibbonEmpty(True)
                                     self.ledStrip.showWarning(1)
 
                                 if printers[printer]["printer-state-message"] == "Paper feed problem!":
                                     self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
                                     self.printerFailure.emit(printer, 3)
-                                    self.label.setPaperEmptyLeft(True)
-                                    self.label.setPaperEmptyRight(True)
+                                    self.label.setPaperEmpty(True)
                                     self.ledStrip.showWarning(1)
                 except cups.IPPError as e:
                     self.logger.error("CUPS.IPPERROR " + str(e))
@@ -433,39 +431,36 @@ class CaptureImageThread(QThread):
 
 class Label(QLabel):
 
-    ribbonEmptyRight = False
-    trayMissingRight = False
-    paperEmptyRight = False
-    ribbonEmptyLeft = False
-    trayMissingLeft = False
-    paperEmptyLeft = False
+    ribbonEmpty = False
+    trayMissing = False
+    paperEmpty = False
+    warningVisible = False
+    printerHelpButtonVisible = False
 
-    def setRibbonEmptyRight(self, b):
-        self.ribbonEmptyRight = b
+    def setRibbonEmpty(self, b):
+        self.ribbonEmpty = b
 
-    def setPaperEmptyRight(self, b):
-        self.paperEmptyRight = b
+    def setPaperEmpty(self, b):
+        self.paperEmpty = b
 
-
-    def setTrayMissingRight(self, b):
-        self.trayMissingRight = b
-
-    def setRibbonEmptyLeft(self, b):
-        self.ribbonEmptyLeft = b
-
-    def setPaperEmptyLeft(self, b):
-        self.paperEmptyLeft = b
-
-    def setTrayMissingLeft(self, b):
-        self.trayMissingLeft = b
+    def setTrayMissing(self, b):
+        self.trayMissing = b
 
     def setWarningVisible(self, visible):
         self.warningVisible = visible
 
+    def setWarningVisible(self, visible):
+        self.warningVisible = visible
+
+    def hasWarning(self):
+        return self.ribbonEmpty is True and self.trayMissing is True and self.paperEmpty is True and self.printerHelpButtonVisible is True
+
+    def setPrinterHelpButtonVisible(self, visible):
+        self.printerHelpButtonVisible = visible
+
     def __init__(self, path, parent=None):
         super(Label, self).__init__(parent=parent)
         self.path = path
-        self.warningVisible = False
 
     def paintEvent(self, e):
 
@@ -473,33 +468,24 @@ class Label(QLabel):
         if self.warningVisible is True:
             iL = 10
             jL = 10
-            iR = 1024 - 295
-            jR = 10
             incw = 0
-            inch = 255
+            inch = 155
 
             qp = QPainter(self)
-            if self.ribbonEmptyLeft is True:
+            if self.paperEmpty is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
+                iL = iL + incw
+                jL = jL + inch
+            if self.ribbonEmpty is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/ribbonEmpty.png"))
                 iL = iL + incw
                 jL = jL + inch
-            if self.trayMissingLeft is True:
+            if self.trayMissing is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
-                iL = iL + incw
-                jL = jL + inch
-            if self.paperEmptyLeft is True:
-                qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
 
-            if self.ribbonEmptyRight is True:
-                qp.drawPixmap(iR, jR, QPixmap(self.path + "/ribbonEmpty.png"))
-                iR = iR + incw
-                jR = jR + inch
-            if self.trayMissingRight is True:
-                qp.drawPixmap(iR, jR, QPixmap(self.path + "/trayMissing.png"))
-                iR = iR + incw
-                jR = jR + inch
-            if self.paperEmptyRight is True:
-                qp.drawPixmap(iR, jR, QPixmap(self.path + "/paperEmpty.png"))
+            if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
+                qp.drawPixmap(70, 768-210, QPixmap(self.path + "/printerHelp.png"))
+
 
 class ledStripControler():
 
@@ -830,13 +816,19 @@ class MainWindow(QMainWindow):
 
         #Only allow warning display on the home page
         if self.label is not None:
-            if mode == DisplayMode.HOMEPAGE:
-                if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+                if mode == DisplayMode.HOMEPAGE:
+                        self.label.setWarningVisible(True)
+                        self.label.setPrinterHelpButtonVisible(True)
+                elif mode == DisplayMode.HELP_PRINTER:
                     self.label.setWarningVisible(True)
+                    self.label.setPrinterHelpButtonVisible(False)
                 else:
-                   self.label.setWarningVisible(False)
+                    self.label.setWarningVisible(False)
+                    self.label.setPrinterHelpButtonVisible(False)
             else:
                 self.label.setWarningVisible(False)
+                self.label.setPrinterHelpButtonVisible(False)
 
         if mode == DisplayMode.HOMEPAGE:
             self.label.setWarningVisible(True)
@@ -850,6 +842,10 @@ class MainWindow(QMainWindow):
             self.defineTimeout(40)
 
         elif mode == DisplayMode.POWER_PRINTER:
+            self.defineTimeout(-1)
+            self.defineTimeout(60 * 5)
+
+        elif mode == DisplayMode.HELP_PRINTER:
             self.defineTimeout(-1)
             self.defineTimeout(60 * 5)
 
@@ -1125,6 +1121,22 @@ class MainWindow(QMainWindow):
         self.connectInputButtonInterupts()
         self.setLedButonBlinking(False, True, False)
 
+
+    def showHelpPrinter(self):
+
+        self.setDisplayMode(DisplayMode.HELP_PRINTER)
+        self.logger.info("SHOW HELP FOR PRINTER")
+        outPixmap = None
+        outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
+        painter = QPainter(outPixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/help_printer.png"))
+        self.label.setPixmap(outPixmap)
+        del painter
+        self.connectInputButtonInterupts()
+        self.setLedButonBlinking(True, True, True)
+
+
     def showStartupPixmap(self):
 
         self.logger.info("SHOW STARTUP PAGE")
@@ -1265,12 +1277,14 @@ class MainWindow(QMainWindow):
             duration = (time.time() - start)
 
             if duration < reset_default[1] and duration >= reset_default[0]:
-                self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
-                self.resetPrinterErrors()
-                self.enablePrinter()
-                self.cancelAllNotCompletedJobs()
-                self.printerMonitoring.start()
-                self.gotoStart()
+                if self.label.hasWarning() is True:
+                    self.showHelpPrinter()
+                # self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
+                # self.resetPrinterErrors()
+                # self.enablePrinter()
+                # self.cancelAllNotCompletedJobs()
+                # self.printerMonitoring.start()
+                # self.gotoStart()
             elif duration >= reprint[0] and duration < reprint[1]:
                 self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
                 self.sendPrintingJob()
@@ -1320,6 +1334,10 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
             self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
+
+        elif self.displayMode == DisplayMode.HELP_PRINTER:
+            self.logger.warning("BUTTON 1 PRESSED : GOTO START")
+            self.gotoStart()
 
         else:
             self.logger.warning(
@@ -1440,6 +1458,10 @@ class MainWindow(QMainWindow):
         elif self.displayMode == DisplayMode.POWER_PRINTER:
             self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
+        elif self.displayMode == DisplayMode.HELP_PRINTER:
+            self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
+            self.sendPrintingJob()
+
         else:
             self.logger.warning(
                 "BUTTON 3 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
@@ -1525,6 +1547,10 @@ class MainWindow(QMainWindow):
         elif self.displayMode == DisplayMode.RUNNING:
             self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
+        elif self.displayMode == DisplayMode.HELP_PRINTER:
+            self.logger.info("BUTTON 2 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
+            self.gotoStart()
+
         else:
             self.logger.warning(
                 "BUTTON 2 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
@@ -1535,12 +1561,9 @@ class MainWindow(QMainWindow):
         self.setLedButonBlinking(False, False, False)
 
         self.printerMonitoring.quit()
-        self.label.setRibbonEmptyLeft(False)
-        self.label.setRibbonEmptyRight(False)
-        self.label.setTrayMissingLeft(False)
-        self.label.setTrayMissingRight(False)
-        self.label.setPaperEmptyLeft(False)
-        self.label.setPaperEmptyRight(False)
+        self.label.setRibbonEmpty(False)
+        self.label.setTrayMissing(False)
+        self.label.setPaperEmpty(False)
         self.ledStrip.showWarning(0)
 
     @pyqtSlot(int)
@@ -2212,12 +2235,12 @@ class MainWindow(QMainWindow):
             self.switchSpeedLight(False)
             self.switchDSLR(False)
             self.setLedButonBlinking(False, False, False)
-            self.ledStrip.setColor(ledStripControler.Location.RIGHT_SIDE, [Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.LEFT_SIDE, [Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [Color.BLACK, Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [Color.BLACK])
-            self.ledStrip.setColor(ledStripControler.Location.ERROR, [Color.BLACK, Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.RIGHT_SIDE, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.LEFT_SIDE, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLACK, ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.CAMERA_BACK, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.TEXT_BACK, [ledStripControler.Color.BLACK])
+            self.ledStrip.setColor(ledStripControler.Location.ERROR, [ledStripControler.Color.BLACK, ledStripControler.Color.BLACK])
         self.command("reboot")
 
     @pyqtSlot()
@@ -2448,6 +2471,10 @@ class MainWindow(QMainWindow):
             self.ledStrip.showWarning(0)
             self.gotoStart()
 
+        elif self.displayMode == DisplayMode.HELP_PRINTER:
+            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.gotoStart()
+
     def redoAssembly(self):
 
         self.setDisplayMode(DisplayMode.DISPLAY_ASSEMBLY)
@@ -2676,7 +2703,12 @@ class MainWindow(QMainWindow):
 
         self.showCuttingLines = False
         self.logger.info("GO HOME")
-        self.setLedButonBlinking(False, True, False)
+        en = False
+        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            if self.label is not None:
+                en = self.label.hasWarning()
+
+        self.setLedButonBlinking(en, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()
         self.showHomePage()

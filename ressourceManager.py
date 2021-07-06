@@ -16,7 +16,6 @@ import uuid
 import logging
 
 
-
 if platform.system() == 'Windows':
     EMULATE = True
 else:

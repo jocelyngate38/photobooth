@@ -335,7 +335,10 @@ class PrinterMonitoringThread(QThread):
                     conn = cups.Connection()
                     printers = conn.getPrinters()
                     for printer in printers:
-
+                        print(printers[printer])
+                        print(printers[printer]['printer-state'])
+                        print(printers[printer]["printer-state-message"])
+                        
                         if printers[printer]['printer-state'] == 5:
                             if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                 self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")

@@ -79,8 +79,11 @@ try:
     from enum import Enum, IntEnum
 except:
     print("Enum import error")
-
-
+try:
+    import socket
+    import urllib.request
+except:
+    print("socket or urllib.request import error")
 
 try:
     from PIL import Image
@@ -333,16 +336,12 @@ class PrinterMonitoringThread(QThread):
     def changePrinterName(self, printerName):
         self.printerName = printerName
 
-
-
-
     def run(self):
 
         while True:
             self.can_run.wait()
             try:
                 self.thing_done.clear()
-                print("PrinterMonitoringThread:WORKING")
                 if EMULATE is False:
                     try:
                         conn = cups.Connection()
@@ -458,6 +457,9 @@ class Label(QLabel):
     paperEmpty = False
     warningVisible = False
     printerHelpButtonVisible = False
+    ipVisible = True
+    localIp = "127.0.0.1"
+    externIp = "127.0.0.1"
 
     def setRibbonEmpty(self, b):
         self.ribbonEmpty = b
@@ -480,6 +482,13 @@ class Label(QLabel):
     def setPrinterHelpButtonVisible(self, visible):
         self.printerHelpButtonVisible = visible
 
+    def setIpVisible(self, visible):
+        self.ipVisible = visible
+
+    def setIpValues(self, localIP, extIp):
+        self.localIp=localIP
+        self.externIp=extIp
+
     def __init__(self, path, parent=None):
         super(Label, self).__init__(parent=parent)
         self.path = path
@@ -487,13 +496,12 @@ class Label(QLabel):
     def paintEvent(self, e):
 
         super().paintEvent(e)
+        qp = QPainter(self)
         if self.warningVisible is True:
             iL = 10
             jL = 10
             incw = 0
             inch = 155
-
-            qp = QPainter(self)
             if self.paperEmpty is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
                 iL = iL + incw
@@ -507,6 +515,18 @@ class Label(QLabel):
 
             if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
                 qp.drawPixmap(40, 768-170, QPixmap(self.path + "/printerHelp.png"))
+
+        if self.ipVisible is True:
+
+            w = 130
+            h = 15
+            x = 1024 - w - 10
+            y = 5
+            if self.localIp != "127.0.0.11":
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "local : " + self.localIp)
+                y = y + h
+            if  self.externIp != "127.0.0.11":
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "external : " + self.externIp)
 
 
 class ledStripControler():
@@ -704,6 +724,9 @@ class MainWindow(QMainWindow):
         self.logger.info("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
         self.logger.info("####################################################################################")
 
+        self.local_ip = "127.0.0.1"
+        self.external_ip = "127.0.0.1"
+
         self.boxSettings.printDetails()
 
         self.interuptsConnected = False
@@ -856,6 +879,9 @@ class MainWindow(QMainWindow):
             else:
                 self.label.setWarningVisible(False)
                 self.label.setPrinterHelpButtonVisible(False)
+
+            if mode != DisplayMode.HOMEPAGE:
+                self.label.setIpVisible(False)
 
         if mode == DisplayMode.HOMEPAGE:
             self.label.setWarningVisible(True)
@@ -1425,6 +1451,8 @@ class MainWindow(QMainWindow):
                 self.cancelAllNotCompletedJobs()
                 self.printerMonitoring.resume()
                 self.gotoStart()
+                self.label.setIpVisible(True)
+                self.label.update()
             elif duration >= reprint[0] and duration < reprint[1]:
                 self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
                 self.sendPrintingJob()
@@ -1880,6 +1908,29 @@ class MainWindow(QMainWindow):
 
             self.backgroundActionList.append(act)
             act.setToolTip("<img src='"+self.resources.getPath(ressourcesManager.PATH.BACKGROUND_LIST_PATH) + "/" + f +"'" + " width='350' height='233' >")
+
+        self.local_ip = self.get_ip()
+        self.external_ip = "127.0.0.1"
+
+        try:
+            self.external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+        except urllib.error.URLError as e:
+            print(e)
+
+        self.label.setIpValues(self.local_ip,self.external_ip)
+
+
+    def get_ip(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.connect(('10.255.255.255', 1))
+            IP = s.getsockname()[0]
+        except Exception:
+            IP = '127.0.0.1'
+        finally:
+            s.close()
+        return IP
+
 
     @pyqtSlot(QAction)
     def onMoveMouseAbove(self, act):

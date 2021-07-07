@@ -772,6 +772,7 @@ class MainWindow(QMainWindow):
         if self.boxSettings.has_printer_port() is True:
             self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName)
             self.printerMonitoring.start()
+            self.printerMonitoring.pause()
 
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
             self.showPowerOnPrinter()
@@ -1422,7 +1423,7 @@ class MainWindow(QMainWindow):
                 self.resetPrinterErrors()
                 self.enablePrinter()
                 self.cancelAllNotCompletedJobs()
-                self.printerMonitoring.start()
+                self.printerMonitoring.resume()
                 self.gotoStart()
             elif duration >= reprint[0] and duration < reprint[1]:
                 self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
@@ -2571,7 +2572,7 @@ class MainWindow(QMainWindow):
                     "NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
                 self.showPrintSentPage()
                 self.wait(5)
-                self.printerMonitoring.start()
+                self.printerMonitoring.resume()
                 self.wait(8)
             else:
                 self.logger.error("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")

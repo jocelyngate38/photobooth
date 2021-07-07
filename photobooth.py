@@ -782,6 +782,10 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.printingEnabled = settings.value("printingEnabled", self.printingEnabled, bool)
+        self.menuDelaySecond = 4
+        self.menuOffsetSecond = 4
+        self.menuDelaySecond = settings.value("menuDelaySecond", self.menuDelaySecond, int)
+        self.menuOffsetSecond = settings.value("menuOffsetSecond", self.menuOffsetSecond, int)
 
     def initGUI(self):
 
@@ -1233,8 +1237,8 @@ class MainWindow(QMainWindow):
 
     def onButton1Pressed(self):
 
-        delay = 4
-        offset = 4
+        delay = self.menuDelaySecond
+        offset = self.menuOffsetSecond
         reset_default = [0, 2]
         reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
         shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
@@ -1345,8 +1349,8 @@ class MainWindow(QMainWindow):
 
     def onButton3Pressed(self):
 
-        delay = 4
-        offset = 3
+        delay = self.menuDelaySecond
+        offset = self.menuOffsetSecond
         reset_default = [0, 2]
         reprint = [reset_default[1] , reset_default[1] + delay]
         shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]

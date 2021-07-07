@@ -314,9 +314,9 @@ class DisplayMode(Enum):
     UNDEFINED = 255
 
 class PrinterMonitoringThread(QThread):
+
     printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
     label = None
-
     logger = logging.getLogger("PrinterMonitori")
 
     def __init__(self, label, ledStrip, printerName):
@@ -324,46 +324,68 @@ class PrinterMonitoringThread(QThread):
         self.label = label
         self.ledStrip = ledStrip
         self.printerName = printerName
-        # run method gets called when we start the thread
+
+        self.can_run = threading.Event()
+        self.thing_done = threading.Event()
+        self.thing_done.set()
+        self.can_run.set()
 
     def changePrinterName(self, printerName):
         self.printerName = printerName
 
+
+
+
     def run(self):
+
         while True:
-            if EMULATE is False :
-                try:
-                    conn = cups.Connection()
-                    printers = conn.getPrinters()
-                    for printer in printers:
-                        if self.printerName == printer :
-                            print(printers[printer]["printer-state-message"])
-                            if printers[printer]['printer-state'] == 5:
-                                if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                    self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
-                                    self.printerFailure.emit(printer, 1)
-                                    self.label.setTrayMissing(True)
-                                    self.ledStrip.showWarning(1)
+            self.can_run.wait()
+            try:
+                self.thing_done.clear()
+                print("PrinterMonitoringThread:WORKING")
+                if EMULATE is False:
+                    try:
+                        conn = cups.Connection()
+                        printers = conn.getPrinters()
+                        for printer in printers:
+                            if self.printerName == printer:
+                                print(printers[printer]["printer-state-message"])
+                                if printers[printer]['printer-state'] == 5:
+                                    if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
+                                        self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
+                                        self.printerFailure.emit(printer, 1)
+                                        self.label.setTrayMissing(True)
+                                        self.ledStrip.showWarning(1)
 
-                            if printers[printer]['printer-state'] == 3:
-                                if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                    self.logger.warning("PRINTER : RIBBON DEPLETED!")
-                                    self.printerFailure.emit(printer, 2)
-                                    self.label.setRibbonEmpty(True)
-                                    self.ledStrip.showWarning(1)
+                                if printers[printer]['printer-state'] == 3:
+                                    if printers[printer]["printer-state-message"] == "Ribbon depleted!":
+                                        self.logger.warning("PRINTER : RIBBON DEPLETED!")
+                                        self.printerFailure.emit(printer, 2)
+                                        self.label.setRibbonEmpty(True)
+                                        self.ledStrip.showWarning(1)
 
-                                if printers[printer]["printer-state-message"] == "Paper feed problem!":
-                                    self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
-                                    self.printerFailure.emit(printer, 3)
-                                    self.label.setPaperEmpty(True)
-                                    self.ledStrip.showWarning(1)
-                except cups.IPPError as e:
-                    self.logger.error("CUPS.IPPERROR " + str(e))
-                except RuntimeError as e1:
-                    self.logger.error("RUNTIMEERROR " + str(e1))
-                    break
-            time.sleep(5)
-            self.label.update()
+                                    if printers[printer]["printer-state-message"] == "Paper feed problem!":
+                                        self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
+                                        self.printerFailure.emit(printer, 3)
+                                        self.label.setPaperEmpty(True)
+                                        self.ledStrip.showWarning(1)
+                    except cups.IPPError as e:
+                        self.logger.error("CUPS.IPPERROR " + str(e))
+                    except RuntimeError as e1:
+                        self.logger.error("RUNTIMEERROR " + str(e1))
+                        break
+                self.label.update()
+                time.sleep(5)
+            finally:
+                self.thing_done.set()
+
+
+    def pause(self):
+        self.can_run.clear()
+        self.thing_done.wait()
+
+    def resume(self):
+        self.can_run.set()
 
 
 class InputButtonThread(QThread):
@@ -1258,9 +1280,13 @@ class MainWindow(QMainWindow):
 
         if self.displayMode == DisplayMode.HOMEPAGE:
             self.logger.info("BUTTON 1 PRESSED : 4 POSSIBLE ACTIONS")
+            self.logger.info("SHOW PRINTER HELP ONLY IF WARNING : " + str(reset_default[0]) + "s to " + str(reset_default[1]) + "s")
+            self.logger.info("RE PRINT LAST PHOTO  : " + str(reprint[0]) + "s to " + str(reprint[1]) + "s")
+            self.logger.info("SHUTDOWN PHOTOBOOTH  : " + str(shutdown[0]) + "s to " + str(shutdown[1]) + "s")
+            self.logger.info("SHOW MENU            : " + str(menu[0]) + "s to " + str(menu[1]) + "s")
+            self.logger.info("SHOW EXPERT MENU     : " + str(menu_advanced[0]) + "s to " + str(menu_advanced[1]) + "s")
 
             start = time.time()
-            stop = 0
             duration = 0
             if EMULATE is False:
                 while GPIO.input(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1)) == 0:
@@ -1283,12 +1309,6 @@ class MainWindow(QMainWindow):
             if duration < reset_default[1] and duration >= reset_default[0]:
                 if self.label.hasVisibleWarning() is True:
                     self.showHelpPrinter()
-                # self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, CANCEL LAST PRINT")
-                # self.resetPrinterErrors()
-                # self.enablePrinter()
-                # self.cancelAllNotCompletedJobs()
-                # self.printerMonitoring.start()
-                # self.gotoStart()
             elif duration >= reprint[0] and duration < reprint[1]:
                 self.logger.info("BUTTON 1 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
                 self.sendPrintingJob()
@@ -1378,7 +1398,6 @@ class MainWindow(QMainWindow):
             self.logger.info("SHOW EXPERT MENU     : " + str(menu_advanced[0]) + "s to " + str(menu_advanced[1]) + "s")
 
             start = time.time()
-            stop = 0
             duration = 0
             if EMULATE is False:
                 while GPIO.input(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3)) == 0:
@@ -1567,7 +1586,7 @@ class MainWindow(QMainWindow):
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)
 
-        self.printerMonitoring.quit()
+        self.printerMonitoring.pause()
         self.label.setRibbonEmpty(False)
         self.label.setTrayMissing(False)
         self.label.setPaperEmpty(False)

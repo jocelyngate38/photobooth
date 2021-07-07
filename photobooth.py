@@ -522,10 +522,10 @@ class Label(QLabel):
             h = 15
             x = 1024 - w - 10
             y = 5
-            if self.localIp != "127.0.0.11":
+            if self.localIp != "127.0.0.1":
                 qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "loc : " + self.localIp)
                 y = y + h
-            if  self.externIp != "127.0.0.11":
+            if  self.externIp != "127.0.0.1":
                 qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "ext : " + self.externIp)
 
 

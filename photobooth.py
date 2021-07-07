@@ -523,10 +523,10 @@ class Label(QLabel):
             x = 1024 - w - 10
             y = 5
             if self.localIp != "127.0.0.11":
-                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "local : " + self.localIp)
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "loc : " + self.localIp)
                 y = y + h
             if  self.externIp != "127.0.0.11":
-                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "external : " + self.externIp)
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "ext : " + self.externIp)
 
 
 class ledStripControler():

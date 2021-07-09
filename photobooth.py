@@ -245,7 +245,7 @@ class PhotoBoothSettings_1(PhotoBoothSettings):
         return False
 
     def can_restart_led_strip(self):
-        return False
+        return True
 
     def is_LedPullUp(self):
         return False
@@ -287,7 +287,7 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
         return True
 
     def can_restart_led_strip(self):
-        return True
+        return False
 
     def is_LedPullUp(self):
         return True

@@ -1,0 +1,2 @@
+Install filebrowser :
+curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash filebrowser -r . -a "" -p 80

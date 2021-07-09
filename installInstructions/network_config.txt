@@ -1,0 +1,6 @@
+if wifi available connects to Bbox
+otherwise creates AP boxaselfi-1 with password boxaselfi-1
+we can then access filebrowser at 192.168.10.1
+
+
+curl https://raw.githubusercontent.com/MkLHX/AP_STA_RPI_SAME_WIFI_CHIP/master/ap_sta_config.sh | sudo bash -s -- --ap boxaselfi-1 boxaselfi-1 --client Bbox-E7F9F1E8 93F9F7496F5F2D666CD1CFED11C2EE --country FR --ip 192.168.10.1

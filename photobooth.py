@@ -773,6 +773,8 @@ class MainWindow(QMainWindow):
 
         self.initGPIO()
 
+        self.wait(2)
+
         self.ledStrip = ledStripControler("/dev/ttyUSB_LED_CONTROLLER", 115200, self.resources)
         self.ledStrip.showWarning(1)
 

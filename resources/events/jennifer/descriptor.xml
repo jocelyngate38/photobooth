@@ -12,10 +12,10 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>254</x>
-					<y>165</y>
-					<w>998</w>
-					<h>674</h>
+					<x>321</x>
+					<y>260</y>
+					<w>1651</w>
+					<h>1112</h>
 					<angle>0</angle>
 				</image>
 			</images>
@@ -28,18 +28,18 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>52</x>
-					<y>374</y>
-					<w>665</w>
-					<h>452</h>
+					<x>419</x>
+					<y>55</y>
+					<w>945</w>
+					<h>633</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>2</index>
-					<x>789</x>
-					<y>215</y>
-					<w>665</w>
-					<h>452</h>
+					<x>1016</x>
+					<y>708</y>
+					<w>938</w>
+					<h>641</h>
 					<angle>0</angle>
 				</image>
 			</images>
@@ -52,26 +52,26 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>470</x>
-					<y>55</y>
-					<w>571</w>
-					<h>386</h>
+					<x>986</x>
+					<y>704</y>
+					<w>976</w>
+					<h>657</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>2</index>
-					<x>52</x>
-					<y>507</y>
-					<w>665</w>
-					<h>452</h>
+					<x>986</x>
+					<y>43</y>
+					<w>976</w>
+					<h>657</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>3</index>
-					<x>792</x>
-					<y>508</y>
-					<w>665</w>
-					<h>452</h>
+					<x>186</x>
+					<y>43</y>
+					<w>796</w>
+					<h>516</h>
 					<angle>0</angle>
 				</image>
 			</images>
@@ -84,34 +84,34 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>158</x>
-					<y>131</y>
-					<w>566</w>
-					<h>383</h>
+					<x>992</x>
+					<y>694</y>
+					<w>990</w>
+					<h>690</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>2</index>
-					<x>791</x>
-					<y>131</y>
-					<w>566</w>
-					<h>383</h>
+					<x>1308</x>
+					<y>217</y>
+					<w>661</w>
+					<h>462</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>3</index>
-					<x>158</x>
-					<y>576</y>
-					<w>566</w>
-					<h>383</h>
+					<x>22</x>
+					<y>694</y>
+					<w>990</w>
+					<h>690</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>4</index>
-					<x>791</x>
-					<y>578</y>
-					<w>566</w>
-					<h>383</h>
+					<x>646</x>
+					<y>217</y>
+					<w>661</w>
+					<h>462</h>
 					<angle>0</angle>
 				</image>
 			</images>

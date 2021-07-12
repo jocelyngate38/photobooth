@@ -2400,6 +2400,10 @@ class MainWindow(QMainWindow):
 
 
     def switchOnLedStrip(self, on):
+
+        if EMULATE is True:
+            return
+        
         if self.boxSettings.has_led_strip() is True and self.boxSettings.can_restart_led_strip() is True:
             if on is True:
                 GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), 0)

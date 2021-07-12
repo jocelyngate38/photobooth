@@ -818,6 +818,8 @@ class MainWindow(QMainWindow):
 
         self.initGPIO()
 
+        self.switchOnLedStrip(True)
+
         self.ledStrip = ledStripControler("/dev/ttyUSB_LED_CONTROLLER", 115200, self.resources)
         self.ledStrip.showWarning(1)
 
@@ -2395,6 +2397,16 @@ class MainWindow(QMainWindow):
             return
         commands = {"shutdown": "sudo shutdown -h now", "reboot": "sudo shutdown -r now"}
         subprocess.call(commands[cmd], shell=True)
+
+
+    def switchOnLedStrip(self, on):
+        if self.boxSettings.has_led_strip() is True and self.boxSettings.can_restart_led_strip() is True:
+            if on is True:
+                GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), 0)
+            else:
+                GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP), 1)
+            time.sleep(0.5)
+
 
     def initGPIO(self):
 

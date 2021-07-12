@@ -266,13 +266,56 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
         self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3, 12)
         self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_4, 21)
         self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT, 22)
+        # self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP, 4)
+        # self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT, 17)
+        # self.setGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT, 23)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR, 4)
+
+    def getName(self):
+        return "PHOTOBOOTH 2"
+
+    def has_external_flash(self):
+        return False
+
+    def can_restart_DSLR(self):
+        return True
+
+    def is_DSLR_up(self):
+        return False
+
+    def can_restart_external_flash(self):
+        return False
+
+    def can_restart_led_strip(self):
+        return False
+
+    def is_LedPullUp(self):
+        return True
+
+    def getCameraName(self):
+        return "Nikon DSC D70s (PTP mode)"
+
+
+class PhotoBoothSettings_10(PhotoBoothSettings):
+
+    def __init__(self):
+
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 13)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2, 26)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 6)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_0, 19)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1, 20)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2, 16)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3, 12)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_4, 21)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT, 22)
         self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP, 4)
         self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT, 17)
         self.setGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT, 23)
         self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR, 4)
 
     def getName(self):
-        return "PHOTOBOOTH 2"
+        return "PHOTOBOOTH 10"
 
     def has_external_flash(self):
         return True
@@ -294,6 +337,7 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
 
     def getCameraName(self):
         return "Nikon DSC D70s (PTP mode)"
+
 
 
 class DisplayMode(Enum):

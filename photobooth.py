@@ -1017,13 +1017,13 @@ class MainWindow(QMainWindow):
         for x in range(0, self.countDown):
 
             if x == 0:
-                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.WHITE, ledStripControler.Color.GREEN])
                 self.ledStrip.blinkFront(400)
             if x == 1:
-                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.GREEN, ledStripControler.Color.BLACK])
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.GREEN, ledStripControler.Color.RED])
                 self.ledStrip.blinkFront(300)
             if x == 2:
-                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.RED, ledStripControler.Color.BLACK])
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.RED, ledStripControler.Color.BLUE])
                 self.ledStrip.blinkFront(200)
                 self.switchConstantLight(True)
 
@@ -1035,7 +1035,7 @@ class MainWindow(QMainWindow):
         captureThread = CaptureImageThread(imPath, self.resources, self.boxSettings)
         captureThread.signal.connect(self.onCaptureProcessFinished)
         self.start = time.time()
-        self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.WHITE, ledStripControler.Color.BLACK])
+        self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
 
         captureThread.start()
 

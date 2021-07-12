@@ -281,7 +281,7 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
         return True
 
     def is_DSLR_up(self):
-        return False
+        return True
 
     def can_restart_external_flash(self):
         return False
@@ -324,7 +324,7 @@ class PhotoBoothSettings_10(PhotoBoothSettings):
         return True
 
     def is_DSLR_up(self):
-        return False
+        return True
 
     def can_restart_external_flash(self):
         return True

@@ -583,9 +583,10 @@ class ledStripControler():
         BLUE = [0, 0, 255]
         GREEN = [0, 255, 0]
         RED = [255, 0, 0]
-        LIGHT_BLUE = [0, 180, 180]
+        LIGHT_BLUE = [0, 180, 255]
         WHITE = [255, 255, 255]
         ORANGE = [255, 180, 0]
+        YELLOW = [255, 255, 0]
         BLACK = [0, 0, 0]
 
     class Location(Enum):
@@ -618,12 +619,12 @@ class ledStripControler():
             self.serialDevice = serial.Serial(self.port)
             self.serialDevice.baudrate = self.speed
 
-            self.setColor(self.Location.RIGHT_SIDE, [self.Color.LIGHT_BLUE])
-            self.setColor(self.Location.LEFT_SIDE, [self.Color.LIGHT_BLUE])
+            self.setColor(self.Location.RIGHT_SIDE, [self.Color.BLUE])
+            self.setColor(self.Location.LEFT_SIDE, [self.Color.BLUE])
             self.setColor(self.Location.CAMERA_ARROWS, [self.Color.BLACK, self.Color.WHITE])
             self.setColor(self.Location.CAMERA_BACK, [self.Color.RED])
-            self.setColor(self.Location.TEXT_BACK, [self.Color.LIGHT_BLUE])
-            self.setColor(self.Location.ERROR, [self.Color.RED, self.Color.BLACK])
+            self.setColor(self.Location.TEXT_BACK, [self.Color.BLUE])
+            self.setColor(self.Location.ERROR, [self.Color.RED, self.Color.YELLOW])
 
         except:
             self.logger.error("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")

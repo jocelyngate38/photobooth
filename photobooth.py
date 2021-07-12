@@ -624,7 +624,7 @@ class ledStripControler():
             self.setColor(self.Location.CAMERA_ARROWS, [self.Color.BLACK, self.Color.WHITE])
             self.setColor(self.Location.CAMERA_BACK, [self.Color.RED])
             self.setColor(self.Location.TEXT_BACK, [self.Color.BLUE])
-            self.setColor(self.Location.ERROR, [self.Color.RED, self.Color.YELLOW])
+            self.setColor(self.Location.ERROR, [self.Color.RED, self.Color.WHITE])
 
         except:
             self.logger.error("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")
@@ -1020,10 +1020,10 @@ class MainWindow(QMainWindow):
                 self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
                 self.ledStrip.blinkFront(400)
             if x == 1:
-                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.GREEN, ledStripControler.Color.BLACK])
                 self.ledStrip.blinkFront(300)
             if x == 2:
-                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+                self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.RED, ledStripControler.Color.BLACK])
                 self.ledStrip.blinkFront(200)
                 self.switchConstantLight(True)
 
@@ -1035,7 +1035,7 @@ class MainWindow(QMainWindow):
         captureThread = CaptureImageThread(imPath, self.resources, self.boxSettings)
         captureThread.signal.connect(self.onCaptureProcessFinished)
         self.start = time.time()
-        self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
+        self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.WHITE, ledStripControler.Color.BLACK])
 
         captureThread.start()
 

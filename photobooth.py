@@ -429,10 +429,12 @@ class PrinterMonitoringThread(QThread):
                         self.logger.error("RUNTIMEERROR " + str(e1))
                         break
                 self.mainWindow.label.update()
-                time.sleep(5)
+
             except:
-                self.logger.error("PrinterMonitoringThread exception")
-                pass
+                self.logger.error("PRINTERMONITORINGTHREAD EXCEPTION")
+
+            finally:
+                time.sleep(5)
 
 class InputButtonThread(QThread):
     inputButtonEventDetected = pyqtSignal(int)
@@ -2825,11 +2827,15 @@ class MainWindow(QMainWindow):
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
-        try:
-            conn = cups.Connection()
-            conn.enablePrinter(self.printerName)
-        except:
-            self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
+        if self.printerName in self.printerNameSerial.values():
+            try:
+                conn = cups.Connection()
+                conn.enablePrinter(self.printerName)
+            except:
+                self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
+
+        else:
+            self.logger.error("ENABLE PRINTER SKIPPED UNKNOWN PRINTER")
 
     def showPrintSentPage(self):
 

@@ -827,6 +827,7 @@ class MainWindow(QMainWindow):
         self.topLightOn = False
         self.lastPrintId = 0
         self.lastAssemblyLandscape = 1
+        self.DebugGPIO = True
 
         self.resources = ressourcesManager()
         self.resources.loadResources()

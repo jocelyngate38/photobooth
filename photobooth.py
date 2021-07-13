@@ -405,6 +405,7 @@ class PrinterMonitoringThread(QThread):
                             printers = conn.getPrinters()
                             for printer in printers:
                                 if self.mainWindow.printerName == printer:
+                                    print(printers[printer])
                                     if printers[printer]['printer-state'] == 5:
                                         if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                             self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
@@ -2802,8 +2803,6 @@ class MainWindow(QMainWindow):
             self.setCurrentPrinter(self.getPrinterName(printerSerial[0]))
         else:
             self.setCurrentPrinter("")
-
-        self.logger.info("SEND JOB " + self.currentAssemblyPath + " on " + self.printerName)
 
         if self.printerName == "":
             self.gotoStart()

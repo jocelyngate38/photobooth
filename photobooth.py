@@ -885,7 +885,7 @@ class MainWindow(QMainWindow):
         printerSerial = self.getOnlinePrinters()
 
         if len(printerSerial) >= 1:
-            self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
+            self.setCurrentPrinter(self.getPrinterName(printerSerial[0]))
         else:
             self.setCurrentPrinter("")
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
@@ -912,7 +912,7 @@ class MainWindow(QMainWindow):
         for printer in printers:
             if "Canon_CP800_" in printer:
                 self.printerNameSerial = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
-                self.printerNameSerial[printer] = id
+                self.printerNameSerial[id] = printer
 
         if len(self.printerNameSerial)==0:
             self.logger.error("PRINTER : CANNOT POPULATE printerNameSerial dic based on cups infos!")
@@ -920,6 +920,12 @@ class MainWindow(QMainWindow):
                                         'GL04120400020191': 'Canon_CP800_1',
                                         'G200090100000410': 'Canon_CP800_2',
                                         'DX01122500001574': 'Canon_CP800_3'}
+
+    def getPrinterName(self,id):
+        if id in self.printerNameSerial.keys():
+            return self.printerNameSerial[id]
+        else:
+            return ""
 
     def getOnlinePrinters(self):
 
@@ -1717,7 +1723,7 @@ class MainWindow(QMainWindow):
             printerSerial = self.getOnlinePrinters()
 
             if len(printerSerial) >= 1:
-                self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
+                self.setCurrentPrinter(self.getPrinterName(printerSerial[0]))
             else:
                 self.setCurrentPrinter("")
                 #self.printerMonitoring.resume()
@@ -2783,7 +2789,7 @@ class MainWindow(QMainWindow):
         printerSerial = self.getOnlinePrinters()
         print(printerSerial)
         if len(printerSerial) >= 1:
-            self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
+            self.setCurrentPrinter(self.getPrinterName(printerSerial[0]))
         else:
             self.setCurrentPrinter("")
 

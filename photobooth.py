@@ -584,7 +584,7 @@ class Label(QLabel):
 
         if self.debugVisible is True:
 
-            w = 130
+            w = 190
             h = 15
             x = 1024 - w - 10
             y = 5
@@ -595,10 +595,10 @@ class Label(QLabel):
                 qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "ext : " + self.externIp)
                 y = y + h
             if self.printerName != "":
-                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : " + self.printerName)
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : " + self.printerName + " (ON)")
                 y = y + h
             else:
-                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : not set")
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : OFF")
                 y = y + h
 
 
@@ -782,11 +782,13 @@ class MainWindow(QMainWindow):
 
     logger = logging.getLogger("MainWindow")
 
-    #populate the list to add new findable printers
-    printerNameSerial = {'DN00121700003777': 'Canon_CP800_0',
-                         'GL04120400020191': 'Canon_CP800_1',
-                         'G200090100000410': 'Canon_CP800_2',
-                         'DX01122500001574': 'Canon_CP800_3'}
+    printerNameSerial = {}
+
+    # populate the list to add new findable printers
+    #{'DN00121700003777': 'Canon_CP800_0',
+    #'GL04120400020191': 'Canon_CP800_1',
+    # 'G200090100000410': 'Canon_CP800_2',
+    # 'DX01122500001574': 'Canon_CP800_3'}
 
     def __init__(self, box_index):
         super(MainWindow, self).__init__()
@@ -851,6 +853,8 @@ class MainWindow(QMainWindow):
 
         self.setDisplayMode(DisplayMode.UNDEFINED)
 
+        self.populatePrintersDictionary()
+
         self.initGPIO()
 
         self.switchOnLedStrip(True)
@@ -893,6 +897,29 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         self.switchConstantLight(False)
+
+    def populatePrintersDictionary(self):
+
+        if EMULATE is True:
+            return
+
+        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+            return
+
+        conn = cups.Connection()
+        printers = conn.getPrinters()
+
+        for printer in printers:
+            if "Canon_CP800_" in printer:
+                self.printerNameSerial = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
+                self.printerNameSerial[printer] = id
+
+        if len(self.printerNameSerial)==0:
+            self.logger.error("PRINTER : CANNOT POPULATE printerNameSerial dic based on cups infos!")
+            self.printerNameSerial ={   'DN00121700003777': 'Canon_CP800_0',
+                                        'GL04120400020191': 'Canon_CP800_1',
+                                        'G200090100000410': 'Canon_CP800_2',
+                                        'DX01122500001574': 'Canon_CP800_3'}
 
     def getOnlinePrinters(self):
 

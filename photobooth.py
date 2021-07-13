@@ -1819,6 +1819,17 @@ class MainWindow(QMainWindow):
         if EMULATE is False:
             subprocess.call("gphoto2 --set-config imagequality=2", shell=True)
 
+    def setCurrentPrinter(self, printerName):
+
+        settings = QSettings('settings.ini', QSettings.IniFormat)
+        settings.setFallbacksEnabled(False)
+        self.printerName = printerName
+        settings.setValue("printerName", self.printerName)
+        self.enablePrinter()
+        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            self.printerMonitoring.changePrinterName(self.printerName)
+
+
     @pyqtSlot()
     def onSetCurrentPrinter(self):
 
@@ -1908,7 +1919,8 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.imagequality = settings.value("imagequality", 0, int)
-        self.printerName = settings.value("printerName", "Canon_CP800_0")
+        self.printerName = ""
+        #settings.value("printerName", "Canon_CP800_0")
         security = settings.value("security", True, bool)
 
         if EMULATE is False:
@@ -2736,20 +2748,18 @@ class MainWindow(QMainWindow):
             return
 
         printerSerial = self.getOnlinePrinters()
-
+        print(printerSerial)
         if len(printerSerial) >= 1:
-            self.printerName = self.printerNameSerial[printerSerial[0]]
+            self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
         else:
-            self.printerName = ""
-
-        if self.boxSettings.has_printer_port() is True:
-            self.printerMonitoring.changePrinterName(self.printerName)
+            self.setCurrentPrinter("")
 
         self.logger.info("SEND JOB " + self.currentAssemblyPath + " on " + self.printerName)
 
         if self.printerName == "" :
             self.printerMonitoring.resume()
             self.showPowerOnPrinter()
+            return
 
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)

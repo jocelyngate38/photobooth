@@ -900,15 +900,18 @@ class MainWindow(QMainWindow):
 
     def populatePrintersDictionary(self):
 
+        print("POPULATE DICT")
         if EMULATE is True:
             return
 
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
+        print("POPULATE DICT")
         conn = cups.Connection()
         printers = conn.getPrinters()
 
+        print(printers)
         for printer in printers:
             if "Canon_CP800_" in printer:
                 id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
@@ -922,7 +925,7 @@ class MainWindow(QMainWindow):
                                         'DX01122500001574': 'Canon_CP800_3'}
 
         print(self.printerNameSerial)
-        
+
         for key, value in self.printerNameSerial.items():
             self.logger.info("Printer name : " + value + ", id : " + key)
 

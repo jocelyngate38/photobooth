@@ -2392,7 +2392,7 @@ class MainWindow(QMainWindow):
         if EMULATE is True:
             return
 
-        if self.boxSettings.has_external_flash() is True and self.boxSettings.can_restart_external_flash() is True
+        if self.boxSettings.has_external_flash() is True and self.boxSettings.can_restart_external_flash() is True:
             self.switchSpeedLight(False)
             self.wait(2)
             self.switchSpeedLight(True)

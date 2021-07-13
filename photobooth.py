@@ -1241,21 +1241,14 @@ class MainWindow(QMainWindow):
         painter.setRenderHint(QPainter.Antialiasing)
 
         assPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png")
-        # painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png"))
 
         painterFrame = QPainter(assPixmap)
-
         painterFrame.setCompositionMode(QPainter.CompositionMode_Source)
-
-        painterFrame.fillRect(0, 0, 500, 500, Qt.transparent)
-
+        painterFrame.fillRect(682, 768-768/5, 1024-682, 768/5, Qt.transparent)
         painterFrame.end()
 
         painter.drawPixmap(0, 0, assPixmap )
 
-        # if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
-        # r = QRect(0,0,800,150)
-        # painter.eraseRect(r);
 
         if self.lastAssemblyPixmap is not None:
             if self.lastAssemblyLandscape == 1:

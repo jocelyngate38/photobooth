@@ -853,7 +853,7 @@ class MainWindow(QMainWindow):
 
         self.setDisplayMode(DisplayMode.UNDEFINED)
 
-        self.populatePrintersDictionary()
+
 
         self.initGPIO()
 
@@ -878,6 +878,8 @@ class MainWindow(QMainWindow):
         self.initMenu()
         self.initDSLRTime()
 
+        self.populatePrintersDictionary()
+
         if self.boxSettings.has_printer_port() is True:
             self.printerMonitoring = PrinterMonitoringThread( self)
             self.printerMonitoring.start()
@@ -900,14 +902,12 @@ class MainWindow(QMainWindow):
 
     def populatePrintersDictionary(self):
 
-        print("POPULATE DICT")
         if EMULATE is True:
             return
 
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
-        print("POPULATE DICT")
         conn = cups.Connection()
         printers = conn.getPrinters()
 
@@ -924,12 +924,11 @@ class MainWindow(QMainWindow):
                                         'G200090100000410': 'Canon_CP800_2',
                                         'DX01122500001574': 'Canon_CP800_3'}
 
-        print(self.printerNameSerial)
-
         for key, value in self.printerNameSerial.items():
             self.logger.info("Printer name : " + value + ", id : " + key)
 
     def getPrinterName(self,id):
+        
         pName = ""
         if id in self.printerNameSerial.keys():
             pName = self.printerNameSerial[id]

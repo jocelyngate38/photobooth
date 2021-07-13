@@ -1873,6 +1873,8 @@ class MainWindow(QMainWindow):
 
     def setCurrentPrinter(self, printerName):
 
+        if printerName == self.printerName:
+            return
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.printerName = printerName
@@ -1883,6 +1885,9 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def onSetCurrentPrinter(self):
+
+        if self.sender().text() == self.printerName:
+            return
 
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
@@ -2873,7 +2878,7 @@ class MainWindow(QMainWindow):
                 conn = cups.Connection()
                 conn.enablePrinter(self.printerName)
 
-                self.logger.error("ENABLE PRINTER " + self.printerName)
+                self.logger.info("ENABLE PRINTER " + self.printerName)
             except:
                 self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
 

@@ -887,10 +887,11 @@ class MainWindow(QMainWindow):
 
     def getOnlinePrinters(self):
 
-        if EMULATE is False:
-            return ['DN00121700003777']
-
         onlinePrinterSerials = []
+
+        if EMULATE is True:
+            return onlinePrinterSerials
+
         try:
             xdevV = usb.core.find(idVendor=0x04a9, idProduct=0x3214, find_all=True)
             for xdev in xdevV:

@@ -1233,7 +1233,7 @@ class MainWindow(QMainWindow):
                                                                                                  showCuttingLine=self.showCuttingLines)
 
         #display assembly page without the assembly we just build
-        # self.showAssemblyPixmap()
+        self.showAssemblyPixmap()
 
     def getFilteredPixmap(self, pixmapPath, hideButton1, hideButton2, hideButton3):
 
@@ -2695,7 +2695,7 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
             except pyautogui.FailSafeException as e:
                 print(e)
-                
+
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.MENU_SETUP:
@@ -2748,7 +2748,8 @@ class MainWindow(QMainWindow):
         self.wait(0.2)
         QApplication.processEvents()
         self.buildNextAssembly()
-        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is False or self.printingEnabled is False)
+        # self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is False or self.printingEnabled is False)
+        self.setLedButonBlinking(True, True, False)
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 

@@ -400,6 +400,8 @@ class PrinterMonitoringThread(QThread):
                     self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
                     self.label.setPrinterOffline(True)
                     self.ledStrip.showWarning(1)
+                else :
+                    self.label.setPrinterOffline(False)
 
                 if EMULATE is False:
                     try:
@@ -881,12 +883,11 @@ class MainWindow(QMainWindow):
         printerSerial = self.getOnlinePrinters()
 
         if len(printerSerial) >= 1:
-            self.printerName = self.printerNameSerial[printerSerial[0]]
+            self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
         else:
-            self.printerName = ""
-
-        if self.boxSettings.has_printer_port() is True:
-            self.printerMonitoring.changePrinterName(self.printerName)
+            self.setCurrentPrinter("")
+            self.printerMonitoring.resume()
+            self.printerMonitoring.pause()
 
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
             if self.printerName == "":
@@ -1694,12 +1695,11 @@ class MainWindow(QMainWindow):
             printerSerial = self.getOnlinePrinters()
 
             if len(printerSerial) >= 1:
-                self.printerName = self.printerNameSerial[printerSerial[0]]
+                self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
             else:
-                self.printerName = ""
-
-            if self.boxSettings.has_printer_port() is True:
-                self.printerMonitoring.changePrinterName(self.printerName)
+                self.setCurrentPrinter("")
+                self.printerMonitoring.resume()
+                self.printerMonitoring.pause()
 
             self.ledStrip.showWarning(0)
             self.gotoStart()
@@ -1744,11 +1744,12 @@ class MainWindow(QMainWindow):
 
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)
-
+        self.setLedButonBlinking(False, False, False)
         self.printerMonitoring.pause()
         self.label.setRibbonEmpty(False)
         self.label.setTrayMissing(False)
         self.label.setPaperEmpty(False)
+        self.label.setPrinterOffline(False)
         self.ledStrip.showWarning(0)
 
     @pyqtSlot(int)

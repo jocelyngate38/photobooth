@@ -375,11 +375,12 @@ class PrinterMonitoringThread(QThread):
     label = None
     logger = logging.getLogger("PrinterMonitori")
 
-    def __init__(self, label, ledStrip, printerName):
+    def __init__(self, label, ledStrip, printerName, mainWindow):
         QThread.__init__(self, label)
         self.label = label
         self.ledStrip = ledStrip
         self.printerName = printerName
+        self.mainWindow = mainWindow
 
         self.can_run = threading.Event()
         self.thing_done = threading.Event()
@@ -395,6 +396,13 @@ class PrinterMonitoringThread(QThread):
             self.can_run.wait()
             try:
                 self.thing_done.clear()
+
+                printerSerial = self.mainWindow.getOnlinePrinters()
+
+                if len(printerSerial) >= 1:
+                    self.mainWindow.setCurrentPrinter(self.mainWindow.printerNameSerial[printerSerial[0]])
+                else:
+                    self.mainWindow.setCurrentPrinter("")
 
                 if self.printerName == "" :
                     self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
@@ -876,7 +884,7 @@ class MainWindow(QMainWindow):
         self.initDSLRTime()
 
         if self.boxSettings.has_printer_port() is True:
-            self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName)
+            self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName, self)
             self.printerMonitoring.start()
             self.printerMonitoring.pause()
 
@@ -1699,7 +1707,6 @@ class MainWindow(QMainWindow):
             else:
                 self.setCurrentPrinter("")
                 self.printerMonitoring.resume()
-                self.printerMonitoring.pause()
 
             self.ledStrip.showWarning(0)
             self.gotoStart()

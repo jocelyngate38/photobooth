@@ -390,7 +390,7 @@ class PrinterMonitoringThread(QThread):
                     else:
                         self.mainWindow.setCurrentPrinter("")
 
-                    if self.printerName == "" :
+                    if self.mainWindow.printerName == "" :
                         self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
                         self.mainWindow.label.setPrinterOffline(True)
                         self.mainWindow.ledStrip.showWarning(1)

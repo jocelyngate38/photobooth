@@ -424,6 +424,9 @@ class PrinterMonitoringThread(QThread):
                                             # self.printerFailure.emit(printer, 3)
                                             self.mainWindow.label.setPaperEmpty(True)
                                             self.mainWindow.ledStrip.showWarning(1)
+
+                            self.mainWindow.refreshLedButtons()
+
                         except cups.IPPError as e:
                             self.logger.error("CUPS.IPPERROR " + str(e))
                         except RuntimeError as e1:
@@ -892,13 +895,9 @@ class MainWindow(QMainWindow):
 
 
     def refreshLedButtons(self):
-        print("refreshLedButtons")
         if self.displayMode == DisplayMode.HOMEPAGE:
-            print("refreshLedButtons1")
             if self.label is not None:
-                print("refreshLedButtons2")
                 if self.label.hasVisibleWarning() is True:
-                    print("refreshLedButtons3")
                     self.setLedButonBlinking(True, True, False)
 
 

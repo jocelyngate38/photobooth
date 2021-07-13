@@ -386,7 +386,7 @@ class PrinterMonitoringThread(QThread):
 
                     printerSerial = self.mainWindow.getOnlinePrinters()
                     if len(printerSerial) >= 1:
-                        self.mainWindow.setCurrentPrinter(self.mainWindow.printerNameSerial[printerSerial[0]])
+                        self.mainWindow.setCurrentPrinter(self.mainWindow.getPrinterName(printerSerial[0]))
                     else:
                         self.mainWindow.setCurrentPrinter("")
 
@@ -922,10 +922,11 @@ class MainWindow(QMainWindow):
                                         'DX01122500001574': 'Canon_CP800_3'}
 
     def getPrinterName(self,id):
+        pName = ""
         if id in self.printerNameSerial.keys():
-            return self.printerNameSerial[id]
-        else:
-            return ""
+            pName = self.printerNameSerial[id]
+        print(pName)
+        return pName
 
     def getOnlinePrinters(self):
 

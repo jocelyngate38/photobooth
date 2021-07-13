@@ -403,7 +403,6 @@ class PrinterMonitoringThread(QThread):
                         printers = conn.getPrinters()
                         for printer in printers:
                             if self.mainWindow.printerName == printer:
-                                print(printers[printer]["printer-state-message"])
                                 if printers[printer]['printer-state'] == 5:
                                     if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                         self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
@@ -911,7 +910,6 @@ class MainWindow(QMainWindow):
         conn = cups.Connection()
         printers = conn.getPrinters()
 
-        print(printers)
         for printer in printers:
             if "Canon_CP800_" in printer:
                 id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
@@ -928,11 +926,10 @@ class MainWindow(QMainWindow):
             self.logger.info("Printer name : " + value + ", id : " + key)
 
     def getPrinterName(self,id):
-        
+
         pName = ""
         if id in self.printerNameSerial.keys():
             pName = self.printerNameSerial[id]
-        print(pName)
         return pName
 
     def getOnlinePrinters(self):
@@ -2795,7 +2792,7 @@ class MainWindow(QMainWindow):
             return
 
         printerSerial = self.getOnlinePrinters()
-        print(printerSerial)
+
         if len(printerSerial) >= 1:
             self.setCurrentPrinter(self.getPrinterName(printerSerial[0]))
         else:
@@ -2803,9 +2800,8 @@ class MainWindow(QMainWindow):
 
         self.logger.info("SEND JOB " + self.currentAssemblyPath + " on " + self.printerName)
 
-        if self.printerName == "" :
-            #self.printerMonitoring.resume()
-            self.showPowerOnPrinter()
+        if self.printerName == "":
+            self.gotoStart()
             return
 
         self.disconnectInputButtonInterupts()

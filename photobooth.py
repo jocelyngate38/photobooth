@@ -515,6 +515,7 @@ class Label(QLabel):
     trayMissing = False
     paperEmpty = False
     warningVisible = False
+    printerOffline = False
     printerHelpButtonVisible = False
     ipVisible = True
     localIp = "127.0.0.1"
@@ -541,6 +542,9 @@ class Label(QLabel):
     def setPrinterHelpButtonVisible(self, visible):
         self.printerHelpButtonVisible = visible
 
+    def setNoPrinterOffline(self, b):
+        self.printerOffline = b
+
     def setIpVisible(self, visible):
         self.ipVisible = visible
 
@@ -557,18 +561,27 @@ class Label(QLabel):
         super().paintEvent(e)
         qp = QPainter(self)
         if self.warningVisible is True:
+
             iL = 10
             jL = 10
             incw = 0
             inch = 155
+
+            if self.printerOffline is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/printerOffline.png"))
+                iL = iL + incw
+                jL = jL + inch
+
             if self.paperEmpty is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/paperEmpty.png"))
                 iL = iL + incw
                 jL = jL + inch
+
             if self.ribbonEmpty is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/ribbonEmpty.png"))
                 iL = iL + incw
                 jL = jL + inch
+
             if self.trayMissing is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
 

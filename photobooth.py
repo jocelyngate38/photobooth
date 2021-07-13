@@ -382,7 +382,7 @@ class PrinterMonitoringThread(QThread):
 
         while True:
             try:
-                if EMULATE is False or self.mainWindow.boxSettings.hasPrinterPort() is True and self.mainWindow.printingEnabled is True:
+                if EMULATE is False and self.mainWindow.boxSettings.hasPrinterPort() is True and self.mainWindow.printingEnabled is True:
 
                     printerSerial = self.mainWindow.getOnlinePrinters()
                     if len(printerSerial) >= 1:

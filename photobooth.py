@@ -1244,7 +1244,9 @@ class MainWindow(QMainWindow):
 
         painterFrame = QPainter(assPixmap)
         painterFrame.setCompositionMode(QPainter.CompositionMode_Source)
-        painterFrame.fillRect(682, 768-768/5, 1024-682, 768/5, Qt.transparent)
+        w = assPixmap.size().width()
+        h = assPixmap.size().height()
+        painterFrame.fillRect(w*2/3, h, w-w*2/3, h/5, Qt.black)
         painterFrame.end()
 
         painter.drawPixmap(0, 0, assPixmap )

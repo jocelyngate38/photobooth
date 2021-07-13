@@ -398,7 +398,7 @@ class PrinterMonitoringThread(QThread):
 
                 if self.printerName == "" :
                     self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
-                    self.label.setNoPrinterOnline(True)
+                    self.label.setPrinterOffline(True)
                     self.ledStrip.showWarning(1)
 
                 if EMULATE is False:
@@ -542,7 +542,7 @@ class Label(QLabel):
     def setPrinterHelpButtonVisible(self, visible):
         self.printerHelpButtonVisible = visible
 
-    def setNoPrinterOffline(self, b):
+    def setPrinterOffline(self, b):
         self.printerOffline = b
 
     def setIpVisible(self, visible):

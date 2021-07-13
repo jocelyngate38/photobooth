@@ -1548,7 +1548,12 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
             self.logger.warning("BUTTON 1 PRESSED : GOTO START")
+            self.resetPrinterErrors()
+            self.enablePrinter()
+            self.cancelAllNotCompletedJobs()
             self.gotoStart()
+            self.label.setDebugVisible(True)
+            self.label.update()
 
         else:
             self.logger.warning(
@@ -1772,7 +1777,7 @@ class MainWindow(QMainWindow):
             self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
-            self.logger.info("BUTTON 2 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
+            self.logger.info("BUTTON 2 PRESSED : GO BACK TO HOME")
             self.gotoStart()
 
         else:

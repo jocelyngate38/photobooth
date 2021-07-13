@@ -2872,6 +2872,8 @@ class MainWindow(QMainWindow):
             try:
                 conn = cups.Connection()
                 conn.enablePrinter(self.printerName)
+
+                self.logger.error("ENABLE PRINTER " + self.printerName)
             except:
                 self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
 

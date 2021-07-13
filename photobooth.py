@@ -953,10 +953,10 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        if len(onlinePrinterSerials) == 0:
-            self.logger.warning("PRINTER : NO PRINTER CONNECTED!")
-        elif len(onlinePrinterSerials) > 1:
-            self.logger.warning("PRINTER : SEVERAL PRINTER CONNECTED!")
+        # if len(onlinePrinterSerials) == 0:
+        #     self.logger.warning("PRINTER : NO PRINTER CONNECTED!")
+        # elif len(onlinePrinterSerials) > 1:
+        #     self.logger.warning("PRINTER : SEVERAL PRINTER CONNECTED!")
 
         return onlinePrinterSerials
 
@@ -2876,8 +2876,6 @@ class MainWindow(QMainWindow):
             except:
                 self.logger.error("ENABLE PRINTER CUPS EXCEPTION")
 
-        else:
-            self.logger.error("ENABLE PRINTER SKIPPED UNKNOWN PRINTER")
 
     def showPrintSentPage(self):
 

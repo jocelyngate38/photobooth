@@ -372,89 +372,67 @@ class DisplayMode(Enum):
 class PrinterMonitoringThread(QThread):
 
     printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
-    label = None
     logger = logging.getLogger("PrinterMonitori")
 
-    def __init__(self, label, ledStrip, printerName, mainWindow):
-        QThread.__init__(self, label)
-        self.label = label
-        self.ledStrip = ledStrip
-        self.printerName = printerName
+    def __init__(self, mainWindow):
+        QThread.__init__(self)
         self.mainWindow = mainWindow
-
-        self.can_run = threading.Event()
-        self.thing_done = threading.Event()
-        self.thing_done.set()
-        self.can_run.set()
-
-    def changePrinterName(self, printerName):
-        self.printerName = printerName
 
     def run(self):
 
         while True:
-            self.can_run.wait()
             try:
-                self.thing_done.clear()
-
-                printerSerial = self.mainWindow.getOnlinePrinters()
-
-                if len(printerSerial) >= 1:
-                    self.mainWindow.setCurrentPrinter(self.mainWindow.printerNameSerial[printerSerial[0]])
-                else:
-                    self.mainWindow.setCurrentPrinter("")
-
-                if self.printerName == "" :
-                    self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
-                    self.label.setPrinterOffline(True)
-                    self.ledStrip.showWarning(1)
-                else :
-                    self.label.setPrinterOffline(False)
-
                 if EMULATE is False:
+
+                    printerSerial = self.mainWindow.getOnlinePrinters()
+                    if len(printerSerial) >= 1:
+                        self.mainWindow.setCurrentPrinter(self.mainWindow.printerNameSerial[printerSerial[0]])
+                    else:
+                        self.mainWindow.setCurrentPrinter("")
+
+                    if self.printerName == "" :
+                        self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
+                        self.mainWindow.label.setPrinterOffline(True)
+                        self.mainWindow.ledStrip.showWarning(1)
+                    else :
+                        self.mainWindow.label.setPrinterOffline(False)
+                        self.mainWindow.ledStrip.showWarning(0)
+
                     try:
                         conn = cups.Connection()
                         printers = conn.getPrinters()
                         for printer in printers:
-                            if self.printerName == printer:
+                            if self.mainWindow.printerName == printer:
                                 print(printers[printer]["printer-state-message"])
                                 if printers[printer]['printer-state'] == 5:
                                     if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                         self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
                                         self.printerFailure.emit(printer, 1)
-                                        self.label.setTrayMissing(True)
-                                        self.ledStrip.showWarning(1)
+                                        self.mainWindow.label.setTrayMissing(True)
+                                        self.mainWindow.ledStrip.showWarning(1)
 
                                 if printers[printer]['printer-state'] == 3:
                                     if printers[printer]["printer-state-message"] == "Ribbon depleted!":
                                         self.logger.warning("PRINTER : RIBBON DEPLETED!")
                                         self.printerFailure.emit(printer, 2)
-                                        self.label.setRibbonEmpty(True)
-                                        self.ledStrip.showWarning(1)
+                                        self.mainWindow.label.setRibbonEmpty(True)
+                                        self.mainWindow.ledStrip.showWarning(1)
 
                                     if printers[printer]["printer-state-message"] == "Paper feed problem!":
                                         self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
                                         self.printerFailure.emit(printer, 3)
-                                        self.label.setPaperEmpty(True)
-                                        self.ledStrip.showWarning(1)
+                                        self.mainWindow.label.setPaperEmpty(True)
+                                        self.mainWindow.ledStrip.showWarning(1)
                     except cups.IPPError as e:
                         self.logger.error("CUPS.IPPERROR " + str(e))
                     except RuntimeError as e1:
                         self.logger.error("RUNTIMEERROR " + str(e1))
                         break
-                self.label.update()
+                self.mainWindow.label.update()
                 time.sleep(5)
-            finally:
-                self.thing_done.set()
-
-
-    def pause(self):
-        self.can_run.clear()
-        self.thing_done.wait()
-
-    def resume(self):
-        self.can_run.set()
-
+            except:
+                self.logger.error("PrinterMonitoringThread exception")
+                pass
 
 class InputButtonThread(QThread):
     inputButtonEventDetected = pyqtSignal(int)
@@ -530,6 +508,7 @@ class Label(QLabel):
     ipVisible = True
     localIp = "127.0.0.1"
     externIp = "127.0.0.1"
+    printerName = ""
 
     def setRibbonEmpty(self, b):
         self.ribbonEmpty = b
@@ -555,12 +534,15 @@ class Label(QLabel):
     def setPrinterOffline(self, b):
         self.printerOffline = b
 
-    def setIpVisible(self, visible):
-        self.ipVisible = visible
+    def setDebugVisible(self, visible):
+        self.debugVisible = visible
 
     def setIpValues(self, localIP, extIp):
         self.localIp=localIP
         self.externIp=extIp
+
+    def setPrinterName(self, printerName):
+        self.printerName=printerName
 
     def __init__(self, path, parent=None):
         super(Label, self).__init__(parent=parent)
@@ -598,7 +580,7 @@ class Label(QLabel):
             if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
                 qp.drawPixmap(40, 768-170, QPixmap(self.path + "/printerHelp.png"))
 
-        if self.ipVisible is True:
+        if self.debugVisible is True:
 
             w = 130
             h = 15
@@ -607,8 +589,15 @@ class Label(QLabel):
             if self.localIp != "127.0.0.1":
                 qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "loc : " + self.localIp)
                 y = y + h
-            if  self.externIp != "127.0.0.1":
+            if self.externIp != "127.0.0.1":
                 qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "ext : " + self.externIp)
+                y = y + h
+            if self.printerName != "":
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : " + self.printerName)
+                y = y + h
+            else:
+                qp.drawText(QRect(x,y,w,h), Qt.AlignRight, "printer : not set")
+                y = y + h
 
 
 class ledStripControler():
@@ -884,9 +873,8 @@ class MainWindow(QMainWindow):
         self.initDSLRTime()
 
         if self.boxSettings.has_printer_port() is True:
-            self.printerMonitoring = PrinterMonitoringThread(self.label, self.ledStrip, self.printerName, self)
+            self.printerMonitoring = PrinterMonitoringThread( self)
             self.printerMonitoring.start()
-            self.printerMonitoring.pause()
 
         printerSerial = self.getOnlinePrinters()
 
@@ -894,9 +882,6 @@ class MainWindow(QMainWindow):
             self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
         else:
             self.setCurrentPrinter("")
-            self.printerMonitoring.resume()
-            self.printerMonitoring.pause()
-
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
             if self.printerName == "":
                 self.showPowerOnPrinter()
@@ -1009,7 +994,7 @@ class MainWindow(QMainWindow):
                 self.label.setPrinterHelpButtonVisible(False)
 
             if mode != DisplayMode.HOMEPAGE:
-                self.label.setIpVisible(False)
+                self.label.setDebugVisible(False)
 
         if mode == DisplayMode.HOMEPAGE:
             self.label.setWarningVisible(True)
@@ -1577,9 +1562,9 @@ class MainWindow(QMainWindow):
                 self.resetPrinterErrors()
                 self.enablePrinter()
                 self.cancelAllNotCompletedJobs()
-                self.printerMonitoring.resume()
+#                self.printerMonitoring.resume()
                 self.gotoStart()
-                self.label.setIpVisible(True)
+                self.label.setDebugVisible(True)
                 self.label.update()
             elif duration >= reprint[0] and duration < reprint[1]:
                 self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY")
@@ -1706,7 +1691,7 @@ class MainWindow(QMainWindow):
                 self.setCurrentPrinter(self.printerNameSerial[printerSerial[0]])
             else:
                 self.setCurrentPrinter("")
-                self.printerMonitoring.resume()
+                #self.printerMonitoring.resume()
 
             self.ledStrip.showWarning(0)
             self.gotoStart()
@@ -1752,7 +1737,6 @@ class MainWindow(QMainWindow):
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)
         self.setLedButonBlinking(False, False, False)
-        self.printerMonitoring.pause()
         self.label.setRibbonEmpty(False)
         self.label.setTrayMissing(False)
         self.label.setPaperEmpty(False)
@@ -1846,6 +1830,7 @@ class MainWindow(QMainWindow):
         settings = QSettings('settings.ini', QSettings.IniFormat)
         settings.setFallbacksEnabled(False)
         self.printerName = printerName
+        self.label.setPrinterName(printerName)
         settings.setValue("printerName", self.printerName)
         self.enablePrinter()
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
@@ -2779,7 +2764,7 @@ class MainWindow(QMainWindow):
         self.logger.info("SEND JOB " + self.currentAssemblyPath + " on " + self.printerName)
 
         if self.printerName == "" :
-            self.printerMonitoring.resume()
+            #self.printerMonitoring.resume()
             self.showPowerOnPrinter()
             return
 
@@ -2800,9 +2785,7 @@ class MainWindow(QMainWindow):
                 self.logger.info(
                     "NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
                 self.showPrintSentPage()
-                self.wait(5)
-                self.printerMonitoring.resume()
-                self.wait(8)
+                self.wait(13)
             else:
                 self.logger.error("NEW JOB PRINT : " + self.currentAssemblyPath + "file does not exists")
         except:

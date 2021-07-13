@@ -1226,11 +1226,14 @@ class MainWindow(QMainWindow):
 
         self.lastAssemblyPixmap = None
         self.lastAssemblyLandscape = choosenLayout["landscape"]
+        #display assembly page without the assembly itself
         self.showAssemblyPixmap()
         [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(captureList=self.captureList,
                                                                                                  choosenLayout=choosenLayout,
                                                                                                  showCuttingLine=self.showCuttingLines)
-        self.showAssemblyPixmap()
+
+        #display assembly page without the assembly we just build
+        # self.showAssemblyPixmap()
 
     def getFilteredPixmap(self, pixmapPath, hideButton1, hideButton2, hideButton3):
 
@@ -1241,13 +1244,13 @@ class MainWindow(QMainWindow):
         h = assPixmap.size().height()
 
         if hideButton1 is True:
-            painterFrame.fillRect(0, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.red)
+            painterFrame.fillRect(0, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
 
         if hideButton2 is True:
-            painterFrame.fillRect(w / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.blue)
+            painterFrame.fillRect(w / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
 
         if hideButton3 is True:
-            painterFrame.fillRect(w * 2 / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.green)
+            painterFrame.fillRect(w * 2 / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
 
         painterFrame.end()
         return assPixmap
@@ -1260,7 +1263,12 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png", True, True, True)
+        assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
+                                           False,
+                                           False,
+                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False
+                                           )
+
         painter.drawPixmap(0, 0, assPixmap )
 
         if self.lastAssemblyPixmap is not None:
@@ -2687,10 +2695,8 @@ class MainWindow(QMainWindow):
                 pyautogui.press('esc')
             except pyautogui.FailSafeException as e:
                 print(e)
-
-
+                
             self.gotoStart()
-
 
         elif self.displayMode == DisplayMode.MENU_SETUP:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
@@ -2742,7 +2748,7 @@ class MainWindow(QMainWindow):
         self.wait(0.2)
         QApplication.processEvents()
         self.buildNextAssembly()
-        self.setLedButonBlinking(True, True, self.printingEnabled)
+        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is False or self.printingEnabled is False)
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 

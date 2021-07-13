@@ -921,6 +921,8 @@ class MainWindow(QMainWindow):
                                         'G200090100000410': 'Canon_CP800_2',
                                         'DX01122500001574': 'Canon_CP800_3'}
 
+        print(self.printerNameSerial)
+        
         for key, value in self.printerNameSerial.items():
             self.logger.info("Printer name : " + value + ", id : " + key)
 

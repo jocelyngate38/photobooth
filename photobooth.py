@@ -862,11 +862,10 @@ class MainWindow(QMainWindow):
 
         self.initSettings()
         self.initDevices()
+        self.populatePrintersDictionary()
         self.initActions()
         self.initMenu()
         self.initDSLRTime()
-
-        self.populatePrintersDictionary()
 
         if self.boxSettings.has_printer_port() is True:
             self.printerMonitoring = PrinterMonitoringThread( self)
@@ -2024,13 +2023,13 @@ class MainWindow(QMainWindow):
         self.actionRestartDSLR = QAction("Redemarrer appareil photo", self)
         self.actionRestartDSLR.triggered.connect(self.restartDSLR)
 
-        printerList = ["Canon_CP800_0","Canon_CP800_1","Canon_CP800_2","Canon_CP800_3"]
+        # printerList = ["Canon_CP800_0","Canon_CP800_1","Canon_CP800_2","Canon_CP800_3"]
+        # self.printerNameSerial.values()
 
         self.printerActionList=[]
-        for f in printerList:
+        for f in self.printerNameSerial.values():
             act = QAction(f, self)
             act.setCheckable(True)
-            #act.triggered.connect(self.onSetCurrentPrinter)
             self.printerActionList.append(act)
 
         self.actionEnablePrinting = QAction("Activer/Désactiver", self)
@@ -2172,7 +2171,7 @@ class MainWindow(QMainWindow):
         self.cupsMenu.addAction(self.actionStartCups)
         self.cupsMenu.addAction(self.actionStopCups)
 
-        if self.boxSettings.has_printer_port() is True and self.printingEnabled:
+        if self.boxSettings.has_printer_port() is True:
             self.settingMenu.addMenu(self.printerMenu)
 
         if self.boxSettings.can_restart_DSLR() is True:

@@ -892,10 +892,13 @@ class MainWindow(QMainWindow):
 
 
     def refreshLedButtons(self):
-
-        if self.displayMode == DisplayMode.HOMEPAGE :
+        print("refreshLedButtons")
+        if self.displayMode == DisplayMode.HOMEPAGE:
+            print("refreshLedButtons1")
             if self.label is not None:
+                print("refreshLedButtons2")
                 if self.label.hasVisibleWarning() is True:
+                    print("refreshLedButtons3")
                     self.setLedButonBlinking(True, True, False)
 
 

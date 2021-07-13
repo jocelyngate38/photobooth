@@ -382,7 +382,7 @@ class PrinterMonitoringThread(QThread):
 
         while True:
             try:
-                if EMULATE is False:
+                if EMULATE is False or self.mainWindow.boxSettings.hasPrinterPort() is True and self.mainWindow.printingEnabled is True:
 
                     printerSerial = self.mainWindow.getOnlinePrinters()
                     if len(printerSerial) >= 1:
@@ -429,6 +429,15 @@ class PrinterMonitoringThread(QThread):
                         except RuntimeError as e1:
                             self.logger.error("RUNTIMEERROR " + str(e1))
                             break
+
+                else:
+                    self.mainWindow.label.setTrayMissing(False)
+                    self.mainWindow.label.setRibbonEmpty(False)
+                    self.mainWindow.label.setPaperEmpty(False)
+                    self.mainWindow.label.setPrinterOffline(False)
+                    self.mainWindow.ledStrip.showWarning(0)
+                    time.sleep(10)
+
                 self.mainWindow.label.update()
 
             except:
@@ -2749,8 +2758,7 @@ class MainWindow(QMainWindow):
         self.wait(0.2)
         QApplication.processEvents()
         self.buildNextAssembly()
-        # self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is False or self.printingEnabled is False)
-        self.setLedButonBlinking(True, True, False)
+        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is True and self.printingEnabled is True)
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 

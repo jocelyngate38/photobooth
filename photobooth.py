@@ -1232,6 +1232,26 @@ class MainWindow(QMainWindow):
                                                                                                  showCuttingLine=self.showCuttingLines)
         self.showAssemblyPixmap()
 
+    def getFilteredPixmap(self, pixmapPath, hideButton1, hideButton2, hideButton3):
+
+        assPixmap = QPixmap(pixmapPath)
+        painterFrame = QPainter(assPixmap)
+        painterFrame.setCompositionMode(QPainter.CompositionMode_Source)
+        w = assPixmap.size().width()
+        h = assPixmap.size().height()
+
+        if hideButton1 is True:
+            painterFrame.fillRect(0, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.red)
+
+        if hideButton2 is True:
+            painterFrame.fillRect(w / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.blue)
+
+        if hideButton3 is True:
+            painterFrame.fillRect(w * 2 / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.green)
+
+        painterFrame.end()
+        return assPixmap
+
     def showAssemblyPixmap(self):
 
         self.logger.info("SHOW ASSEMBLY PAGE")
@@ -1240,17 +1260,8 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        assPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png")
-
-        painterFrame = QPainter(assPixmap)
-        painterFrame.setCompositionMode(QPainter.CompositionMode_Source)
-        w = assPixmap.size().width()
-        h = assPixmap.size().height()
-        painterFrame.fillRect(w*2/3, h-h/5, w-w*2/3, h/5, Qt.black)
-        painterFrame.end()
-
+        assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png", True, True, True)
         painter.drawPixmap(0, 0, assPixmap )
-
 
         if self.lastAssemblyPixmap is not None:
             if self.lastAssemblyLandscape == 1:

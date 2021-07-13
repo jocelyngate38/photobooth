@@ -505,7 +505,7 @@ class Label(QLabel):
     warningVisible = False
     printerOffline = False
     printerHelpButtonVisible = False
-    ipVisible = True
+    debugVisible = True
     localIp = "127.0.0.1"
     externIp = "127.0.0.1"
     printerName = ""

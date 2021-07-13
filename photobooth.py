@@ -2391,9 +2391,11 @@ class MainWindow(QMainWindow):
         self.logger.info("RESTART SPEEDLIGHT")
         if EMULATE is True:
             return
-        self.switchSpeedLight(False)
-        self.wait(2)
-        self.switchSpeedLight(True)
+
+        if self.boxSettings.has_external_flash() is True and self.boxSettings.can_restart_external_flash() is True
+            self.switchSpeedLight(False)
+            self.wait(2)
+            self.switchSpeedLight(True)
 
     @pyqtSlot()
     def restartDSLR(self):
@@ -2401,9 +2403,10 @@ class MainWindow(QMainWindow):
         self.logger.info("RESTART DSLR")
         if EMULATE is True:
             return
-        self.switchDSLR(False)
-        self.wait(2)
-        self.switchDSLR(True)
+        if self.boxSettings.can_restart_DSLR() is True:
+            self.switchDSLR(False)
+            self.wait(2)
+            self.switchDSLR(True)
 
     def initDevicesFast(self):
 

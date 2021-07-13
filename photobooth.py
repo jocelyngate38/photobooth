@@ -382,7 +382,7 @@ class PrinterMonitoringThread(QThread):
 
         while True:
             try:
-                if EMULATE is False and self.mainWindow.boxSettings.hasPrinterPort() is True and self.mainWindow.printingEnabled is True:
+                if EMULATE is False and self.mainWindow.boxSettings.has_printer_port() is True and self.mainWindow.printingEnabled is True:
 
                     printerSerial = self.mainWindow.getOnlinePrinters()
                     if len(printerSerial) >= 1:
@@ -440,8 +440,8 @@ class PrinterMonitoringThread(QThread):
 
                 self.mainWindow.label.update()
 
-            # except:
-            #     self.logger.error("PRINTERMONITORINGTHREAD EXCEPTION")
+            except:
+                self.logger.error("PRINTERMONITORINGTHREAD EXCEPTION")
 
             finally:
                 time.sleep(5)

@@ -1081,6 +1081,7 @@ class MainWindow(QMainWindow):
         self.setDisplayMode(DisplayMode.HOMEPAGE)
         outPixmap = QPixmap(self.homeDisplay)
         self.label.setPixmap(outPixmap)
+        self.refreshLedButtons()
         QApplication.processEvents()
 
     def showComputingPixmap(self):
@@ -3005,12 +3006,15 @@ class MainWindow(QMainWindow):
 
         self.showCuttingLines = False
         self.logger.info("GO HOME")
-        en = False
-        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-            if self.label is not None:
-                en = self.label.hasVisibleWarning() is True
 
-        self.setLedButonBlinking(en, True, False)
+
+
+        # en = False
+        # if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+        #     if self.label is not None:
+        #         en = self.label.hasVisibleWarning() is True
+        #
+        # self.setLedButonBlinking(en, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()
         self.showHomePage()

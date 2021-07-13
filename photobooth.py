@@ -698,16 +698,19 @@ class ledStripControler():
     def setColor(self, location, colors):
 
         self.logger.info("LEDCONTROLER:SETCOLOR " + str(location) + str(colors))
+
         if location == self.Location.RIGHT_SIDE:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
             self.sendCommand('6,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+
         if location == self.Location.LEFT_SIDE:
             r = colors[0][0]
             g = colors[0][1]
             b = colors[0][2]
             self.sendCommand('7,' + str(r) + ',' + str(g) + ',' + str(b) + ';')
+
         if location == self.Location.CAMERA_ARROWS:
             r1 = colors[0][0]
             g1 = colors[0][1]
@@ -761,10 +764,7 @@ class ledStripControler():
 
     def showWarning(self, isDefault):
         self.logger.info("LEDCONTROLER:SHOWDEFAULT " + str(isDefault))
-        if isDefault == 1:
-            self.setBrightness(255)
-        else:
-            self.setBrightness(180)
+        self.setBrightness(255)
         self.sendCommand('10,' + str(isDefault) + ';')
 
     def restart(self):
@@ -787,12 +787,6 @@ class MainWindow(QMainWindow):
     logger = logging.getLogger("MainWindow")
 
     printerNameSerial = {}
-
-    # populate the list to add new findable printers
-    #{'DN00121700003777': 'Canon_CP800_0',
-    #'GL04120400020191': 'Canon_CP800_1',
-    # 'G200090100000410': 'Canon_CP800_2',
-    # 'DX01122500001574': 'Canon_CP800_3'}
 
     def __init__(self, box_index):
         super(MainWindow, self).__init__()
@@ -820,45 +814,27 @@ class MainWindow(QMainWindow):
         self.displayMode = DisplayMode.HOMEPAGE
         self.timeoutTimer = None
         self.showCuttingLines = False
-
         self.captureList = []
         self.lastAssemblyPixmap = None
         self.inputButtonThread = None
         self.label = None
         self.resources = None
-
         self.printingEnabled = False
+        self.blinkState = 0
+        self.button1LedEnabled = True
+        self.button2LedEnabled = True
+        self.button3LedEnabled = True
+        self.topLightOn = False
+        self.lastPrintId = 0
+        self.lastAssemblyLandscape = 1
 
         self.resources = ressourcesManager()
         self.resources.loadResources()
         self.resources.logInfos()
 
         self.logger.info("INITIALIZING PHOTOBOOTH")
-
-        # DSLR SETTINGS
-        self.Wcapture = 3008
-        self.Hcapture = 2000
-
-        self.blinkState = 0
-
-        self.button1LedEnabled = True
-        self.button2LedEnabled = True
-        self.button3LedEnabled = True
-
-        self.topLightOn = False
-        self.lastPrintId = 0
-
-        # PHOTOBOOTH SETTINGS
-        self.screenWidth = 1024
-        self.screenHeight = 768
-
-        self.lastAssemblyLandscape = 1
-        self.countDown = 4
-
         self.setDisplayMode(DisplayMode.UNDEFINED)
-
         self.initGPIO()
-
         self.switchOnLedStrip(True)
 
         self.ledStrip = ledStripControler("/dev/ttyUSB_LED_CONTROLLER", 115200, self.resources)
@@ -953,15 +929,7 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        # if len(onlinePrinterSerials) == 0:
-        #     self.logger.warning("PRINTER : NO PRINTER CONNECTED!")
-        # elif len(onlinePrinterSerials) > 1:
-        #     self.logger.warning("PRINTER : SEVERAL PRINTER CONNECTED!")
-
         return onlinePrinterSerials
-
-
-
 
     def defineTimeout(self, delaySec):
 
@@ -997,8 +965,9 @@ class MainWindow(QMainWindow):
 
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setScaledContents(True)
-        self.label.setMinimumSize(self.screenWidth, self.screenHeight)
-        self.label.setMaximumSize(self.screenWidth, self.screenHeight)
+
+        self.label.setMinimumSize(self.boxSettings.getScreenResolution()[0], self.boxSettings.getScreenResolution()[1])
+        self.label.setMaximumSize(self.boxSettings.getScreenResolution()[0], self.boxSettings.getScreenResolution()[1])
         self.setCentralWidget(self.label)
         self.cacheHomePicture()
 
@@ -1126,8 +1095,8 @@ class MainWindow(QMainWindow):
 
         self.setLedButonBlinking(False, False, False)
 
-        self.countDown = 4
-        for x in range(0, self.countDown):
+        countDown = 4
+        for x in range(0, countDown):
 
             if x == 0:
                 self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
@@ -1140,7 +1109,7 @@ class MainWindow(QMainWindow):
                 self.ledStrip.blinkFront(200)
                 self.switchConstantLight(True)
 
-            delay = self.showPixmap(self.countDown - x, False, False, False)
+            delay = self.showPixmap(countDown - x, False, False, False)
             self.wait(0.6 - delay)
             delay = self.showPixmap(0, True, False, False)
             self.wait(0.6 - delay)
@@ -1271,11 +1240,11 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-            painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png"))
-        else:
-            painter.drawPixmap(0, 0,
-                               QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly-noprint.png"))
+        painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png"))
+
+        # if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+        r = QRect(0,0,800,150)
+        painter.eraseRect(r);
 
         if self.lastAssemblyPixmap is not None:
             if self.lastAssemblyLandscape == 1:
@@ -1296,7 +1265,6 @@ class MainWindow(QMainWindow):
             pen.setWidth(5)
             painter.setPen(pen)
             painter.drawRect(0, 0, p.width(), p.height())
-
             painter.translate(-x, -y)
 
         self.label.setPixmap(outPixmap)

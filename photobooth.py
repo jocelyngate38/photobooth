@@ -394,39 +394,39 @@ class PrinterMonitoringThread(QThread):
                         self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
                         self.mainWindow.label.setPrinterOffline(True)
                         self.mainWindow.ledStrip.showWarning(1)
+
                     else :
                         self.mainWindow.label.setPrinterOffline(False)
                         self.mainWindow.ledStrip.showWarning(0)
+                        try:
+                            conn = cups.Connection()
+                            printers = conn.getPrinters()
+                            for printer in printers:
+                                if self.mainWindow.printerName == printer:
+                                    if printers[printer]['printer-state'] == 5:
+                                        if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
+                                            self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
+                                            self.printerFailure.emit(printer, 1)
+                                            self.mainWindow.label.setTrayMissing(True)
+                                            self.mainWindow.ledStrip.showWarning(1)
 
-                    try:
-                        conn = cups.Connection()
-                        printers = conn.getPrinters()
-                        for printer in printers:
-                            if self.mainWindow.printerName == printer:
-                                if printers[printer]['printer-state'] == 5:
-                                    if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                        self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
-                                        self.printerFailure.emit(printer, 1)
-                                        self.mainWindow.label.setTrayMissing(True)
-                                        self.mainWindow.ledStrip.showWarning(1)
+                                    if printers[printer]['printer-state'] == 3:
+                                        if printers[printer]["printer-state-message"] == "Ribbon depleted!":
+                                            self.logger.warning("PRINTER : RIBBON DEPLETED!")
+                                            self.printerFailure.emit(printer, 2)
+                                            self.mainWindow.label.setRibbonEmpty(True)
+                                            self.mainWindow.ledStrip.showWarning(1)
 
-                                if printers[printer]['printer-state'] == 3:
-                                    if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                        self.logger.warning("PRINTER : RIBBON DEPLETED!")
-                                        self.printerFailure.emit(printer, 2)
-                                        self.mainWindow.label.setRibbonEmpty(True)
-                                        self.mainWindow.ledStrip.showWarning(1)
-
-                                    if printers[printer]["printer-state-message"] == "Paper feed problem!":
-                                        self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
-                                        self.printerFailure.emit(printer, 3)
-                                        self.mainWindow.label.setPaperEmpty(True)
-                                        self.mainWindow.ledStrip.showWarning(1)
-                    except cups.IPPError as e:
-                        self.logger.error("CUPS.IPPERROR " + str(e))
-                    except RuntimeError as e1:
-                        self.logger.error("RUNTIMEERROR " + str(e1))
-                        break
+                                        if printers[printer]["printer-state-message"] == "Paper feed problem!":
+                                            self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
+                                            self.printerFailure.emit(printer, 3)
+                                            self.mainWindow.label.setPaperEmpty(True)
+                                            self.mainWindow.ledStrip.showWarning(1)
+                        except cups.IPPError as e:
+                            self.logger.error("CUPS.IPPERROR " + str(e))
+                        except RuntimeError as e1:
+                            self.logger.error("RUNTIMEERROR " + str(e1))
+                            break
                 self.mainWindow.label.update()
 
             except:

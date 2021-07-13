@@ -392,12 +392,14 @@ class PrinterMonitoringThread(QThread):
 
                     if self.mainWindow.printerName == "" :
                         self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
-                        self.mainWindow.label.setPrinterOffline(True)
-                        self.mainWindow.ledStrip.showWarning(1)
+                        if self.mainWindow.label.hasPrinterOffline() is True:
+                            self.mainWindow.label.setPrinterOffline(True)
+                            self.mainWindow.ledStrip.showWarning(1)
 
                     else :
-                        self.mainWindow.label.setPrinterOffline(False)
-                        self.mainWindow.ledStrip.showWarning(0)
+                        if self.mainWindow.label.hasPrinterOffline() is False:
+                            self.mainWindow.label.setPrinterOffline(False)
+                            self.mainWindow.ledStrip.showWarning(0)
                         try:
                             conn = cups.Connection()
                             printers = conn.getPrinters()
@@ -534,6 +536,9 @@ class Label(QLabel):
 
     def setPrinterOffline(self, b):
         self.printerOffline = b
+
+    def hasPrinterOffline(self):
+        return self.printerOffline
 
     def setDebugVisible(self, visible):
         self.debugVisible = visible

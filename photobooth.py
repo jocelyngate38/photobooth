@@ -3009,7 +3009,7 @@ class MainWindow(QMainWindow):
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
             if self.label is not None:
                 en = self.label.hasVisibleWarning()
-
+        print(en)
         self.setLedButonBlinking(en, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()

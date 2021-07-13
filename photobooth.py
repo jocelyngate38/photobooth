@@ -1833,8 +1833,6 @@ class MainWindow(QMainWindow):
         self.label.setPrinterName(printerName)
         settings.setValue("printerName", self.printerName)
         self.enablePrinter()
-        if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-            self.printerMonitoring.changePrinterName(self.printerName)
 
 
     @pyqtSlot()
@@ -1845,7 +1843,6 @@ class MainWindow(QMainWindow):
         self.printerName = self.sender().text()
         settings.setValue("printerName", self.printerName)
         self.enablePrinter()
-        self.printerMonitoring.changePrinterName(self.printerName)
 
 
     def wait(self, delay):

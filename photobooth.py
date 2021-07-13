@@ -858,8 +858,6 @@ class MainWindow(QMainWindow):
 
         self.setDisplayMode(DisplayMode.UNDEFINED)
 
-
-
         self.initGPIO()
 
         self.switchOnLedStrip(True)
@@ -900,8 +898,10 @@ class MainWindow(QMainWindow):
                 self.showPowerOnPrinter()
             else:
                 self.gotoStart()
+                self.ledStrip.showWarning(0)
         else:
             self.gotoStart()
+            self.ledStrip.showWarning(0)
 
         self.switchConstantLight(False)
 

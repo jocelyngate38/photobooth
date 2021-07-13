@@ -230,9 +230,9 @@ class PhotoBoothSettings_1(PhotoBoothSettings):
 
     def __init__(self):
 
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 6)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 13)
         self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2, 26)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 13)
+        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 6)
         self.setGPIO(PhotoBoothSettings.GPIOPin.LED_0, 19)
         self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1, 12)
         self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2, 16)
@@ -827,7 +827,7 @@ class MainWindow(QMainWindow):
         self.topLightOn = False
         self.lastPrintId = 0
         self.lastAssemblyLandscape = 1
-        self.DebugGPIO = True
+        self.DebugGPIO = False
 
         self.resources = ressourcesManager()
         self.resources.loadResources()
@@ -1245,13 +1245,13 @@ class MainWindow(QMainWindow):
         h = assPixmap.size().height()
 
         if hideButton1 is True:
-            painterFrame.fillRect(0, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
 
         if hideButton2 is True:
-            painterFrame.fillRect(w / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
 
         if hideButton3 is True:
-            painterFrame.fillRect(w * 2 / 3, h - h / 5, w - w * 2 / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
 
         painterFrame.end()
         return assPixmap

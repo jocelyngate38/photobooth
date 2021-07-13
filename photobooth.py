@@ -911,7 +911,7 @@ class MainWindow(QMainWindow):
 
         for printer in printers:
             if "Canon_CP800_" in printer:
-                self.printerNameSerial = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
+                id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
                 self.printerNameSerial[id] = printer
 
         if len(self.printerNameSerial)==0:
@@ -920,6 +920,9 @@ class MainWindow(QMainWindow):
                                         'GL04120400020191': 'Canon_CP800_1',
                                         'G200090100000410': 'Canon_CP800_2',
                                         'DX01122500001574': 'Canon_CP800_3'}
+
+        for k, v in self.printerNameSerial:
+            self.logger.info("Printer name : " + v + ", id : " + k)
 
     def getPrinterName(self,id):
         pName = ""

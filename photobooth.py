@@ -90,7 +90,16 @@ try:
 except:
     print("import Image from PIL error")
 
-import logging
+try:
+    import logging
+except:
+    print("import logging error")
+
+if EMULATE is False:
+    try:
+        import usb.core
+    except:
+        print("import usb.core error")
 
 if EMULATE is False:
     GPIO.setmode(GPIO.BCM)
@@ -386,6 +395,12 @@ class PrinterMonitoringThread(QThread):
             self.can_run.wait()
             try:
                 self.thing_done.clear()
+
+                if self.printerName == "" :
+                    self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
+                    self.label.setNoPrinterOnline(True)
+                    self.ledStrip.showWarning(1)
+
                 if EMULATE is False:
                     try:
                         conn = cups.Connection()
@@ -753,6 +768,12 @@ class MainWindow(QMainWindow):
 
     logger = logging.getLogger("MainWindow")
 
+    #populate the list to add new findable printers
+    printerNameSerial = {'DN00121700003777': 'Canon_CP800_0',
+                         'GL04120400020191': 'Canon_CP800_1',
+                         'G200090100000410': 'Canon_CP800_2',
+                         'DX01122500001574': 'Canon_CP800_3'}
+
     def __init__(self, box_index):
         super(MainWindow, self).__init__()
 
@@ -844,12 +865,49 @@ class MainWindow(QMainWindow):
             self.printerMonitoring.start()
             self.printerMonitoring.pause()
 
+        printerSerial = self.getOnlinePrinters()
+
+        if len(printerSerial) >= 1:
+            self.printerName = self.printerNameSerial[printerSerial[0]]
+        else:
+            self.printerName = ""
+
+        if self.boxSettings.has_printer_port() is True:
+            self.printerMonitoring.changePrinterName(self.printerName)
+
         if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-            self.showPowerOnPrinter()
+            if self.printerName == "":
+                self.showPowerOnPrinter()
+            else:
+                self.gotoStart()
         else:
             self.gotoStart()
 
         self.switchConstantLight(False)
+
+    def getOnlinePrinters(self):
+
+        if EMULATE is False:
+            return ['DN00121700003777']
+
+        onlinePrinterSerials = []
+        try:
+            xdevV = usb.core.find(idVendor=0x04a9, idProduct=0x3214, find_all=True)
+            for xdev in xdevV:
+                if xdev._serial_number is None:
+                    xdev._serial_number = usb.util.get_string(xdev, xdev.iSerialNumber)
+                    onlinePrinterSerials.append(str(xdev._serial_number).strip())
+        except:
+            pass
+
+        if len(onlinePrinterSerials) == 0:
+            self.logger.warning("PRINTER : NO PRINTER CONNECTED!")
+        elif len(onlinePrinterSerials) > 1:
+            self.logger.warning("PRINTER : SEVERAL PRINTER CONNECTED!")
+
+        return onlinePrinterSerials
+
+
 
 
     def defineTimeout(self, delaySec):
@@ -1618,6 +1676,17 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
             self.logger.info("BUTTON 2 PRESSED : POWER_PRINTER ACK -> HOMEPAGE")
+
+            printerSerial = self.getOnlinePrinters()
+
+            if len(printerSerial) >= 1:
+                self.printerName = self.printerNameSerial[printerSerial[0]]
+            else:
+                self.printerName = ""
+
+            if self.boxSettings.has_printer_port() is True:
+                self.printerMonitoring.changePrinterName(self.printerName)
+
             self.ledStrip.showWarning(0)
             self.gotoStart()
             self.switchConstantLight(False)
@@ -1892,7 +1961,7 @@ class MainWindow(QMainWindow):
         for f in printerList:
             act = QAction(f, self)
             act.setCheckable(True)
-            act.triggered.connect(self.onSetCurrentPrinter)
+            #act.triggered.connect(self.onSetCurrentPrinter)
             self.printerActionList.append(act)
 
         self.actionEnablePrinting = QAction("Activer/Désactiver", self)
@@ -2665,6 +2734,22 @@ class MainWindow(QMainWindow):
             self.wait(3)
             self.gotoStart()
             return
+
+        printerSerial = self.getOnlinePrinters()
+
+        if len(printerSerial) >= 1:
+            self.printerName = self.printerNameSerial[printerSerial[0]]
+        else:
+            self.printerName = ""
+
+        if self.boxSettings.has_printer_port() is True:
+            self.printerMonitoring.changePrinterName(self.printerName)
+
+        self.logger.info("SEND JOB " + self.currentAssemblyPath + " on " + self.printerName)
+
+        if self.printerName == "" :
+            self.printerMonitoring.resume()
+            self.showPowerOnPrinter()
 
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)

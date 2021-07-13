@@ -440,8 +440,8 @@ class PrinterMonitoringThread(QThread):
 
                 self.mainWindow.label.update()
 
-            except:
-                self.logger.error("PRINTERMONITORINGTHREAD EXCEPTION")
+            # except:
+            #     self.logger.error("PRINTERMONITORINGTHREAD EXCEPTION")
 
             finally:
                 time.sleep(5)

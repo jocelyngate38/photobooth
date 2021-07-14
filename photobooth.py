@@ -906,26 +906,31 @@ class MainWindow(QMainWindow):
         if EMULATE is True:
             return
 
-        if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
-            return
+        try:
+            conn = cups.Connection()
+            printers = conn.getPrinters()
 
-        conn = cups.Connection()
-        printers = conn.getPrinters()
+            for printer in printers:
+                if "Canon_CP800_" in printer:
+                    id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
+                    self.printerNameSerial[id] = printer
 
-        for printer in printers:
-            if "Canon_CP800_" in printer:
-                id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
-                self.printerNameSerial[id] = printer
+            # if len(self.printerNameSerial)==0:
+            #     self.logger.error("PRINTER : CANNOT POPULATE printerNameSerial dic based on cups infos!")
+            #     self.printerNameSerial ={   'DN00121700003777': 'Canon_CP800_0',
+            #                                 'GL04120400020191': 'Canon_CP800_1',
+            #                                 'G200090100000410': 'Canon_CP800_2',
+            #                                 'DX01122500001574': 'Canon_CP800_3'}
 
-        if len(self.printerNameSerial)==0:
-            self.logger.error("PRINTER : CANNOT POPULATE printerNameSerial dic based on cups infos!")
-            self.printerNameSerial ={   'DN00121700003777': 'Canon_CP800_0',
-                                        'GL04120400020191': 'Canon_CP800_1',
-                                        'G200090100000410': 'Canon_CP800_2',
-                                        'DX01122500001574': 'Canon_CP800_3'}
+            for key, value in self.printerNameSerial.items():
+                self.logger.info("Printer name : " + value + ", id : " + key)
 
-        for key, value in self.printerNameSerial.items():
-            self.logger.info("Printer name : " + value + ", id : " + key)
+        except:
+
+            if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
+                self.logger.info("POPULATE PRINTER DICTIONNARY EXCEPTION, PRINTING DISABLED")
+            else:
+                self.logger.error("POPULATE PRINTER DICTIONNARY EXCEPTION, PRINTING ENABLED!!!")
 
     def getPrinterName(self,id):
 

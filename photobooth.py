@@ -1266,7 +1266,7 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = Qt.transparent
+        color = QColor(0,255,0,200)
 
         if hideButton1 is True:
             c = color
@@ -1300,7 +1300,7 @@ class MainWindow(QMainWindow):
 
 
         hideB3 = self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
-        cB3 = None
+        cB3 = QColor(255,0,0,200)
 
         if self.printingEnabled is True and self.printerName=="" and self.boxSettings.has_printer_port() is False:
             cB3 = QColor(255,255,255,50)

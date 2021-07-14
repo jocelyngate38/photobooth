@@ -1278,13 +1278,13 @@ class MainWindow(QMainWindow):
             painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
             painterFrame.setCompositionMode(QPainter.CompositionMode_SourceOver)
             pen = QPen()  # creates a default pen
-            pen.setStyle(Qt.DashDotLine)
+            pen.setStyle(Qt.SolidLine)
             pen.setWidth(5)
-            pen.setBrush(QColor(80,80,80))
+            pen.setBrush(QColor(80,80,80,80))
             pen.setCapStyle(Qt.RoundCap)
             pen.setJoinStyle(Qt.RoundJoin)
             painterFrame.setPen(pen)
-            painterFrame.drawLine(w * 2 / 3 + 30 , h - h / 10, w / 3 + 1 - 60 , h - h / 10)
+            painterFrame.drawLine(w * 2 / 3 + 10 , h - h / 10, w - 20 , h - h / 10)
 
         painterFrame.end()
         del painterFrame

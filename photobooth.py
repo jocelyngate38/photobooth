@@ -417,7 +417,7 @@ class PrinterMonitoringThread(QThread):
 
                                         if printers[printer]["printer-state-message"] == "No ribbon loaded, aborting job!":
                                             self.logger.warning("PRINTER : NO RIBBON LOADED, ABORTING!")
-                                            self.mainWindow.label.setRibbonEmpty(True)
+                                            self.mainWindow.label.setRibbonMissing(True)
                                             self.mainWindow.ledStrip.showWarning(1)
 
                                     if printers[printer]['printer-state'] == 3:
@@ -441,6 +441,7 @@ class PrinterMonitoringThread(QThread):
 
                 else:
                     self.mainWindow.label.setTrayMissing(False)
+                    self.mainWindow.label.setRibbonMissing(False)
                     self.mainWindow.label.setRibbonEmpty(False)
                     self.mainWindow.label.setPaperEmpty(False)
                     self.mainWindow.label.setPrinterOffline(False)
@@ -521,6 +522,7 @@ class CaptureImageThread(QThread):
 class Label(QLabel):
 
     ribbonEmpty = False
+    ribbonMissing = False
     trayMissing = False
     paperEmpty = False
     warningVisible = False
@@ -533,6 +535,9 @@ class Label(QLabel):
 
     def setRibbonEmpty(self, b):
         self.ribbonEmpty = b
+
+    def setRibbonMissing(self, b):
+        self.ribbonMissing = b
 
     def setPaperEmpty(self, b):
         self.paperEmpty = b
@@ -547,7 +552,7 @@ class Label(QLabel):
         self.warningVisible = visible
 
     def hasVisibleWarning(self):
-        return (self.ribbonEmpty is True or self.trayMissing is True or self.paperEmpty is True) and self.printerHelpButtonVisible is True
+        return (self.ribbonEmpty is True or self.trayMissing is True or self.paperEmpty is True or self.ribbonMissing is True) and self.printerHelpButtonVisible is True
 
     def setPrinterHelpButtonVisible(self, visible):
         self.printerHelpButtonVisible = visible
@@ -600,8 +605,15 @@ class Label(QLabel):
 
             if self.trayMissing is True:
                 qp.drawPixmap(iL, jL, QPixmap(self.path + "/trayMissing.png"))
+                iL = iL + incw
+                jL = jL + inch
 
-            if self.printerHelpButtonVisible is True and (self.paperEmpty is True or self.ribbonEmpty is True or self.trayMissing is True):
+            if self.ribbonMissing is True:
+                qp.drawPixmap(iL, jL, QPixmap(self.path + "/ribbonMissing.png"))
+                iL = iL + incw
+                jL = jL + inch
+
+            if self.hasVisibleWarning() is True:
                 qp.drawPixmap(40, 768-170, QPixmap(self.path + "/printerHelp.png"))
 
         if self.debugVisible is True:
@@ -1838,8 +1850,8 @@ class MainWindow(QMainWindow):
 
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)
-        self.setLedButonBlinking(False, False, False)
         self.label.setRibbonEmpty(False)
+        self.label.setRibbonMissing(False)
         self.label.setTrayMissing(False)
         self.label.setPaperEmpty(False)
         self.label.setPrinterOffline(False)

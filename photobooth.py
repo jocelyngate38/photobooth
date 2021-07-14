@@ -1266,7 +1266,7 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = QColor(255,255,255,0)
+        color = Qt.transparent
 
         if hideButton1 is True:
             c = color
@@ -1300,10 +1300,10 @@ class MainWindow(QMainWindow):
 
 
         hideB3 = self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
-        cB3 = QColor(255,255,255,150)
+        cB3 = None
 
-        if self.printingEnabled is True and self.printerName=="" and self.boxSettings.has_printer_port() is False:
-            cB3 = QColor(255,255,255,50)
+        if self.printingEnabled is True and self.printerName=="" and self.boxSettings.has_printer_port() is True:
+            cB3 = QColor(255,255,255,150)
 
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
                                            False, None,

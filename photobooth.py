@@ -1281,7 +1281,7 @@ class MainWindow(QMainWindow):
             c = color
             if color1 is not None:
                 c = color1
-            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, c)
+            painterFrame.fillRect(0, h - h / 5, w / 3 + 20, h / 5 + 1, c)
 
         if hideButton2 is True:
             c = color

@@ -1266,20 +1266,28 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = QColor(255,255,255,100)
+        color = QColor(255,255,255,80)
 
         if hideButton1 is True:
             painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton2 is True:
-            painterFrame.setCompositionMode(QPainter.CompositionMode_SourceIn)
             painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton3 is True:
-            painterFrame.setCompositionMode(QPainter.CompositionMode_DestinationIn)
             painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
+            painterFrame.setCompositionMode(QPainter.CompositionMode_DestinationIn)
+            pen = QPen()  # creates a default pen
+            pen.setStyle(Qt.DashDotLine)
+            pen.setWidth(5)
+            pen.setBrush(QColor(80,80,80))
+            pen.setCapStyle(Qt.RoundCap)
+            pen.setJoinStyle(Qt.RoundJoin)
+            painterFrame.setPen(pen)
+            painterFrame.drawLine(w * 2 / 3 + 30 , h - h / 10, w / 3 + 1 - 60 , h - h / 10)
 
         painterFrame.end()
+        del painterFrame
         return assPixmap
 
     def showAssemblyPixmap(self):
@@ -1292,8 +1300,8 @@ class MainWindow(QMainWindow):
 
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
                                            False,
-                                           True,
-                                           True#                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False
+                                           False,
+                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
                                            )
 
         painter.drawPixmap(0, 0, assPixmap )

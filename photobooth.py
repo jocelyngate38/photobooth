@@ -892,9 +892,11 @@ class MainWindow(QMainWindow):
 
     def refreshLedButtons(self):
         if self.displayMode == DisplayMode.HOMEPAGE:
+            self.setLedButonBlinking(False, True, False)
             if self.label is not None:
-                if self.label.hasVisibleWarning() is True:
-                    self.setLedButonBlinking(True, True, False)
+                if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+                    if self.label.hasVisibleWarning() is True:
+                        self.setLedButonBlinking(True, True, False)
 
 
     def populatePrintersDictionary(self):
@@ -1172,7 +1174,14 @@ class MainWindow(QMainWindow):
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture.png"))
+
+        hideB1 = len(self.captureList) >= 4
+        validatePixmap = self.getFilteredPixmap(QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture.png"),
+                                                hideB1, QColor(255,255,255,80),
+                                                False, None,
+                                                False, None)
+
+        painter.drawPixmap(0, 0, validatePixmap)
 
         w = 450
         h = 300
@@ -1237,7 +1246,7 @@ class MainWindow(QMainWindow):
 
         QApplication.processEvents()
         self.connectInputButtonInterupts()
-        self.setLedButonBlinking(True, True, True)
+        self.setLedButonBlinking(not hideB1, True, True)
 
     def buildNextAssembly(self):
 
@@ -1303,7 +1312,7 @@ class MainWindow(QMainWindow):
         cB3 = None
 
         if self.printingEnabled is True and self.printerName=="" and self.boxSettings.has_printer_port() is True:
-            cB3 = QColor(255,255,255,150)
+            cB3 = QColor(255,255,255,80)
 
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
                                            False, None,
@@ -1557,13 +1566,12 @@ class MainWindow(QMainWindow):
             self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.VALIDATE:
-            self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
-            self.storeLastCapture()
-            if len(self.captureList) >= 4:
-                self.resources.resetChoices()
-                self.redoAssembly()
-            else:
+            if len(self.captureList) < 4:
+                self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
+                self.storeLastCapture()
                 self.startCaptureProcess()
+            else:
+                self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON IMAGES NUMBER >= 4")
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             self.logger.info("BUTTON 1 PRESSED : OTHER ASSEMBLY")
@@ -3025,15 +3033,6 @@ class MainWindow(QMainWindow):
 
         self.showCuttingLines = False
         self.logger.info("GO HOME")
-
-
-
-        # en = False
-        # if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
-        #     if self.label is not None:
-        #         en = self.label.hasVisibleWarning() is True
-        #
-        # self.setLedButonBlinking(en, True, False)
         self.connectInputButtonInterupts()
         self.captureList.clear()
         self.showHomePage()

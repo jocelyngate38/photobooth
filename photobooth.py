@@ -1265,14 +1265,16 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
+        color = QColor(255,255,255,255/3)
+
         if hideButton1 is True:
-            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton2 is True:
-            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton3 is True:
-            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, Qt.transparent)
+            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         painterFrame.end()
         return assPixmap

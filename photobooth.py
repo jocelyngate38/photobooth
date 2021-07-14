@@ -1266,7 +1266,7 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = QColor(255,255,255,80)
+        color = QColor(255,255,255,50)
 
         if hideButton1 is True:
             painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)
@@ -1276,15 +1276,15 @@ class MainWindow(QMainWindow):
 
         if hideButton3 is True:
             painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
-            painterFrame.setCompositionMode(QPainter.CompositionMode_SourceOver)
-            pen = QPen()  # creates a default pen
-            pen.setStyle(Qt.SolidLine)
-            pen.setWidth(5)
-            pen.setBrush(QColor(80,80,80,80))
-            pen.setCapStyle(Qt.RoundCap)
-            pen.setJoinStyle(Qt.RoundJoin)
-            painterFrame.setPen(pen)
-            painterFrame.drawLine(w * 2 / 3 + 10 , h - h / 10, w - 20 , h - h / 10)
+            # painterFrame.setCompositionMode(QPainter.CompositionMode_SourceOver)
+            # pen = QPen()  # creates a default pen
+            # pen.setStyle(Qt.SolidLine)
+            # pen.setWidth(5)
+            # pen.setBrush(QColor(80,80,80,80))
+            # pen.setCapStyle(Qt.RoundCap)
+            # pen.setJoinStyle(Qt.RoundJoin)
+            # painterFrame.setPen(pen)
+            # painterFrame.drawLine(w * 2 / 3 + 10 , h - h / 10, w - 20 , h - h / 10)
 
         painterFrame.end()
         del painterFrame

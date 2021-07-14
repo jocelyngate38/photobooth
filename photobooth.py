@@ -391,8 +391,8 @@ class PrinterMonitoringThread(QThread):
                         self.mainWindow.setCurrentPrinter("")
 
                     if self.mainWindow.printerName == "" :
-                        self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
                         if self.mainWindow.label.hasPrinterOffline() is False:
+                            self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
                             self.mainWindow.label.setPrinterOffline(True)
                             self.mainWindow.ledStrip.showWarning(1)
 
@@ -408,20 +408,17 @@ class PrinterMonitoringThread(QThread):
                                     if printers[printer]['printer-state'] == 5:
                                         if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
                                             self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
-                                            # self.printerFailure.emit(printer, 1)
                                             self.mainWindow.label.setTrayMissing(True)
                                             self.mainWindow.ledStrip.showWarning(1)
 
                                     if printers[printer]['printer-state'] == 3:
                                         if printers[printer]["printer-state-message"] == "Ribbon depleted!":
                                             self.logger.warning("PRINTER : RIBBON DEPLETED!")
-                                            # self.printerFailure.emit(printer, 2)
                                             self.mainWindow.label.setRibbonEmpty(True)
                                             self.mainWindow.ledStrip.showWarning(1)
 
                                         if printers[printer]["printer-state-message"] == "Paper feed problem!":
                                             self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
-                                            # self.printerFailure.emit(printer, 3)
                                             self.mainWindow.label.setPaperEmpty(True)
                                             self.mainWindow.ledStrip.showWarning(1)
 
@@ -440,7 +437,7 @@ class PrinterMonitoringThread(QThread):
                     self.mainWindow.label.setPrinterOffline(False)
                     self.mainWindow.ledStrip.showWarning(0)
                     self.mainWindow.refreshLedButtons()
-                    time.sleep(10)
+                    time.sleep(240)
 
                 self.mainWindow.label.update()
 
@@ -461,7 +458,6 @@ class InputButtonThread(QThread):
             GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
             GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
             GPIO.add_event_detect(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3), GPIO.FALLING, callback=self.queue.put, bouncetime=500)
-        # GPIO 20 wired also
 
     def run(self):
         while True:
@@ -2324,7 +2320,6 @@ class MainWindow(QMainWindow):
             self.actionRestartCups.setText("Redemarrer (démarré)")
             self.actionStartCups.setText("Demarrer (démarré)")
             self.actionStopCups.setText("Arreter (démarré)")
-
 
         self.actionEnableSpeedLight.setChecked(self.speedLightEnabled)
         self.actionRestartSpeedLight.setVisible(self.speedLightEnabled)

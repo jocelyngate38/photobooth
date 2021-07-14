@@ -1175,7 +1175,7 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        hideB1 = len(self.captureList) >= 4
+        hideB1 = len(self.captureList) >= 3
         validatePixmap = self.getFilteredPixmap(QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture.png"),
                                                 hideB1, QColor(255,255,255,80),
                                                 False, None,
@@ -1566,7 +1566,7 @@ class MainWindow(QMainWindow):
             self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
 
         elif self.displayMode == DisplayMode.VALIDATE:
-            if len(self.captureList) < 4:
+            if len(self.captureList) < 3:
                 self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
                 self.storeLastCapture()
                 self.startCaptureProcess()

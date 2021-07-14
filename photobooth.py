@@ -1937,6 +1937,7 @@ class MainWindow(QMainWindow):
         self.label.setPrinterName(printerName)
         settings.setValue("printerName", self.printerName)
         self.enablePrinter()
+        self.cancelAllNotCompletedJobs()
 
 
     @pyqtSlot()

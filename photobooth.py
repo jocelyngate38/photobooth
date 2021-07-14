@@ -1265,7 +1265,7 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = QColor(255,255,255,255/3)
+        color = Qt.transparent
 
         if hideButton1 is True:
             painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)

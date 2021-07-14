@@ -1276,7 +1276,7 @@ class MainWindow(QMainWindow):
 
         if hideButton3 is True:
             painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
-            painterFrame.setCompositionMode(QPainter.CompositionMode_DestinationIn)
+            painterFrame.setCompositionMode(QPainter.CompositionMode_SourceOver)
             pen = QPen()  # creates a default pen
             pen.setStyle(Qt.DashDotLine)
             pen.setWidth(5)

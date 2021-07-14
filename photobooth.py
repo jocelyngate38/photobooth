@@ -1258,7 +1258,7 @@ class MainWindow(QMainWindow):
         #display assembly page without the assembly we just build
         self.showAssemblyPixmap()
 
-    def getFilteredPixmap(self, pixmapPath, hideButton1, hideButton2, hideButton3):
+    def getFilteredPixmap(self, pixmapPath, hideButton1, color1, hideButton2, color2, hideButton3,color3):
 
         assPixmap = QPixmap(pixmapPath)
         painterFrame = QPainter(assPixmap)
@@ -1266,25 +1266,25 @@ class MainWindow(QMainWindow):
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = QColor(255,255,255,50)
+        color = Qt.transparent
 
         if hideButton1 is True:
-            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)
+            c = color
+            if color1 is not None:
+                c = color1
+            painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, c)
 
         if hideButton2 is True:
-            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
+            c = color
+            if color2 is not None:
+                c = color2
+            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, c)
 
         if hideButton3 is True:
-            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
-            # painterFrame.setCompositionMode(QPainter.CompositionMode_SourceOver)
-            # pen = QPen()  # creates a default pen
-            # pen.setStyle(Qt.SolidLine)
-            # pen.setWidth(5)
-            # pen.setBrush(QColor(80,80,80,80))
-            # pen.setCapStyle(Qt.RoundCap)
-            # pen.setJoinStyle(Qt.RoundJoin)
-            # painterFrame.setPen(pen)
-            # painterFrame.drawLine(w * 2 / 3 + 10 , h - h / 10, w - 20 , h - h / 10)
+            c = color
+            if color3 is not None:
+                c = color3
+            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, c)
 
         painterFrame.end()
         del painterFrame
@@ -1298,13 +1298,20 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
+
+        hideB3 = self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
+        cB3 = None
+
+        if self.printingEnabled is True and self.printerName=="" and self.boxSettings.has_printer_port() is False:
+            cB3 = QColor(255,255,255,50)
+
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
-                                           False,
-                                           False,
-                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
+                                           False, None,
+                                           False, None,
+                                           hideB3, cB3
                                            )
 
-        painter.drawPixmap(0, 0, assPixmap )
+        painter.drawPixmap(0, 0, assPixmap)
 
         if self.lastAssemblyPixmap is not None:
             if self.lastAssemblyLandscape == 1:
@@ -1679,7 +1686,7 @@ class MainWindow(QMainWindow):
             self.redoAssembly()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
-            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
+            if self.boxSettings.has_printer_port() is True and self.printingEnabled is True and self.printerName != "":
                 self.logger.info("BUTTON 3 PRESSED : PRINT")
                 self.sendPrintingJob()
             else:
@@ -2790,7 +2797,7 @@ class MainWindow(QMainWindow):
         self.wait(0.2)
         QApplication.processEvents()
         self.buildNextAssembly()
-        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is True and self.printingEnabled is True)
+        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is True and self.printingEnabled is True and self.printerName != "")
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 

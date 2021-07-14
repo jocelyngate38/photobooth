@@ -1262,11 +1262,11 @@ class MainWindow(QMainWindow):
 
         assPixmap = QPixmap(pixmapPath)
         painterFrame = QPainter(assPixmap)
-        painterFrame.setCompositionMode(QPainter.CompositionMode_Source)
+        painterFrame.setCompositionMode(QPainter.CompositionMode_Destination)
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
-        color = Qt.transparent
+        color = QColor(255,255,255,100)
 
         if hideButton1 is True:
             painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)

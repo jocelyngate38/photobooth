@@ -1262,7 +1262,7 @@ class MainWindow(QMainWindow):
 
         assPixmap = QPixmap(pixmapPath)
         painterFrame = QPainter(assPixmap)
-        painterFrame.setCompositionMode(QPainter.CompositionMode_Destination)
+        painterFrame.setCompositionMode(QPainter.CompositionMode_DestinationIn)
         w = assPixmap.size().width()
         h = assPixmap.size().height()
 
@@ -1272,9 +1272,11 @@ class MainWindow(QMainWindow):
             painterFrame.fillRect(0, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton2 is True:
+            painterFrame.setCompositionMode(QPainter.CompositionMode_SourceIn)
             painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         if hideButton3 is True:
+            painterFrame.setCompositionMode(QPainter.CompositionMode_DestinationIn)
             painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, color)
 
         painterFrame.end()
@@ -1290,8 +1292,8 @@ class MainWindow(QMainWindow):
 
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
                                            False,
-                                           False,
-                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False
+                                           True,
+                                           True#                                           self.boxSettings.has_printer_port() is False or self.printingEnabled is False
                                            )
 
         painter.drawPixmap(0, 0, assPixmap )

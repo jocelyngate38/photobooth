@@ -415,6 +415,11 @@ class PrinterMonitoringThread(QThread):
                                             self.mainWindow.label.setTrayMissing(True)
                                             self.mainWindow.ledStrip.showWarning(1)
 
+                                        if printers[printer]["printer-state-message"] == "No ribbon loaded, aborting job!":
+                                            self.logger.warning("PRINTER : NO RIBBON LOADED, ABORTING!")
+                                            self.mainWindow.label.setRibbonEmpty(True)
+                                            self.mainWindow.ledStrip.showWarning(1)
+
                                     if printers[printer]['printer-state'] == 3:
                                         if printers[printer]["printer-state-message"] == "Ribbon depleted!":
                                             self.logger.warning("PRINTER : RIBBON DEPLETED!")

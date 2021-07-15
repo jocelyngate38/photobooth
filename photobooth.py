@@ -2633,7 +2633,7 @@ class MainWindow(QMainWindow):
         if EMULATE is True:
             return
 
-        GPIO.setWarnings(False)
+        GPIO.setwarnings(False)
         GPIO.cleanup()
 
         # GPIO IN 20 wired

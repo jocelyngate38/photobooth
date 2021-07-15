@@ -983,7 +983,7 @@ class MainWindow(QMainWindow):
             self.timeoutTimer.stop()
         else:
             self.timeoutTimer.start(1000 * delaySec)
-            self.logger.info("SETTING TIMEOUT TO " + str(delaySec) + " SECONDES")
+            self.logger.warning("SET TIMEOUT (" + str(delaySec) + "s) FOR " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
 
     def initDSLRTime(self):
 
@@ -1036,7 +1036,7 @@ class MainWindow(QMainWindow):
 
         self.displayMode = mode
 
-        self.logger.warning("TRY TO DEFINETIMEOUT FOR : " + mode.name + "(" + str(mode.value) + ")")
+        self.logger.warning("TRY DEFINE TIMEOUT FOR : " + mode.name + "(" + str(mode.value) + ")")
 
         #Only allow warning display on the home page
         if self.label is not None:
@@ -1100,7 +1100,7 @@ class MainWindow(QMainWindow):
             self.defineTimeout(30)
 
         else:
-            self.logger.error("defineTimeout error, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
+            self.logger.error("DEFINE TIMEOUT ERROR, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
             self.defineTimeout(-1)
             self.defineTimeout(60)
 
@@ -2763,7 +2763,7 @@ class MainWindow(QMainWindow):
 
         self.defineTimeout(-1)
 
-        self.logger.warning("TIMEOUT @ " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
+        self.logger.warning("TIMEOUT TRIGGERED FOR " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
 
         if self.displayMode == DisplayMode.HOMEPAGE:
             self.logger.warning("DO NOTHING")

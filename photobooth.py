@@ -1415,11 +1415,25 @@ class MainWindow(QMainWindow):
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.drawPixmap(0, 0, QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/help_printer.png"))
+
+        fileExist = os.path.isfile(self.currentAssemblyPath)
+        cB3 = None
+
+        if fileExist is False:
+            cB3 = Qt.transparent
+
+        assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/help_printer.png",
+                                           False, None,
+                                           False, None,
+                                           not fileExist, cB3
+                                           )
+
+        painter.drawPixmap(0, 0, assPixmap)
+
         self.label.setPixmap(outPixmap)
         del painter
         self.connectInputButtonInterupts()
-        self.setLedButonBlinking(True, True, True)
+        self.setLedButonBlinking(True, True, fileExist)
 
 
     def showStartupPixmap(self):
@@ -1752,7 +1766,7 @@ class MainWindow(QMainWindow):
             if exists:
                 self.sendPrintingJob()
             else:
-                self.startCaptureProcess()
+                self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
         else:
             self.logger.warning(
                 "BUTTON 3 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")

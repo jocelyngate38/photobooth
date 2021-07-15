@@ -1036,6 +1036,8 @@ class MainWindow(QMainWindow):
 
         self.displayMode = mode
 
+        self.logger.warning("TRY TO DEFINETIMEOUT FOR : " + mode.name + "(" + str(mode.value) + ")")
+
         #Only allow warning display on the home page
         if self.label is not None:
             if self.boxSettings.has_printer_port() is True and self.printingEnabled is True:
@@ -1098,7 +1100,7 @@ class MainWindow(QMainWindow):
             self.defineTimeout(30)
 
         else:
-            self.logger.error("DEFINETIMEOUT NOT DONE, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
+            self.logger.error("defineTimeout error, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
             self.defineTimeout(-1)
             self.defineTimeout(60)
 
@@ -2760,16 +2762,18 @@ class MainWindow(QMainWindow):
 
         self.defineTimeout(-1)
 
+        self.logger.warning("TIMEOUT @ " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
+
         if self.displayMode == DisplayMode.HOMEPAGE:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED DO NOTHING")
+            self.logger.warning("DO NOTHING")
             pass
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.MENU:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             if EMULATE is True:
                 self.gotoStart()
                 return
@@ -2784,7 +2788,7 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.MENU_SETUP:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             if EMULATE is True:
                 self.gotoStart()
                 return
@@ -2798,36 +2802,37 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.VALIDATE:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
+            self.logger.warning("BUTTON 3 EMULATED")
             self.onButton3Pressed()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
+            self.logger.warning("BUTTON 3 EMULATED")
             self.onButton3Pressed()
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.ledStrip.showWarning(0)
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
-            self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
         else:
-            self.logger.error(self.displayMode.name + "(" + str(self.displayMode.value) + ")" + "NOT HANDLED -> TIMEOUT GO HOME")
+            self.logger.error(self.displayMode.name + "(" + str(self.displayMode.value) + ")" + "NOT HANDLED")
+            self.logger.warning("GO HOME")
             self.gotoStart()
 
 

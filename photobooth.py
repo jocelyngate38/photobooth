@@ -974,6 +974,10 @@ class MainWindow(QMainWindow):
 
     def defineTimeout(self, delaySec):
 
+        if self.timeoutTimer is None:
+            self.logger.warning("NOT INITIALIZED VARIABLE : (self.timeoutTimer is None)")
+            return
+
         if delaySec <= 0:
             self.logger.info("REMOVING TIMEOUT")
             self.timeoutTimer.stop()

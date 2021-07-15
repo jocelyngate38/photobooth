@@ -1093,6 +1093,12 @@ class MainWindow(QMainWindow):
         elif mode == DisplayMode.RUNNING:
             self.defineTimeout(30)
 
+        else:
+            self.logger.error("DEFINETIMEOUT NOT DONE, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
+            self.defineTimeout(-1)
+            self.defineTimeout(60)
+
+
     def showHomePage(self):
 
         if self.displayMode == DisplayMode.HOMEPAGE:
@@ -2762,6 +2768,7 @@ class MainWindow(QMainWindow):
         elif self.displayMode == DisplayMode.MENU:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
+                self.gotoStart()
                 return
             try:
                 pyautogui.press('esc')
@@ -2776,6 +2783,7 @@ class MainWindow(QMainWindow):
         elif self.displayMode == DisplayMode.MENU_SETUP:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             if EMULATE is True:
+                self.gotoStart()
                 return
             try:
                 pyautogui.press('esc')
@@ -2800,7 +2808,7 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED BUTTON 3 EMULATED")
-            self.onLeftButtonPressed()
+            self.onButton3Pressed()
 
         elif self.displayMode == DisplayMode.RUNNING:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
@@ -2814,6 +2822,11 @@ class MainWindow(QMainWindow):
         elif self.displayMode == DisplayMode.HELP_PRINTER:
             self.logger.info(self.displayMode.name + " TIMEOUT CALLBACK TRIGGERED GO HOME")
             self.gotoStart()
+
+        else:
+            self.logger.error(self.displayMode.name + "(" + str(self.displayMode.value) + ")" + "NOT HANDLED -> TIMEOUT GO HOME")
+            self.gotoStart()
+
 
     def redoAssembly(self):
 

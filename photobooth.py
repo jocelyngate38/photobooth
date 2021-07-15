@@ -1616,7 +1616,7 @@ class MainWindow(QMainWindow):
                 self.storeLastCapture()
                 self.startCaptureProcess()
             else:
-                self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON IMAGES NUMBER >= 4")
+                self.logger.warning("BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             self.logger.info("BUTTON 1 PRESSED : OTHER ASSEMBLY")
@@ -1752,14 +1752,8 @@ class MainWindow(QMainWindow):
                         self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
-
-            self.logger.warning("IGNORING THIS CAPTURE ")
-            if len(self.captureList) < self.resources.nbImageMax:
-                self.startCaptureProcess()
-
-            else:
-                self.redoAssembly()
-
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.RUNNING:
             self.logger.warning(
@@ -2427,7 +2421,6 @@ class MainWindow(QMainWindow):
 
         self.logger.error("TRIGGER CAPTURE ERROR")
         self.setDisplayMode(DisplayMode.TRIGGER_ERROR)
-
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
         painter = QPainter(outPixmap)
@@ -2436,8 +2429,7 @@ class MainWindow(QMainWindow):
         self.label.setPixmap(outPixmap)
         del painter
         QApplication.processEvents()
-
-        self.setLedButonBlinking(True, True, True)
+        self.setLedButonBlinking(True, True, False)
         self.connectInputButtonInterupts()
 
     def onShowAdvancedMenu(self):
@@ -2841,8 +2833,8 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
-            self.logger.warning("BUTTON 3 EMULATED")
-            self.onButton3Pressed()
+            self.logger.warning("GO HOME")
+            self.gotoStart()
 
         elif self.displayMode == DisplayMode.RUNNING:
             self.logger.warning("GO HOME")

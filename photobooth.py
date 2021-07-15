@@ -1549,7 +1549,7 @@ class MainWindow(QMainWindow):
         if self.interuptsConnected is False:
             return
 
-            self.logger.info("BUTTON 1 PRESSED")
+        self.logger.info("BUTTON 1 PRESSED [" + self.displayMode.name + "(" + str(self.displayMode.value) + ")]")
 
         if self.displayMode == DisplayMode.HOMEPAGE:
             self.logger.info("BUTTON 1 PRESSED : 4 POSSIBLE ACTIONS")
@@ -1596,18 +1596,19 @@ class MainWindow(QMainWindow):
                 self.onShowAdvancedMenu()
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.MENU:
             self.logger.info("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
             self.onRightButtonGPIO()
-
         elif self.displayMode == DisplayMode.MENU_SETUP:
             self.logger.info("BUTTON 1 PRESSED : TRIGGER ACTION MENU")
             self.onRightButtonGPIO()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.VALIDATE:
             if len(self.captureList) < 3:
@@ -1626,10 +1627,12 @@ class MainWindow(QMainWindow):
             self.startCaptureProcess()
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
-            self.logger.warning("BUTTON 1 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
             self.logger.warning("BUTTON 1 PRESSED : GOTO START")
@@ -1663,7 +1666,7 @@ class MainWindow(QMainWindow):
         if self.interuptsConnected is False:
             return
 
-        self.logger.info("BUTTON 3 PRESSED")
+        self.logger.info("BUTTON 3 PRESSED [" + self.displayMode.name + "(" + str(self.displayMode.value) + ")]")
 
         if self.displayMode == DisplayMode.HOMEPAGE:
             self.logger.info("BUTTON 3 PRESSED : 4 POSSIBLE ACTIONS")
@@ -1717,7 +1720,8 @@ class MainWindow(QMainWindow):
                 self.onShowAdvancedMenu()
 
         elif self.displayMode == DisplayMode.PRINT:
-            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.MENU:
             self.logger.info("BUTTON 3 PRESSED : MENU BACK")
@@ -1729,7 +1733,8 @@ class MainWindow(QMainWindow):
             self.onLeftButtonGPIO()
 
         elif self.displayMode == DisplayMode.COMPUTING:
-            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.info("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
@@ -1742,7 +1747,9 @@ class MainWindow(QMainWindow):
                 self.logger.info("BUTTON 3 PRESSED : PRINT")
                 self.sendPrintingJob()
             else:
-                self.logger.info("BUTTON 3 PRESSED : PRINT NOT ENABLED, DO NOTHING")
+                self.logger.warning(
+                    "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(
+                        self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
 
@@ -1755,10 +1762,12 @@ class MainWindow(QMainWindow):
 
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.POWER_PRINTER:
-            self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
             self.logger.info("BUTTON 3 PRESSED : RESET PRINTER ERROR, PRINT LAST ASSEMBLY OR START CAPTURE")
@@ -1766,7 +1775,8 @@ class MainWindow(QMainWindow):
             if exists:
                 self.sendPrintingJob()
             else:
-                self.logger.warning("BUTTON 3 PRESSED : NO OPTION MAP TO THIS BUTTON")
+                self.logger.warning(
+                    "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
         else:
             self.logger.warning(
                 "BUTTON 3 PRESSED : THIS MODE (" + str(self.displayMode.value) + ") IS NOT HANDLED.")
@@ -1785,7 +1795,7 @@ class MainWindow(QMainWindow):
         if self.interuptsConnected is False:
             return
 
-        self.logger.info("BUTTON 2 PRESSED")
+        self.logger.info("BUTTON 2 PRESSED [" + self.displayMode.name + "(" + str(self.displayMode.value) + ")]")
 
         if self.displayMode == DisplayMode.HOMEPAGE:
 
@@ -1859,7 +1869,8 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.RUNNING:
-            self.logger.warning("BUTTON 2 PRESSED : NO OPTION MAP TO THIS BUTTON")
+            self.logger.warning(
+                "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.HELP_PRINTER:
             self.logger.info("BUTTON 2 PRESSED : GO BACK TO HOME")

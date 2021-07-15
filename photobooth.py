@@ -2477,7 +2477,6 @@ class MainWindow(QMainWindow):
             return
         if self.boxSettings.can_restart_DSLR() is True:
             self.switchDSLR(False)
-            self.wait(2)
             self.switchDSLR(True)
 
     def initDevicesFast(self):
@@ -2751,10 +2750,10 @@ class MainWindow(QMainWindow):
 
         if on is True:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), 0)
-            self.wait(1)
+            self.wait(2)
         else:
             GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR), 1)
-            self.wait(1)
+            self.wait(2)
 
     @pyqtSlot()
     def onTimeout(self):
@@ -3184,7 +3183,7 @@ class SimulatorButtonThread(QThread):
 if __name__ == '__main__':
 
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.WARNING,
         format="[%(asctime)s][%(levelname)7s] [%(name)15s-%(lineno)5s] > %(message)s",
         handlers=[
             logging.FileHandler("../photobooth-datas/logs/trace.log"),

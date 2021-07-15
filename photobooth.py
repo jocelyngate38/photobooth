@@ -1311,19 +1311,19 @@ class MainWindow(QMainWindow):
             c = color
             if color1 is not None:
                 c = color1
-            painterFrame.fillRect(0, h - h / 5, w / 3 + 60, h / 5 + 1, c)
+            painterFrame.fillRect(0, h - h / 5.5, w / 3 + 60, h / 5.5 + 1, c)
 
         if hideButton2 is True:
             c = color
             if color2 is not None:
                 c = color2
-            painterFrame.fillRect(w / 3, h - h / 5, w / 3 + 1, h / 5 + 1, c)
+            painterFrame.fillRect(w / 3, h - h / 5.5, w / 3 + 1, h / 5.5 + 1, c)
 
         if hideButton3 is True:
             c = color
             if color3 is not None:
                 c = color3
-            painterFrame.fillRect(w * 2 / 3, h - h / 5, w / 3 + 1, h / 5 + 1, c)
+            painterFrame.fillRect(w * 2 / 3 -60, h - h / 5.5, w / 3 + 61, h / 5.5 + 1, c)
 
         painterFrame.end()
         del painterFrame

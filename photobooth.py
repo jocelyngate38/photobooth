@@ -1063,6 +1063,7 @@ class MainWindow(QMainWindow):
 
         elif mode == DisplayMode.PRINT:
             self.defineTimeout(-1)
+            self.defineTimeout(30)
 
         elif mode == DisplayMode.MENU:
             self.defineTimeout(-1)

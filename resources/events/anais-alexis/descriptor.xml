@@ -28,7 +28,7 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>50</x>
+					<x>70</x>
 					<y>56</y>
 					<w>946</w>
 					<h>629</h>
@@ -36,7 +36,7 @@
 				</image>
 				<image>
 					<index>2</index>
-					<x>1001</x>
+					<x>981</x>
 					<y>711</y>
 					<w>946</w>
 					<h>629</h>
@@ -52,7 +52,7 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>41</x>
+					<x>48</x>
 					<y>57</y>
 					<w>944</w>
 					<h>627</h>
@@ -60,7 +60,7 @@
 				</image>
 				<image>
 					<index>2</index>
-					<x>1015</x>
+					<x>1008</x>
 					<y>57</y>
 					<w>944</w>
 					<h>627</h>
@@ -68,7 +68,7 @@
 				</image>
 				<image>
 					<index>3</index>
-					<x>1015</x>
+					<x>1008</x>
 					<y>714</y>
 					<w>944</w>
 					<h>627</h>
@@ -84,32 +84,32 @@
 			<images>
 				<image>
 					<index>1</index>
-					<x>41</x>
-					<y>57</y>
+					<x>47</x>
+					<y>63</y>
 					<w>944</w>
 					<h>627</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>2</index>
-					<x>1015</x>
-					<y>57</y>
+					<x>1009</x>
+					<y>63</y>
 					<w>944</w>
 					<h>627</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>3</index>
-					<x>1015</x>
-					<y>714</y>
+					<x>1009</x>
+					<y>708</y>
 					<w>944</w>
 					<h>627</h>
 					<angle>0</angle>
 				</image>
 				<image>
 					<index>4</index>
-					<x>41</x>
-					<y>714</y>
+					<x>47</x>
+					<y>708</y>
 					<w>944</w>
 					<h>627</h>
 					<angle>0</angle>

@@ -1312,19 +1312,19 @@ class MainWindow(QMainWindow):
             c = color
             if color1 is not None:
                 c = color1
-            painterFrame.fillRect(0, h - h / 5.5, w / 3 + 60, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(0), int(h - h / 5.5), int(w / 3 + 60), int(h / 5.5 + 1), c)
 
         if hideButton2 is True:
             c = color
             if color2 is not None:
                 c = color2
-            painterFrame.fillRect(w / 3, h - h / 5.5, w / 3 + 1, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(w / 3, h - h / 5.5), int(w / 3 + 1), int(h / 5.5 + 1), c)
 
         if hideButton3 is True:
             c = color
             if color3 is not None:
                 c = color3
-            painterFrame.fillRect(w * 2 / 3 -60, h - h / 5.5, w / 3 + 61, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(w * 2 / 3 -60), int(h - h / 5.5), int(w / 3 + 61), int(h / 5.5 + 1), c)
 
         painterFrame.end()
         del painterFrame
@@ -1536,10 +1536,18 @@ class MainWindow(QMainWindow):
         delay = self.menuDelaySecond
         offset = self.menuOffsetSecond
         reset_default = [0, 2]
-        reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
-        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
-        menu = [shutdown[1] + offset, shutdown[1] + offset + delay]
-        menu_advanced = [menu[1] + offset, menu[1] + offset + delay]
+
+        if '192.168.1.' in self.local_ip:
+            menu_advanced = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            menu = [menu_advanced[1] + offset, menu_advanced[1] + offset + delay]
+            shutdown = [menu[1] + offset, menu[1] + offset + delay]
+            reprint = [shutdown[1] + offset, shutdown[1] + offset + delay]
+
+        else:
+            reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
+            menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
+            menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
         if self.DebugGPIO is True:
             self.logger.info("BUTTON 1 PRESSED")
@@ -1653,10 +1661,18 @@ class MainWindow(QMainWindow):
         delay = self.menuDelaySecond
         offset = self.menuOffsetSecond
         reset_default = [0, 2]
-        reprint = [reset_default[1] , reset_default[1] + delay]
-        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
-        menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
-        menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
+
+        if '192.168.1.' in self.local_ip:
+            menu_advanced = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            menu = [menu_advanced[1] + offset, menu_advanced[1] + offset + delay]
+            shutdown = [menu[1] + offset, menu[1] + offset + delay]
+            reprint = [shutdown[1] + offset, shutdown[1] + offset + delay]
+
+        else:
+            reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
+            menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
+            menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
         if self.DebugGPIO is True:
             self.logger.info("BUTTON 3 PRESSED")
@@ -1995,12 +2011,12 @@ class MainWindow(QMainWindow):
 
 
     def wait(self, delay):
-
-        if EMULATE is True:
-            time.sleep(delay/10)
-            return
         try:
-            time.sleep(delay)
+            if EMULATE is True:
+                self.logger.warning("SLEEP FOR " + str(delay) + " s (ACCELERATED 10x)")
+                time.sleep(delay/10)
+            else:
+                time.sleep(delay)
         except ValueError as e:
             self.logger.error("TIME.SLEEP EXCEPTION " + str(e))
 
@@ -2041,6 +2057,17 @@ class MainWindow(QMainWindow):
         self.onShowAssemblyCalibration3()
         self.wait(5)
         self.onShowAssemblyCalibration4()
+
+
+    @pyqtSlot()
+    def onPrintAllTestAssemblies(self):
+        for i in range(1,5):
+            self.buildCalibrationAssembly(i)
+            if i==1:
+                self.wait(5)
+            else:
+                self.wait(45)
+            self.sendPrintingJob()
 
     @pyqtSlot()
     def onShowAssemblyCalibration1(self):
@@ -2152,12 +2179,16 @@ class MainWindow(QMainWindow):
         self.actionGenerateSingleAssemblies.triggered.connect(self.onGenerateAllSingleAssemblies)
 
         self.actionShowAllAssemblyCalibration = QAction("Calibration de tous les assemblages", self)
+
+        self.actionPrintAllAssemblyCalibration = QAction("Impression des 4 calibrations", self)
+
         self.actionShowAssemblyCalibration1 = QAction("Calibration assemblage 1", self)
         self.actionShowAssemblyCalibration2 = QAction("Calibration assemblage 2", self)
         self.actionShowAssemblyCalibration3 = QAction("Calibration assemblage 3", self)
         self.actionShowAssemblyCalibration4 = QAction("Calibration assemblage 4", self)
 
         self.actionShowAllAssemblyCalibration.triggered.connect(self.onShowAllTestAssemblies)
+        self.actionPrintAllAssemblyCalibration.triggered.connect(self.onPrintAllTestAssemblies)
         self.actionShowAssemblyCalibration1.triggered.connect(self.onShowAssemblyCalibration1)
         self.actionShowAssemblyCalibration2.triggered.connect(self.onShowAssemblyCalibration2)
         self.actionShowAssemblyCalibration3.triggered.connect(self.onShowAssemblyCalibration3)
@@ -2301,6 +2332,7 @@ class MainWindow(QMainWindow):
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration2)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration3)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration4)
+        self.calibrateMenu.addAction(self.actionPrintAllAssemblyCalibration)
 
         self.contextMenu.addMenu(self.dataMenu)
         self.contextMenu.addMenu(self.settingMenu)
@@ -2945,6 +2977,9 @@ class MainWindow(QMainWindow):
 
     def cancelNotCompletedJobs(self):
 
+        if EMULATE is True:
+            return
+
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
@@ -2961,6 +2996,9 @@ class MainWindow(QMainWindow):
             self.logger.error("cancelNotCompletedJobs EXCEPTION")
 
     def cancelAllNotCompletedJobs(self):
+
+        if EMULATE is True:
+            return
 
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return

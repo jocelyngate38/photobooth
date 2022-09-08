@@ -279,9 +279,7 @@ class ressourcesManager:
             layoutDict["layoutId"] = layoutId
 
             if not os.path.isfile(self.getPath(ressourcesManager.PATH.EVENT) + "/" + path):
-                self.logger.error("XML ERROR NO SUCH FILE " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
-                self.logger.error(
-                    "XML error no such file " + self.getPath(ressourcesManager.PATH.EVENT) + "/" + path)
+                self.logger.error("FILE NOT FOUND : " +self.eventName + "/" + path + " IGNORING")
                 continue
 
             images = lay.findall("./images/image")

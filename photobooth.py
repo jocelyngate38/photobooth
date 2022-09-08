@@ -1177,6 +1177,7 @@ class MainWindow(QMainWindow):
         captureThread.start()
 
         self.showPixmap(0, True, True, False)
+        #self.wait(3.5)
         self.wait(2.7)
         self.showPixmap(0, False, False, True)
         self.switchConstantLight(False)

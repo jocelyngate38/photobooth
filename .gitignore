@@ -1,0 +1,7 @@
+# Ignore build folders
+resources/events
+__pycache__
+
+
+# Ignore files generated
+filebrowser.db

@@ -56,9 +56,9 @@ try:
 except:
     print("Queue import error")
 try:
-    import threading, time, random, shutil, os, subprocess
+    import threading, time, random, shutil, os, subprocess, re
 except:
-    print("threading, time, random, shutil, os, subprocess import error")
+    print("threading, time, random, shutil, os, subprocess, re import error")
 try:
     import glob
 except:
@@ -305,49 +305,6 @@ class PhotoBoothSettings_2(PhotoBoothSettings):
         return "Nikon DSC D70s (PTP mode)"
 
 
-class PhotoBoothSettings_10(PhotoBoothSettings):
-
-    def __init__(self):
-
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_1, 13)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_2, 26)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_BUTTON_3, 6)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.LED_0, 19)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_1, 20)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_2, 16)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_3, 12)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.BUTTON_4, 21)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT, 22)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.RELAY_LED_STRIP, 4)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_SPEEDLIGHT, 17)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.ON_OFF_SPEEDLIGHT, 23)
-        self.setGPIO(PhotoBoothSettings.GPIOPin.POWER_DSLR, 4)
-
-    def getName(self):
-        return "PHOTOBOOTH 10"
-
-    def has_external_flash(self):
-        return True
-
-    def can_restart_DSLR(self):
-        return True
-
-    def is_DSLR_up(self):
-        return True
-
-    def can_restart_external_flash(self):
-        return True
-
-    def can_restart_led_strip(self):
-        return False
-
-    def is_LedPullUp(self):
-        return True
-
-    def getCameraName(self):
-        return "Nikon DSC D70s (PTP mode)"
-
-
 
 class DisplayMode(Enum):
 
@@ -367,11 +324,11 @@ class DisplayMode(Enum):
     INFO_REPRINT = 14
     INFO_SWITCH_CONSTANT_LIGHT = 15
     HELP_PRINTER = 16
+    STATISTICS=17
     UNDEFINED = 255
 
 class PrinterMonitoringThread(QThread):
 
-    # printerFailure = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
     logger = logging.getLogger("PrinterMonitori")
 
     def __init__(self, mainWindow):
@@ -392,14 +349,16 @@ class PrinterMonitoringThread(QThread):
 
                     if self.mainWindow.printerName == "" :
                         if self.mainWindow.label.hasPrinterOffline() is False:
-                            self.logger.warning("PRINTER : PLUG/POWER THE PRINTER!")
+                            self.logger.info("PRINTER : PLUG/POWER THE PRINTER!")
                             self.mainWindow.label.setPrinterOffline(True)
                             self.mainWindow.ledStrip.showWarning(1)
+                            self.mainWindow.setPrinterWarning(True, "")
 
                     else :
                         if self.mainWindow.label.hasPrinterOffline() is True:
                             self.mainWindow.label.setPrinterOffline(False)
                             self.mainWindow.ledStrip.showWarning(0)
+                            self.mainWindow.setPrinterWarning(False, "")
                         try:
                             conn = cups.Connection()
                             printers = conn.getPrinters()
@@ -407,25 +366,29 @@ class PrinterMonitoringThread(QThread):
                                 if self.mainWindow.printerName == printer:
                                     if printers[printer]['printer-state'] == 5:
                                         if printers[printer]["printer-state-message"] == "No paper tray loaded, aborting!":
-                                            self.logger.warning("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
+                                            self.logger.info("PRINTER : NO PAPER TRAY LOADED, ABORTING!")
                                             self.mainWindow.label.setTrayMissing(True)
                                             self.mainWindow.ledStrip.showWarning(1)
+                                            self.mainWindow.setPrinterWarning(True, "No paper tray loaded, aborting!")
 
                                         if printers[printer]["printer-state-message"] == "No ribbon loaded, aborting job!":
-                                            self.logger.warning("PRINTER : NO RIBBON LOADED, ABORTING!")
+                                            self.logger.info("PRINTER : NO RIBBON LOADED, ABORTING!")
                                             self.mainWindow.label.setRibbonMissing(True)
                                             self.mainWindow.ledStrip.showWarning(1)
+                                            self.mainWindow.setPrinterWarning(True, "No ribbon loaded, aborting job!")
 
                                     if printers[printer]['printer-state'] == 3:
                                         if printers[printer]["printer-state-message"] == "Ribbon depleted!":
-                                            self.logger.warning("PRINTER : RIBBON DEPLETED!")
+                                            self.logger.info("PRINTER : RIBBON DEPLETED!")
                                             self.mainWindow.label.setRibbonEmpty(True)
                                             self.mainWindow.ledStrip.showWarning(1)
+                                            self.mainWindow.setPrinterWarning(True, "Ribbon depleted!")
 
                                         if printers[printer]["printer-state-message"] == "Paper feed problem!":
                                             self.logger.warning("PRINTER : PAPER FEED PROBLEM!")
                                             self.mainWindow.label.setPaperEmpty(True)
                                             self.mainWindow.ledStrip.showWarning(1)
+                                            self.mainWindow.setPrinterWarning(True, "Paper feed problem!")
 
                             self.mainWindow.refreshLedButtons()
 
@@ -442,6 +405,7 @@ class PrinterMonitoringThread(QThread):
                     self.mainWindow.label.setPaperEmpty(False)
                     self.mainWindow.label.setPrinterOffline(False)
                     self.mainWindow.ledStrip.showWarning(0)
+                    self.mainWindow.setPrinterWarning(False,"")
                     self.mainWindow.refreshLedButtons()
                     time.sleep(240)
 
@@ -474,11 +438,12 @@ class CaptureImageThread(QThread):
     signal = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
     logger = logging.getLogger("CaptureImageThr")
-    def __init__(self, path, ressourceManager, photoboothSettings):
+    def __init__(self, path, ressourceManager, photoboothSettings, calibrationName=ressourcesManager.PATH.CALIBRATION_GROUP_PATH):
         QThread.__init__(self)
         self.capture = path
         self.ressourceManager = ressourceManager
         self.photoboothSettings = photoboothSettings
+        self.calibrationName = calibrationName
     # run method gets called when we start the thread
 
     def getCameraName(self):
@@ -491,13 +456,16 @@ class CaptureImageThread(QThread):
         if EMULATE is True:
             self.logger.info("IMAGE CAPTURED : " + self.capture)
             time.sleep(1)
-            Original_Image = Image.open(self.ressourceManager.getPath(self.ressourceManager.PATH.CALIBRATION_IMAGE))
+            path = self.ressourceManager.getPath(self.calibrationName) + "/calibration_image_"
+            path = path + str(random.randint(1, 4)) + ".jpg"
+            Original_Image = Image.open(path)
             Original_Image.save(self.capture)
             self.signal.emit(True, self.capture)
             return
 
-        p = Popen(["gphoto2", "--camera", self.photoboothSettings.getCameraName(), "--capture-image-and-download",
-                   "--filename=" + self.capture], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        #p = Popen(["gphoto2", "--camera", self.photoboothSettings.getCameraName(), "--capture-image-and-download", "--filename=" + self.capture], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(["gphoto2", "--wait-event=360ms", "--capture-image-and-download", "--filename=" + self.capture], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        
         output, err = p.communicate()
         rc = p.returncode
 
@@ -674,7 +642,6 @@ class ledStripControler():
     def init(self):
 
         try:
-
             self.serialDevice = serial.Serial(self.port)
             self.serialDevice.baudrate = self.speed
 
@@ -687,6 +654,11 @@ class ledStripControler():
 
         except:
             self.logger.error("LEDCONTROLER:SERIALDEVICE INIT EXCEPTION")
+            try:
+                self.serialDevice.close()
+            except:
+                self.logger.error("LEDCONTROLER:SERIALDEVICE CLOSE EXCEPTION")
+                self.serialDevice=None
 
     def sendCommand(self, command, retryMax=4):
 
@@ -789,7 +761,7 @@ class ledStripControler():
                              + ',' + str(r) + ',' + str(g) + ',' + str(b) + ';')
 
     def showWarning(self, isDefault):
-        self.logger.info("LEDCONTROLER:SHOWDEFAULT " + str(isDefault))
+        # self.logger.info("LEDCONTROLER:SHOWDEFAULT " + str(isDefault))
         self.setBrightness(255)
         self.sendCommand('10,' + str(isDefault) + ';')
 
@@ -798,7 +770,7 @@ class ledStripControler():
         self.sendCommand('3;')
 
     def setBrightness(self, brightness):
-        self.logger.info("LEDCONTROLER:SETBRIGHTNESS")
+        # self.logger.info("LEDCONTROLER:SETBRIGHTNESS")
         self.sendCommand('12,' + str(brightness) + ';')
 
 
@@ -824,22 +796,21 @@ class MainWindow(QMainWindow):
         else:
             self.boxSettings = PhotoBoothSettings_1()
 
-        self.logger.info("####################################################################################")
-        self.logger.info("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
-        self.logger.info("##                              NEW INSTANCE STARTED                              ##")
-        self.logger.info("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
-        self.logger.info("####################################################################################")
+        self.logger.error("####################################################################################")
+        self.logger.error("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
+        self.logger.error("##                              NEW INSTANCE STARTED                              ##")
+        self.logger.error("##      NEW INSTANCE STARTED                            NEW INSTANCE STARTED      ##")
+        self.logger.error("####################################################################################")
 
         self.local_ip = "127.0.0.1"
         self.external_ip = "127.0.0.1"
 
         self.boxSettings.printDetails()
-
+        self.stats = None
         self.interuptsConnected = False
         self.currentAssemblyPath = ""
-        self.displayMode = DisplayMode.HOMEPAGE
+        self.displayMode = DisplayMode.UNDEFINED
         self.timeoutTimer = None
-        self.showCuttingLines = False
         self.captureList = []
         self.lastAssemblyPixmap = None
         self.inputButtonThread = None
@@ -854,7 +825,7 @@ class MainWindow(QMainWindow):
         self.lastPrintId = 0
         self.lastAssemblyLandscape = 1
         self.DebugGPIO = False
-
+        self.lastPrinterWarning = False
         self.resources = ressourcesManager()
         self.resources.loadResources()
         self.resources.logInfos()
@@ -906,6 +877,11 @@ class MainWindow(QMainWindow):
 
         self.switchConstantLight(False)
 
+    def setPrinterWarning(self, isWarning, msg=""):
+        if self.lastPrinterWarning!=isWarning:
+            self.lastPrinterWarning = isWarning
+            if isWarning is True:
+                self.resources.add_print_error_event(self.lastPrintId, os.path.basename(self.currentAssemblyPath), msg)
 
     def refreshLedButtons(self):
         if self.displayMode == DisplayMode.HOMEPAGE:
@@ -929,13 +905,6 @@ class MainWindow(QMainWindow):
                 if "Canon_CP800_" in printer:
                     id = printers[printer]["device-uri"].replace('gutenprint53+usb://canon-cp800/', '')
                     self.printerNameSerial[id] = printer
-
-            # if len(self.printerNameSerial)==0:
-            #     self.logger.error("PRINTER : CANNOT POPULATE printerNameSerial dic based on cups infos!")
-            #     self.printerNameSerial ={   'DN00121700003777': 'Canon_CP800_0',
-            #                                 'GL04120400020191': 'Canon_CP800_1',
-            #                                 'G200090100000410': 'Canon_CP800_2',
-            #                                 'DX01122500001574': 'Canon_CP800_3'}
 
             for key, value in self.printerNameSerial.items():
                 self.logger.info("Printer name : " + value + ", id : " + key)
@@ -975,7 +944,6 @@ class MainWindow(QMainWindow):
     def defineTimeout(self, delaySec):
 
         if self.timeoutTimer is None:
-            self.logger.warning("NOT INITIALIZED VARIABLE : (self.timeoutTimer is None)")
             return
 
         if delaySec <= 0:
@@ -983,7 +951,7 @@ class MainWindow(QMainWindow):
             self.timeoutTimer.stop()
         else:
             self.timeoutTimer.start(1000 * delaySec)
-            self.logger.warning("SET TIMEOUT (" + str(delaySec) + "s) FOR " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
+            self.logger.info("SET TIMEOUT (" + str(delaySec) + "s) FOR " + self.displayMode.name + "(" + str(self.displayMode.value) + ")")
 
     def initDSLRTime(self):
 
@@ -1031,12 +999,10 @@ class MainWindow(QMainWindow):
                 "CHANGING CURRENT MODE TO THE SAME MODE " + mode.name + "(" + str(mode.value) + ")")
         else:
             self.logger.info(
-                "CHANGING CURRENT MODE " + self.displayMode.name + "(" + str(
-                    self.displayMode.value) + ") to mode " + mode.name + "(" + str(mode.value) + ")")
+                "DisplayMode." + self.displayMode.name + "(" + str(
+                    self.displayMode.value) + ") -> DisplayMode." + mode.name + "(" + str(mode.value) + ")")
 
         self.displayMode = mode
-
-        self.logger.warning("TRY DEFINE TIMEOUT FOR : " + mode.name + "(" + str(mode.value) + ")")
 
         #Only allow warning display on the home page
         if self.label is not None:
@@ -1093,12 +1059,20 @@ class MainWindow(QMainWindow):
             self.defineTimeout(-1)
             self.defineTimeout(60 * 2)
 
+        elif mode == DisplayMode.STATISTICS:
+            self.defineTimeout(-1)
+            self.defineTimeout(60)
+
         elif mode == DisplayMode.TRIGGER_ERROR:
             self.defineTimeout(-1)
             self.defineTimeout(30)
 
         elif mode == DisplayMode.RUNNING:
             self.defineTimeout(30)
+
+        elif mode == DisplayMode.UNDEFINED:
+            self.defineTimeout(-1)
+            self.defineTimeout(60)
 
         else:
             self.logger.error("DEFINE TIMEOUT ERROR, " + mode.name + "(" + str(mode.value) + ") NOT HANDLED")
@@ -1113,7 +1087,13 @@ class MainWindow(QMainWindow):
 
         self.setDisplayMode(DisplayMode.HOMEPAGE)
         outPixmap = QPixmap(self.homeDisplay)
+        painter = QPainter(outPixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        path=self.resources.getPath(ressourcesManager.PATH.PAGE) + "/qr.png"
+        painter.drawPixmap(0, 0, QPixmap(path))
         self.label.setPixmap(outPixmap)
+        del painter
+        QApplication.processEvents()
         self.refreshLedButtons()
         QApplication.processEvents()
 
@@ -1139,11 +1119,35 @@ class MainWindow(QMainWindow):
         QApplication.processEvents()
         QApplication.processEvents()
         QApplication.processEvents()
+
+        self.resources.create_session_json()                  
         self.startCaptureProcess()
 
-    def startCaptureProcess(self):
 
-        imPath = self.resources.getPath(ressourcesManager.PATH.CAPTURE) + "/" + str(uuid.uuid4()) + ".jpg"
+    def suggest_next_filename(self, path):
+        # Regular expression to match filenames like capture_0001.jpg
+        pattern = re.compile(r'capture_(\d+)\.jpg')
+        
+        max_number = 0
+        for filename in os.listdir(path):
+            match = pattern.match(filename)
+            if match:
+                num = int(match.group(1))
+                if num > max_number:
+                    max_number = num
+
+        # Suggest next filename
+        next_number = max_number + 1
+        return f"capture_{next_number:04}.jpg"
+
+
+    def startCaptureProcess(self):
+        
+        capturePath=self.resources.getPath(ressourcesManager.PATH.CAPTURE) + "/"
+        next_filename = self.suggest_next_filename(capturePath)
+        
+        imPath = capturePath + next_filename
+        
         self.logger.info("CAPTURE PROCESS " + imPath)
         self.setDisplayMode(DisplayMode.RUNNING)
         self.disconnectInputButtonInterupts()
@@ -1169,7 +1173,7 @@ class MainWindow(QMainWindow):
             delay = self.showPixmap(0, True, False, False)
             self.wait(0.6 - delay)
 
-        captureThread = CaptureImageThread(imPath, self.resources, self.boxSettings)
+        captureThread = CaptureImageThread(imPath, self.resources, self.boxSettings, calibrationName=ressourcesManager.PATH.CALIBRATION_WHITE_BG_PATH)
         captureThread.signal.connect(self.onCaptureProcessFinished)
         self.start = time.time()
         self.ledStrip.setColor(ledStripControler.Location.CAMERA_ARROWS, [ledStripControler.Color.BLUE, ledStripControler.Color.BLACK])
@@ -1177,8 +1181,8 @@ class MainWindow(QMainWindow):
         captureThread.start()
 
         self.showPixmap(0, True, True, False)
-        #self.wait(3.5)
-        self.wait(2.7)
+        self.wait(3.5)
+        #self.wait(2.7)
         self.showPixmap(0, False, False, True)
         self.switchConstantLight(False)
 
@@ -1206,11 +1210,21 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        hideB1 = len(self.captureList) >= 3
-        validatePixmap = self.getFilteredPixmap(QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture.png"),
-                                                hideB1, QColor(255,255,255,80),
-                                                False, None,
-                                                False, None)
+        imagesMax=self.resources.getMaxImageCount()
+        hideB1 = len(self.captureList) >= imagesMax-1
+
+        if( imagesMax==1):
+            hideB1 = True
+            validatePixmap = self.getFilteredPixmap(
+                QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture_1.png"),
+                hideB1, QColor(255, 255, 255, 80),
+                False, None,
+                False, None)
+        else:
+            validatePixmap = self.getFilteredPixmap(QPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/validate-capture.png"),
+                                                    hideB1, QColor(255,255,255,80),
+                                                    False, None,
+                                                    False, None)
 
         painter.drawPixmap(0, 0, validatePixmap)
 
@@ -1220,7 +1234,7 @@ class MainWindow(QMainWindow):
         x0 = (1280 - 2 * w - b) / 2
         y0 = (1024 - 2 * h - b) / 2
 
-        for i in range(4):
+        for i in range(imagesMax):
 
             if i == 0:
                 x = x0
@@ -1234,6 +1248,12 @@ class MainWindow(QMainWindow):
             if i == 3:
                 x = x0 + w + b
                 y = y0 + h + b
+
+            if(imagesMax == 1):
+                x = x0
+                y = y0-40
+                w = 2*w+b
+                h = int(w/1.5)
 
             preview = None
             pen = None
@@ -1254,7 +1274,7 @@ class MainWindow(QMainWindow):
                 preview = QPixmap(capture)
                 painter.translate(x, y)
                 painter.drawPixmap(0, 0,
-                                   preview.scaled(w, h, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
+                                   preview.scaled(w, h+10, Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation))
                 pen = QPen(Qt.black)
                 pen.setWidth(6)
 
@@ -1279,9 +1299,9 @@ class MainWindow(QMainWindow):
         self.connectInputButtonInterupts()
         self.setLedButonBlinking(not hideB1, True, True)
 
-    def buildNextAssembly(self):
+    def buildNextAssembly(self, cuttingLines=False, copyright=False):
 
-        self.logger.info("BUILD NEXT ASSEMBLY")
+        self.logger.info("BUILD NEXT ASSEMBLY " + str(len(self.captureList)))
         choosenLayout = self.resources.chooseNextLayout(len(self.captureList))
 
         if choosenLayout == None:
@@ -1293,7 +1313,8 @@ class MainWindow(QMainWindow):
         self.showAssemblyPixmap()
         [self.lastAssemblyPixmap, self.currentAssemblyPath] = self.resources.buildLayoutFromList(captureList=self.captureList,
                                                                                                  choosenLayout=choosenLayout,
-                                                                                                 showCuttingLine=self.showCuttingLines)
+                                                                                                 cuttingLines=cuttingLines,
+                                                                                                 copyright=copyright)
 
         #display assembly page without the assembly we just build
         self.showAssemblyPixmap()
@@ -1312,19 +1333,19 @@ class MainWindow(QMainWindow):
             c = color
             if color1 is not None:
                 c = color1
-            painterFrame.fillRect(0, h - h / 5.5, w / 3 + 60, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(0), int(h - h / 5.5), int(w / 3 + 60), int(h / 5.5 + 1), c)
 
         if hideButton2 is True:
             c = color
             if color2 is not None:
                 c = color2
-            painterFrame.fillRect(w / 3, h - h / 5.5, w / 3 + 1, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(w / 3, h - h / 5.5), int(w / 3 + 1), int(h / 5.5 + 1), c)
 
         if hideButton3 is True:
             c = color
             if color3 is not None:
                 c = color3
-            painterFrame.fillRect(w * 2 / 3 -60, h - h / 5.5, w / 3 + 61, h / 5.5 + 1, c)
+            painterFrame.fillRect(int(w * 2 / 3 -60), int(h - h / 5.5), int(w / 3 + 61), int(h / 5.5 + 1), c)
 
         painterFrame.end()
         del painterFrame
@@ -1338,6 +1359,9 @@ class MainWindow(QMainWindow):
         painter = QPainter(outPixmap)
         painter.setRenderHint(QPainter.Antialiasing)
 
+        hideB1 = False
+        if self.resources.currentLayoutCount(len(self.captureList))==1:
+            hideB1=True
 
         hideB3 = self.boxSettings.has_printer_port() is False or self.printingEnabled is False or self.printerName==""
         cB3 = None
@@ -1346,7 +1370,7 @@ class MainWindow(QMainWindow):
             cB3 = QColor(255,255,255,80)
 
         assPixmap = self.getFilteredPixmap(self.resources.getPath(ressourcesManager.PATH.PAGE) + "/assembly.png",
-                                           False, None,
+                                           hideB1, QColor(255, 255, 255, 0),
                                            False, None,
                                            hideB3, cB3
                                            )
@@ -1536,10 +1560,18 @@ class MainWindow(QMainWindow):
         delay = self.menuDelaySecond
         offset = self.menuOffsetSecond
         reset_default = [0, 2]
-        reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
-        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
-        menu = [shutdown[1] + offset, shutdown[1] + offset + delay]
-        menu_advanced = [menu[1] + offset, menu[1] + offset + delay]
+
+        if '192.168.1.' in self.local_ip:
+            menu_advanced = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            menu = [menu_advanced[1] + offset, menu_advanced[1] + offset + delay]
+            shutdown = [menu[1] + offset, menu[1] + offset + delay]
+            reprint = [shutdown[1] + offset, shutdown[1] + offset + delay]
+
+        else:
+            reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
+            menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
+            menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
         if self.DebugGPIO is True:
             self.logger.info("BUTTON 1 PRESSED")
@@ -1612,16 +1644,23 @@ class MainWindow(QMainWindow):
                 "BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.VALIDATE:
-            if len(self.captureList) < 3:
+            if len(self.captureList) < self.resources.getMaxImageCount()-1:
                 self.logger.info("BUTTON 1 PRESSED : PHOTO VALIDATED")
                 self.storeLastCapture()
                 self.startCaptureProcess()
             else:
                 self.logger.warning("BUTTON 1 PRESSED " + self.displayMode.name + "(" + str(self.displayMode.value) + ") : NOTHING TO DO.")
 
+        elif self.displayMode == DisplayMode.STATISTICS:
+            self.logger.info("BUTTON 1 PRESSED : GO BACK HOME")
+            self.gotoStart()
+
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
-            self.logger.info("BUTTON 1 PRESSED : OTHER ASSEMBLY")
-            self.redoAssembly()
+            if self.hasOtherLayout():
+                self.logger.info("BUTTON 1 PRESSED : OTHER ASSEMBLY")
+                self.redoAssembly(cuttingLines=False, copyright=False)
+            else:
+                self.logger.warning("BUTTON 1 PRESSED : NO OTHER ASSEMBLY AVAILABLE : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
             self.logger.warning("RETRYING CAPTURE ")
@@ -1653,10 +1692,18 @@ class MainWindow(QMainWindow):
         delay = self.menuDelaySecond
         offset = self.menuOffsetSecond
         reset_default = [0, 2]
-        reprint = [reset_default[1] , reset_default[1] + delay]
-        shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
-        menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
-        menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
+
+        if '192.168.1.' in self.local_ip:
+            menu_advanced = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            menu = [menu_advanced[1] + offset, menu_advanced[1] + offset + delay]
+            shutdown = [menu[1] + offset, menu[1] + offset + delay]
+            reprint = [shutdown[1] + offset, shutdown[1] + offset + delay]
+
+        else:
+            reprint = [reset_default[1] + offset, reset_default[1] + offset + delay]
+            shutdown = [reprint[1] + 3*offset, reprint[1] + 3*offset + delay]
+            menu = [shutdown[1] + 3*offset, shutdown[1] + 3*offset + delay]
+            menu_advanced = [menu[1] + 3*offset, menu[1] + 3*offset + delay]
 
         if self.DebugGPIO is True:
             self.logger.info("BUTTON 3 PRESSED")
@@ -1703,7 +1750,6 @@ class MainWindow(QMainWindow):
                 self.resetPrinterErrors()
                 self.enablePrinter()
                 self.cancelAllNotCompletedJobs()
-#                self.printerMonitoring.resume()
                 self.gotoStart()
                 self.label.setDebugVisible(True)
                 self.label.update()
@@ -1741,15 +1787,24 @@ class MainWindow(QMainWindow):
             self.logger.info("BUTTON 3 PRESSED : PHOTO VALIDATED CREATE ASSEMBLY")
             self.storeLastCapture()
             self.resources.resetChoices()
-            self.redoAssembly()
+            self.resources.randomizeFirstLayoutChoice(len(self.captureList))
+            self.redoAssembly(cuttingLines=False, copyright=False)
+
+        elif self.displayMode == DisplayMode.STATISTICS:
+            self.logger.info("BUTTON 3 PRESSED : GO BACK HOME")
+            self.gotoStart()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             if self.boxSettings.has_printer_port() is True and self.printingEnabled is True and self.printerName != "":
                 self.logger.info("BUTTON 3 PRESSED : PRINT")
                 self.sendPrintingJob()
             else:
-                self.logger.warning(
-                    "BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(
+                if EMULATE is True:
+                    self.sendPrintingJob()
+                    self.logger.warning("BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(
+                        self.displayMode.value) + ") : EMULATED PRINT.")
+                else:
+                    self.logger.warning("BUTTON 3 PRESSED " + self.displayMode.name + "(" + str(
                         self.displayMode.value) + ") : NOTHING TO DO.")
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
@@ -1852,7 +1907,12 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.info("BUTTON 2 PRESSED : REDO LAST PICTURE")
+            self.resources.add_discarded_capture(os.path.basename(self.lastCapture))
             self.startCaptureProcess()
+
+        elif self.displayMode == DisplayMode.STATISTICS:
+            self.logger.info("BUTTON 2 PRESSED : GO BACK HOME")
+            self.gotoStart()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             self.logger.info("BUTTON 2 PRESSED : DISPLAY_ASSEMBLY -> HOMEPAGE")
@@ -1921,7 +1981,7 @@ class MainWindow(QMainWindow):
             print(e)
 
     def onShowMenu(self):
-
+        self.captureList.clear()
         self.setDisplayMode(DisplayMode.MENU)
         self.setLedButonBlinking(False, False, False)
         self.showPixmapMenu()
@@ -1995,12 +2055,12 @@ class MainWindow(QMainWindow):
 
 
     def wait(self, delay):
-
-        if EMULATE is True:
-            time.sleep(delay/10)
-            return
         try:
-            time.sleep(delay)
+            if EMULATE is True:
+                self.logger.info("SLEEP FOR " + str(delay) + " s (ACCELERATED 10x)")
+                time.sleep(delay/10)
+            else:
+                time.sleep(delay)
         except ValueError as e:
             self.logger.error("TIME.SLEEP EXCEPTION " + str(e))
 
@@ -2034,37 +2094,77 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def onShowAllTestAssemblies(self):
 
-        self.onShowAssemblyCalibration1()
-        self.wait(5)
-        self.onShowAssemblyCalibration2()
-        self.wait(5)
-        self.onShowAssemblyCalibration3()
-        self.wait(5)
-        self.onShowAssemblyCalibration4()
+        showCopyright=False
+        cuttingLines=False
+
+        self.onShowAssemblyCalibration1(cuttingLines=cuttingLines, copyright=showCopyright)
+        if EMULATE is False:
+            self.wait(1)
+
+        self.onShowAssemblyCalibration2(cuttingLines=cuttingLines, copyright=showCopyright)
+        if EMULATE is False:
+            self.wait(1)
+
+        self.onShowAssemblyCalibration3(cuttingLines=cuttingLines, copyright=showCopyright)
+        if EMULATE is False:
+            self.wait(1)
+
+        self.onShowAssemblyCalibration4(cuttingLines=cuttingLines, copyright=showCopyright)
+        import shutil
+
+        shutil.copy2(self.homeDisplay, self.resources.getPath(ressourcesManager.PATH.ASSEMBLIES))
 
     @pyqtSlot()
-    def onShowAssemblyCalibration1(self):
-        self.buildCalibrationAssembly(1)
+    def onPrintAllTestAssemblies(self):
+        for i in range(1,5):
+            self.buildCalibrationAssembly(i, cuttingLines=False, copyright=False)
+            if i==1:
+                self.wait(5)
+            else:
+                self.wait(45)
+            self.sendPrintingJob()
 
     @pyqtSlot()
-    def onShowAssemblyCalibration2(self):
-        self.buildCalibrationAssembly(2)
+    def onShowAssemblyCalibration1(self, cuttingLines=False, copyright=False):
+        self.buildCalibrationAssembly(1, cuttingLines=cuttingLines, copyright=copyright)
+        for i in range(1, self.availableLayouts()):
+            self.redoAssembly(cuttingLines=cuttingLines, copyright=copyright)
 
     @pyqtSlot()
-    def onShowAssemblyCalibration3(self):
-        self.buildCalibrationAssembly(3)
+    def onShowAssemblyCalibration2(self, cuttingLines=False, copyright=False):
+        self.buildCalibrationAssembly(2, cuttingLines=cuttingLines, copyright=copyright)
+        for i in range(1, self.availableLayouts()):
+            self.redoAssembly(cuttingLines=cuttingLines, copyright=copyright)
 
     @pyqtSlot()
-    def onShowAssemblyCalibration4(self):
-        self.buildCalibrationAssembly(4)
+    def onShowAssemblyCalibration3(self, cuttingLines=False, copyright=False):
+        self.buildCalibrationAssembly(3, cuttingLines=cuttingLines, copyright=copyright)
+        for i in range(1, self.availableLayouts()):
+            self.redoAssembly(cuttingLines=cuttingLines, copyright=copyright)
 
-    def buildCalibrationAssembly(self, n):
+    @pyqtSlot()
+    def onShowAssemblyCalibration4(self, cuttingLines=False, copyright=False):
+        self.buildCalibrationAssembly(4, cuttingLines=cuttingLines, copyright=copyright)
+        for i in range(1, self.availableLayouts()):
+            self.redoAssembly(cuttingLines=cuttingLines, copyright=copyright)
 
-        self.showCuttingLines = True
+    def buildCalibrationAssembly(self, n, cuttingLines=False, copyright=False, calibrationType=ressourcesManager.PATH.CALIBRATION_PATH_DEFAULT):
+
+        path = self.resources.getPath(calibrationType) + "/calibration_image_"
         self.captureList.clear()
         for i in range(n):
-            self.captureList.append(QPixmap(self.resources.getPath(ressourcesManager.PATH.CALIBRATION_IMAGE)))
-        self.redoAssembly()
+            if i==0:
+                self.captureList.append(path + "1.jpg")
+            elif i==1:
+                self.captureList.append(path + "2.jpg")
+            elif i==2:
+                self.captureList.append(path + "3.jpg")
+            elif i==3:
+                self.captureList.append(path + "4.jpg")
+            else:
+                self.captureList.append(path + "1.jpg")
+
+        self.redoAssembly(cuttingLines=cuttingLines, copyright=copyright)
 
 
     def initActions(self):
@@ -2120,9 +2220,6 @@ class MainWindow(QMainWindow):
         self.actionRestartDSLR = QAction("Redemarrer appareil photo", self)
         self.actionRestartDSLR.triggered.connect(self.restartDSLR)
 
-        # printerList = ["Canon_CP800_0","Canon_CP800_1","Canon_CP800_2","Canon_CP800_3"]
-        # self.printerNameSerial.values()
-
         self.printerActionList=[]
         for f in self.printerNameSerial.values():
             act = QAction(f, self)
@@ -2152,16 +2249,34 @@ class MainWindow(QMainWindow):
         self.actionGenerateSingleAssemblies.triggered.connect(self.onGenerateAllSingleAssemblies)
 
         self.actionShowAllAssemblyCalibration = QAction("Calibration de tous les assemblages", self)
+
+        self.actionPrintAllAssemblyCalibration = QAction("Impression des 4 calibrations", self)
+
         self.actionShowAssemblyCalibration1 = QAction("Calibration assemblage 1", self)
         self.actionShowAssemblyCalibration2 = QAction("Calibration assemblage 2", self)
         self.actionShowAssemblyCalibration3 = QAction("Calibration assemblage 3", self)
         self.actionShowAssemblyCalibration4 = QAction("Calibration assemblage 4", self)
 
         self.actionShowAllAssemblyCalibration.triggered.connect(self.onShowAllTestAssemblies)
+        self.actionPrintAllAssemblyCalibration.triggered.connect(self.onPrintAllTestAssemblies)
         self.actionShowAssemblyCalibration1.triggered.connect(self.onShowAssemblyCalibration1)
         self.actionShowAssemblyCalibration2.triggered.connect(self.onShowAssemblyCalibration2)
         self.actionShowAssemblyCalibration3.triggered.connect(self.onShowAssemblyCalibration3)
         self.actionShowAssemblyCalibration4.triggered.connect(self.onShowAssemblyCalibration4)
+
+        self.actionComputeStats = QAction("Compute usage statistics", self)
+        self.actionComputeStats.triggered.connect(self.onComputeStatistics)
+
+        self.actionRegenAssemblies_x1 = QAction("Regenerate assemblies", self)
+        self.actionRegenAssemblies_x1.triggered.connect(self.onRebuildAllAssemblies_x1)
+
+        self.actionRegenAssemblies_x2 = QAction("Regenerate assemblies upscale=2", self)
+        self.actionRegenAssemblies_x2.triggered.connect(self.onRebuildAllAssemblies_x2)
+
+        self.actionRegenAssemblies_x4 = QAction("Regenerate assemblies upscale=4", self)
+        self.actionRegenAssemblies_x4.triggered.connect(self.onRebuildAllAssemblies_x4)
+
+        
 
         self.eventActionList=[]
         list = [f.name for f in os.scandir(self.resources.getPath(ressourcesManager.PATH.EVENT_LIST_PATH)) if f.is_dir()]
@@ -2295,18 +2410,23 @@ class MainWindow(QMainWindow):
         self.functionalitiesMenu.addMenu(self.taskMenu)
 
         self.taskMenu.addAction(self.actionGenerateSingleAssemblies)
+        self.taskMenu.addAction(self.actionRegenAssemblies_x1)
+        self.taskMenu.addAction(self.actionRegenAssemblies_x2)
+        self.taskMenu.addAction(self.actionRegenAssemblies_x4)
 
-        self.calibrateMenu.addAction(self.actionShowAllAssemblyCalibration)
+        self.calibrateMenu.addAction(self.actionPrintAllAssemblyCalibration)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration1)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration2)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration3)
         self.calibrateMenu.addAction(self.actionShowAssemblyCalibration4)
+        self.calibrateMenu.addAction(self.actionShowAllAssemblyCalibration)
 
+        self.contextMenu.addMenu(self.functionalitiesMenu)
+        self.contextMenu.addAction(self.actionComputeStats)
         self.contextMenu.addMenu(self.dataMenu)
         self.contextMenu.addMenu(self.settingMenu)
         self.contextMenu.addMenu(self.displayMenu)
         self.contextMenu.addMenu(self.eventMenu)
-        self.contextMenu.addMenu(self.functionalitiesMenu)
         self.contextMenu.addAction(self.actionShutdown)
         self.contextMenu.addAction(self.actionReboot)
         self.contextMenu.addAction(self.actionExit)
@@ -2416,11 +2536,19 @@ class MainWindow(QMainWindow):
         self.constantLightMenu.menuAction().setVisible(not self.constantLightMenu.isEmpty())
         self.settingMenu.menuAction().setVisible(not self.settingMenu.isEmpty())
 
+        if security is True and EMULATE is False:
+            self.eventMenu.menuAction().setVisible(False)
+            self.taskMenu.menuAction().setVisible(False)
+            self.constantLightMenu.menuAction().setVisible(False)
+            self.printerMenu.menuAction().setVisible(False)
+            self.dslrMenu.menuAction().setVisible(False)
+
         QApplication.processEvents()
 
     def showTriggerErrorPage(self):
 
         self.logger.error("TRIGGER CAPTURE ERROR")
+        self.resources.increase_session_trigger_capture_count()
         self.setDisplayMode(DisplayMode.TRIGGER_ERROR)
         outPixmap = None
         outPixmap = QPixmap(self.resources.getPath(ressourcesManager.PATH.BACKGROUND_IMAGE))
@@ -2435,6 +2563,7 @@ class MainWindow(QMainWindow):
 
     def onShowAdvancedMenu(self):
 
+        self.captureList.clear()
         self.setDisplayMode(DisplayMode.MENU_SETUP)
         self.setLedButonBlinking(False, False, False)
         self.showPixmapMenu()
@@ -2727,6 +2856,116 @@ class MainWindow(QMainWindow):
         self.switchConstantLight(False)
 
 
+    @pyqtSlot()
+    def onRebuildAllAssemblies_x1(self):
+        self.onRebuildAllAssembliesUpscale(scaleFactor=1)
+
+    @pyqtSlot()
+    def onRebuildAllAssemblies_x2(self):
+        self.onRebuildAllAssembliesUpscale(scaleFactor=2)
+
+    @pyqtSlot()
+    def onRebuildAllAssemblies_x3(self):
+        self.onRebuildAllAssembliesUpscale(scaleFactor=3)
+
+    @pyqtSlot()
+    def onRebuildAllAssemblies_x4(self):
+        self.onRebuildAllAssembliesUpscale(scaleFactor=4)
+
+
+    def onRebuildAllAssembliesUpscale(self,scaleFactor=1):
+
+        self.showComputingPixmap()
+        self.disconnectInputButtonInterupts()
+        self.setLedButonBlinking(False, False, False)
+        self.resources.rebuildAllAssembly(self.resources.getPath(ressourcesManager.PATH.JSON_PATH),scaleFactor)
+        self.gotoStart()
+    
+
+    
+    @pyqtSlot()
+    def onComputeStatistics(self):
+
+        self.setDisplayMode(DisplayMode.STATISTICS)
+        self.disconnectInputButtonInterupts()
+        self.setLedButonBlinking(False, False, False)
+        if self.stats is None:
+            self.stats = statisticsToolbox()
+        self.stats.updateStatistics(self.resources.getPath(ressourcesManager.PATH.JSON_PATH))
+        self.label.clear()
+        self.label.setAlignment(Qt.AlignLeft)
+        self.label.setTextFormat(Qt.RichText)
+
+        table_style_html = """
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 12px;
+            }
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            th {
+                background-color: #f4f4f4;
+            }
+        </style>
+        """
+
+        div = self.stats.discarded_files['total']+self.stats.staged_files['total']
+        ss = "NaN"
+        dp = "Nan"
+        pp = "Nan"
+        if div != 0:
+            ss=round(100.0*self.stats.staged_files['total']/(div),2)
+            dp=round(100.0*self.stats.discarded_files['total']/(div),2)
+        if self.stats.session_count != 0:
+            pp=round(100.0*self.stats.prints['total']/self.stats.session_count, 2)
+        
+        table_html = f"""
+            <table border="1">
+                <tr><td colspan="2" align="center" style="font-size: 16px; background-color: #a5a5a5; font-weight: bold;">Duration ({self.stats.seconds_to_readable_time(self.stats.durations['total'])})</td></tr>
+                <tr><td>[mean; median]</td><td>[{self.stats.seconds_to_readable_time(self.stats.durations['mean'])}; {self.stats.seconds_to_readable_time(self.stats.durations['median'])}]</td></tr>
+                <tr><td>[min; max]</td><td>[{self.stats.seconds_to_readable_time(self.stats.durations['min'])}; {self.stats.seconds_to_readable_time(self.stats.durations['max'])}]</td></tr>
+
+                <tr><td colspan="2" align="center" style="font-size: 16px; background-color: #a5a5a5; font-weight: bold;">Staged captures ({(self.stats.staged_files['total'])})</td></tr>
+                <tr><td>[mean; median]</td><td>[{round((self.stats.staged_files['mean']),2)}; {round((self.stats.staged_files['median']),2)}]</td></tr>
+                <tr><td>[min; max]</td><td>[{(self.stats.staged_files['min'])}; {(self.stats.staged_files['max'])}]</td></tr>
+
+                <tr><td colspan="2" align="center" style="font-size: 16px; background-color: #a5a5a5; font-weight: bold;">Discarded captures ({(self.stats.discarded_files['total'])})</td></tr>
+                <tr><td>[mean; median]</td><td>[{round(self.stats.discarded_files['mean'],2)}; {round(self.stats.discarded_files['median'],2)}]</td></tr>
+                <tr><td>[min; max]</td><td>[{(self.stats.discarded_files['min'])}; {(self.stats.discarded_files['max'])}]</td></tr>
+
+                <tr><td colspan="2" align="center" style="font-size: 16px; background-color: #a5a5a5; font-weight: bold;">1,2,3,4 photos par session</td></tr>
+                <tr><td>1 photo </td><td>{round(self.stats.session_layout_size['1'], 2)} | {round(self.stats.session_layout_size['1%'], 2)} %</td></tr>
+                <tr><td>2 photos</td><td>{round(self.stats.session_layout_size['2'], 2)} | {round(self.stats.session_layout_size['2%'], 2)} %</td></tr>
+                <tr><td>3 photos</td><td>{round(self.stats.session_layout_size['3'], 2)} | {round(self.stats.session_layout_size['3%'], 2)} %</td></tr>
+                <tr><td>4 photos</td><td>{round(self.stats.session_layout_size['4'], 2)} | {round(self.stats.session_layout_size['4%'], 2)} %</td></tr>
+
+                <tr><td colspan="2" align="center" style="font-size: 16px; background-color: #a5a5a5; font-weight: bold;">TOTALS</td></tr>
+                <tr><td><b>Sessions</b></td><td><b>{self.stats.session_count}</b></td></tr>
+                <tr><td><b>Duration</b></td><td><b>{self.stats.seconds_to_readable_time(self.stats.durations['total'])}</b></td></tr>
+                <tr><td><b>Captures</b></td><td><b>{self.stats.staged_files['total'] + self.stats.discarded_files['total']}</b></td></tr>
+                <tr><td>-- Staged</td><td>{self.stats.staged_files['total']} | {ss} %</td></tr>
+                <tr><td>-- Discarded</td><td>{self.stats.discarded_files['total']} | {dp} %</td></tr>
+                <tr><td><b>Print success</b></td><td><b>{self.stats.prints['total']-self.stats.print_errors['total']}</b></td></tr>
+                <tr><td>-- Print tried</td><td>{self.stats.prints['total']}</td></tr>
+                <tr><td>-- Print errors</td><td>{self.stats.print_errors['total']}</td></tr>
+                <tr><td><b>Timeouts</b></td><td><b>{self.stats.timeouts['total']}</b></td></tr>
+
+            </table>
+            """
+        
+        self.label.setText(table_style_html + table_html)
+        self.wait(0.2)
+        QApplication.processEvents()
+
+        self.setLedButonBlinking(True, True, True)
+        self.connectInputButtonInterupts()
+        QApplication.processEvents()
+
     def testRelays(self):
 
         GPIO.output(self.boxSettings.getGPIO(PhotoBoothSettings.GPIOPin.RELAY_POWER_TOP_LIGHT), 0)
@@ -2788,6 +3027,10 @@ class MainWindow(QMainWindow):
             self.logger.warning("DO NOTHING")
             pass
 
+        elif self.displayMode == DisplayMode.STATISTICS:
+            self.logger.warning("GO HOME")
+            self.gotoStart()
+
         elif self.displayMode == DisplayMode.PRINT:
             self.logger.warning("GO HOME")
             self.gotoStart()
@@ -2827,14 +3070,17 @@ class MainWindow(QMainWindow):
 
         elif self.displayMode == DisplayMode.VALIDATE:
             self.logger.warning("BUTTON 3 EMULATED")
+            self.resources.increase_session_value(field_name='validate_timeout')
             self.onButton3Pressed()
 
         elif self.displayMode == DisplayMode.DISPLAY_ASSEMBLY:
             self.logger.warning("GO HOME")
+            self.resources.increase_session_value(field_name='display_assembly_timeout')
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.TRIGGER_ERROR:
             self.logger.warning("GO HOME")
+            self.resources.increase_session_value(field_name='trigger_error_timeout')
             self.gotoStart()
 
         elif self.displayMode == DisplayMode.RUNNING:
@@ -2856,15 +3102,24 @@ class MainWindow(QMainWindow):
             self.gotoStart()
 
 
-    def redoAssembly(self):
+    def availableLayouts(self):
+        return self.resources.currentLayoutCount(len(self.captureList))
+
+    def hasOtherLayout(self):
+
+        if self.resources.currentLayoutCount(len(self.captureList))==1:
+            return False
+        return True
+
+    def redoAssembly(self, cuttingLines=False, copyright=False):
 
         self.setDisplayMode(DisplayMode.DISPLAY_ASSEMBLY)
         self.disconnectInputButtonInterupts()
         self.setLedButonBlinking(False, False, False)
         self.wait(0.2)
         QApplication.processEvents()
-        self.buildNextAssembly()
-        self.setLedButonBlinking(True, True, self.boxSettings.has_printer_port() is True and self.printingEnabled is True and self.printerName != "")
+        self.buildNextAssembly(cuttingLines=cuttingLines, copyright=copyright)
+        self.setLedButonBlinking(self.hasOtherLayout(), True, self.boxSettings.has_printer_port() is True and self.printingEnabled is True and self.printerName != "")
         self.connectInputButtonInterupts()
         QApplication.processEvents()
 
@@ -2894,17 +3149,17 @@ class MainWindow(QMainWindow):
 
     def sendPrintingJob(self):
 
+        if EMULATE is True:
+            self.showPrintSentPage()
+            self.wait(3)
+            self.gotoStart()
+            return
+
         if self.boxSettings.has_printer_port() is False:
             self.gotoStart()
             return
 
         if self.printingEnabled is False:
-            self.gotoStart()
-            return
-
-        if EMULATE is True:
-            self.showPrintSentPage()
-            self.wait(3)
             self.gotoStart()
             return
 
@@ -2924,17 +3179,16 @@ class MainWindow(QMainWindow):
         self.enablePrinter()
 
         self.resetPrinterErrors()
-
+        self.setPrinterWarning(False, "")
         self.cancelAllNotCompletedJobs()
         try:
             conn = cups.Connection()
 
             exists = os.path.isfile(self.currentAssemblyPath)
             if exists:
-                self.lastPrintId = conn.printFile(self.printerName, self.currentAssemblyPath, title='boxaselfi_job',
-                                                  options={})
-                self.logger.info(
-                    "NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
+                self.lastPrintId = conn.printFile(self.printerName, self.currentAssemblyPath, title='boxaselfi_job', options={})
+                self.resources.add_print_event(str(self.lastPrintId), os.path.basename(self.currentAssemblyPath))
+                self.logger.info("NEW JOB PRINT(" + str(self.lastPrintId) + ") : " + self.currentAssemblyPath)
                 self.showPrintSentPage()
                 self.wait(13)
             else:
@@ -2945,12 +3199,15 @@ class MainWindow(QMainWindow):
 
     def cancelNotCompletedJobs(self):
 
+        if EMULATE is True:
+            return
+
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
         try:
             conn = cups.Connection()
-            # printers = conn.getPrinters()
+
             for key, val in conn.getJobs(which_jobs='not-completed', my_jobs=False, limit=-1, first_job_id=-1).items():
                 if key != self.lastPrintId:
                     self.logger.info("CANCEL JOB ID : " + str(key))
@@ -2962,12 +3219,14 @@ class MainWindow(QMainWindow):
 
     def cancelAllNotCompletedJobs(self):
 
+        if EMULATE is True:
+            return
+
         if self.boxSettings.has_printer_port() is False or self.printingEnabled is False:
             return
 
         try:
             conn = cups.Connection()
-            # printers = conn.getPrinters()
             for key, val in conn.getJobs(which_jobs='not-completed', my_jobs=False, limit=-1, first_job_id=-1).items():
                 self.logger.info("CANCEL JOB ID : " + str(key))
                 conn.cancelJob(key, purge_job=False)
@@ -3090,7 +3349,7 @@ class MainWindow(QMainWindow):
 
     def gotoStart(self):
 
-        self.showCuttingLines = False
+        self.label.setAlignment(Qt.AlignCenter)
         self.logger.info("GO HOME")
         self.connectInputButtonInterupts()
         self.captureList.clear()
@@ -3165,11 +3424,9 @@ class MainWindow(QMainWindow):
 
         for files in fileList:
 
-            idName = os.path.basename(files)
-            for ind in range(self.resources.nbImageMax):
-                idName = idName.replace("_" + str(ind) + ".jpg", "", 1)
+            idName = "regen_" + os.path.basename(files)
 
-            outFile = outputFolder + "/" + idName + "_" + layoutId + ".jpg"
+            outFile = outputFolder + "/" + idName
 
             self.resources.buildSingleLayout(files, outFile, choosenLayout)
 
@@ -3207,11 +3464,19 @@ class SimulatorButtonThread(QThread):
 
 if __name__ == '__main__':
 
+    settings = QSettings('settings.ini', QSettings.IniFormat)
+    settings.setFallbacksEnabled(False)
+    name = settings.value("event", "trace")
+    path = "../photobooth-datas/" + name + "/"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
     logging.basicConfig(
         level=logging.WARNING,
         format="[%(asctime)s][%(levelname)7s] [%(name)15s-%(lineno)5s] > %(message)s",
         handlers=[
-            logging.FileHandler("../photobooth-datas/logs/trace.log"),
+            logging.FileHandler(path+name+".log"),
             logging.StreamHandler()
         ]
     )

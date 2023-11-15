@@ -645,11 +645,13 @@ class ressourcesManager:
                 
                 # Open the file and read the JSON data
                 with open(json_file_path, 'r') as json_file:
-
-                    json_data_list.extend(self.load_and_normalize(json_file))
-                    #json_data = json.load(json_file)
-                    # Add the JSON data to the list
-                    #json_data_list.append(json_data)
+                    try:
+                        json_data_list.extend(self.load_and_normalize(json_file))
+                        #json_data = json.load(json_file)
+                        # Add the JSON data to the list
+                        #json_data_list.append(json_data)
+                    except:
+                        print(json_file_path)
             else:
                 print(f"File not found: {json_file_path}")
 
@@ -659,56 +661,63 @@ class ressourcesManager:
             self.rebuildLayoutFromJson(jsonData=json_data, scaleFactor=scaleFactor)
 
     def rebuildLayoutFromJson(self, jsonData, scaleFactor):
-        
-        if 'name' in jsonData:
-            name = jsonData['name']
-        else:
-            self.logger.error(f"missing key : name -> skipping rebuild")
-            return
-        
-        if 'staged_files' in jsonData:
-            staged_files = jsonData['staged_files']
-        else:
-            self.logger.error(f"missing key : staged_files -> skipping rebuild")
-            return
-        
-        if 'output' in jsonData:
-            asmPath = self.getPath(ressourcesManager.PATH.ASSEMBLY_REGEN_PATH) + "/"
-            output = jsonData['output']
-        else:
-            self.logger.error(f"missing key : output -> skipping rebuild")
-            return
-        
-        if 'layout_id' in jsonData:
-            layout_id = jsonData['layout_id']
-        else:
-            self.logger.error(f"missing key : layout_id -> skipping rebuild")
-            return
-        
-        captures=[]
 
-        self.logger.info(f"REBUILDING ASSEMBLY : {name}")
+        if 'assemblies' not in jsonData:
+            return
 
-        regenCaptPath = self.getPath(ressourcesManager.PATH.CAPTURE_REGEN_PATH) + "/"
-        captPath = self.getPath(ressourcesManager.PATH.CAPTURE) + "/"
+        jsm = jsonData['assemblies']
 
-        for filename in staged_files:
-            filepath = regenCaptPath + filename
-            #check if file is present in regen capture folder first
-            if not os.path.isfile(filepath):
-                self.logger.warning(f"MISSING STAGED CAPTURE IN REGEN FOLDER: {filename} CHECKING IN CAPTURE FOLDER")
-                filepath = captPath + filename
+        for jsonDataAsm in jsm:
+        
+            if 'name' in jsonData:
+                name = jsonData['name']
+            else:
+                self.logger.error(f"missing key : name -> skipping rebuild")
+                return
+            
+            if 'staged_files' in jsonData:
+                staged_files = jsonData['staged_files']
+            else:
+                self.logger.error(f"missing key : staged_files -> skipping rebuild")
+                return
+            
+            if 'output' in jsonDataAsm:
+                asmPath = self.getPath(ressourcesManager.PATH.ASSEMBLY_REGEN_PATH) + "/"
+                output = jsonDataAsm['output']
+            else:
+                self.logger.error(f"missing key : output -> skipping rebuild")
+                return
+            
+            if 'layout_id' in jsonDataAsm:
+                layout_id = jsonDataAsm['layout_id']
+            else:
+                self.logger.error(f"missing key : layout_id -> skipping rebuild")
+                return
+            
+            captures=[]
+
+            self.logger.info(f"REBUILDING ASSEMBLY : {name}")
+
+            regenCaptPath = self.getPath(ressourcesManager.PATH.CAPTURE_REGEN_PATH) + "/"
+            captPath = self.getPath(ressourcesManager.PATH.CAPTURE) + "/"
+
+            for filename in staged_files:
+                filepath = regenCaptPath + filename
+                #check if file is present in regen capture folder first
                 if not os.path.isfile(filepath):
-                    self.logger.error(f"MISSING STAGED CAPTURE IN REGEN AND CAPTURE FOLDER: {filename} ABORTING")
-                    return
+                    self.logger.warning(f"MISSING STAGED CAPTURE IN REGEN FOLDER: {filename} CHECKING IN CAPTURE FOLDER")
+                    filepath = captPath + filename
+                    if not os.path.isfile(filepath):
+                        self.logger.error(f"MISSING STAGED CAPTURE IN REGEN AND CAPTURE FOLDER: {filename} ABORTING")
+                        return
+                    else:
+                        captures.append(filepath)
                 else:
                     captures.append(filepath)
-            else:
-                captures.append(filepath)
 
-        choosenLayout = self.chooseNextLayout(len(staged_files), forcedId="")
-                
-        self.buildLayoutFromList(captureList=captures, choosenLayout=choosenLayout, cuttingLines=False, copyright=False, outputPath=asmPath, outFilename=output, regenFlag=True, scaleFactor=scaleFactor)
+            choosenLayout = self.chooseNextLayout(len(staged_files), forcedId=layout_id)
+                    
+            self.buildLayoutFromList(captureList=captures, choosenLayout=choosenLayout, cuttingLines=False, copyright=False, outputPath=asmPath, outFilename=output, regenFlag=True, scaleFactor=scaleFactor)
 
 
     def buildLayoutFromList(self, captureList, choosenLayout, cuttingLines=False, copyright=False, outputPath=None, outFilename=None, regenFlag=False, scaleFactor=1):
@@ -1034,6 +1043,7 @@ class statisticsToolbox:
             self.session_layout_size['4%']  = 0
 
             self.session_count = 0
+            self.ignored_json.clear()
 
     def updateStatistics(self, jsonFolder):
 
@@ -1056,14 +1066,18 @@ class statisticsToolbox:
                 
                 # Open the file and read the JSON data
                 with open(json_file_path, 'r') as json_file:
-                    json_data = json.load(json_file)
-                    if 'assemblies' in json_data:
-                        # Add the JSON data to the list
-                        json_data_list.append(json_data)
-                    else:
-                        self.logger.error(f"File : {json_file_path} have no key assemblies, skipping")
-                        self.ignored_json.append(os.path.basename(json_file_path))
-
+                    
+                    try:
+                        json_data = json.load(json_file)
+                        if 'assemblies' in json_data:
+                            # Add the JSON data to the list
+                            json_data_list.append(json_data)
+                        else:
+                            self.logger.error(f"File : {json_file_path} have no key assemblies, skipping")
+                            self.ignored_json.append(os.path.basename(json_file_path))
+                    except:
+                        self.logger.error(f"File : {json_file_path} cannot be converted to json, skipping")
+                        
             else:
                 self.logger.error(f"File not found: {json_file_path}")
 
